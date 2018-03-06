@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net461</TargetFramework>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Code.fs" />
+    <Compile Include="VCommon.fs" />
+    <Compile Include="VData.fs" />
+    <Compile Include="VLog.fs" />
+    <Compile Include="Visual.fs" />
+    <Compile Include="VTest.fs" />
+    <Compile Include="VProgram.fs" />
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project=".paket\Paket.Restore.targets" />
+</Project>
