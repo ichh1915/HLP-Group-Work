@@ -1,0 +1,25 @@
+C:/src17/VisualTesting/VisualTest/obj/Debug/netcoreapp2.0/VisualTest.fsprojResolveAssemblyReference.cache
+/home/carotti/Documents/EIE3/High Level Programming/VisualTesting/VisualTest/bin/Debug/netcoreapp2.0/VisualTest.deps.json
+/home/carotti/Documents/EIE3/High Level Programming/VisualTesting/VisualTest/bin/Debug/netcoreapp2.0/VisualTest.runtimeconfig.json
+/home/carotti/Documents/EIE3/High Level Programming/VisualTesting/VisualTest/bin/Debug/netcoreapp2.0/VisualTest.runtimeconfig.dev.json
+/home/carotti/Documents/EIE3/High Level Programming/VisualTesting/VisualTest/bin/Debug/netcoreapp2.0/VisualTest.dll
+/home/carotti/Documents/EIE3/High Level Programming/VisualTesting/VisualTest/bin/Debug/netcoreapp2.0/VisualTest.pdb
+/home/carotti/Documents/EIE3/High Level Programming/VisualTesting/VisualTest/obj/Debug/netcoreapp2.0/VisualTest.fsprojResolveAssemblyReference.cache
+/home/carotti/Documents/EIE3/High Level Programming/VisualTesting/VisualTest/obj/Debug/netcoreapp2.0/VisualTest.dll
+/home/carotti/Documents/EIE3/High Level Programming/VisualTesting/VisualTest/obj/Debug/netcoreapp2.0/VisualTest.pdb
+/Users/clivewongtohsoon/Desktop/HLP2018/VisualTesting-1/VisualTest/obj/Debug/netcoreapp2.0/VisualTest.dll
+/Users/clivewongtohsoon/Desktop/HLP2018/VisualTesting-1/VisualTest/obj/Debug/netcoreapp2.0/VisualTest.pdb
+/Users/clivewongtohsoon/Desktop/HLP2018/VisualTesting-1/VisualTest/bin/Debug/netcoreapp2.0/VisualTest.deps.json
+/Users/clivewongtohsoon/Desktop/HLP2018/VisualTesting-1/VisualTest/bin/Debug/netcoreapp2.0/VisualTest.runtimeconfig.json
+/Users/clivewongtohsoon/Desktop/HLP2018/VisualTesting-1/VisualTest/bin/Debug/netcoreapp2.0/VisualTest.runtimeconfig.dev.json
+/Users/clivewongtohsoon/Desktop/HLP2018/VisualTesting-1/VisualTest/bin/Debug/netcoreapp2.0/VisualTest.dll
+/Users/clivewongtohsoon/Desktop/HLP2018/VisualTesting-1/VisualTest/bin/Debug/netcoreapp2.0/VisualTest.pdb
+/Users/clivewongtohsoon/Desktop/HLP2018/VisualTesting-1/VisualTest/obj/Debug/netcoreapp2.0/VisualTest.fsprojResolveAssemblyReference.cache
+/Users/clivewongtohsoon/Desktop/HLP2018/VisualTesting-Mac/VisualTest/bin/Debug/netcoreapp2.0/VisualTest.deps.json
+/Users/clivewongtohsoon/Desktop/HLP2018/VisualTesting-Mac/VisualTest/bin/Debug/netcoreapp2.0/VisualTest.runtimeconfig.json
+/Users/clivewongtohsoon/Desktop/HLP2018/VisualTesting-Mac/VisualTest/bin/Debug/netcoreapp2.0/VisualTest.runtimeconfig.dev.json
+/Users/clivewongtohsoon/Desktop/HLP2018/VisualTesting-Mac/VisualTest/bin/Debug/netcoreapp2.0/VisualTest.dll
+/Users/clivewongtohsoon/Desktop/HLP2018/VisualTesting-Mac/VisualTest/bin/Debug/netcoreapp2.0/VisualTest.pdb
+/Users/clivewongtohsoon/Desktop/HLP2018/VisualTesting-Mac/VisualTest/obj/Debug/netcoreapp2.0/VisualTest.fsprojResolveAssemblyReference.cache
+/Users/clivewongtohsoon/Desktop/HLP2018/VisualTesting-Mac/VisualTest/obj/Debug/netcoreapp2.0/VisualTest.dll
+/Users/clivewongtohsoon/Desktop/HLP2018/VisualTesting-Mac/VisualTest/obj/Debug/netcoreapp2.0/VisualTest.pdb
