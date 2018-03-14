@@ -7,12 +7,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Code.fs" />
-    <Compile Include="VCommon.fs" />
-    <Compile Include="VData.fs" />
-    <Compile Include="VLog.fs" />
-    <Compile Include="Visual.fs" />
-    <Compile Include="VTest.fs" />
-    <Compile Include="VProgram.fs" />
     <None Include="App.config" />
   </ItemGroup>
   <Import Project=".paket\Paket.Restore.targets" />

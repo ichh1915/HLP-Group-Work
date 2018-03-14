@@ -136,7 +136,7 @@ module CommonLex=
         | Cal // the "always executed condition "AL". Used by default on no condition
 
     /// classes of instructions (example, add/change this is needed)
-    type InstrClass = | ARI | LOG | LS | LSM | Branch
+    type InstrClass = | ARI | LOG | LS | LSM | Branch 
 
     /// specification of set of instructions
     type OpSpec = {
@@ -1096,7 +1096,7 @@ module Branch=
 
     /// Parse Active Pattern used by top-level code
     let (|IMatch|_|) = parse
-
+    
     //--------------------------------------Branch Instruciton Execution------------------------------------//
     
     let execB (instr:BInstr) (dataPath:DataPath<'INS>) = 
@@ -1114,6 +1114,46 @@ module Branch=
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                       END                                                    //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// module End=
+
+//     open CommonData
+//     open CommonLex
+   
+//     type ENDInstr = END'
+
+//     ///Branch Instruction Specs
+//     let bSpec = {
+//         InstrC = END
+//         Roots = ["END"]
+//         Suffixes = [""]
+//     }
+
+//     /// map of all possible opcodes recognised
+//     let opCodes = opCodeExpand bSpec
+
+
+//     //----------------------------Branch Parsing----------------------------//
+//     let parse (ls: LineData) : Result<Parse<ENDInstr>,string> option =
+//         let parse' (instrC, (root,suffix,pCond)) =
+//             let (WA la) = ls.LoadAddr 
+//             Ok {
+//                 PInstr=END'
+//                 PLabel = ls.Label |> Option.map (fun lab -> lab, la) ;
+//                 PSize = 0u; 
+//                 PCond = pCond 
+//                 }
+
+
+//         Map.tryFind ls.OpCode opCodes // lookup opcode to see if it is known
+//         |> Option.map parse' // if unknown keep none, if known parse it.
+
+
+//     /// Parse Active Pattern used by top-level code
+//     let (|IMatch|_|) = parse
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                      CommonTop                                                     //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1126,12 +1166,15 @@ module CommonTop =
 
     open CommonLex
     open CommonData
+    open System.Text.RegularExpressions
 
     /// allows different modules to return different instruction types
     type Instr =
         | ILSM of LSM.LSMInstr
         | ILS of LS.LSInstr
         | IB of Branch.BInstr
+        |END        
+        
     
     /// allows different modules to return different error info
     /// by default all return string so this is not needed
@@ -1146,6 +1189,9 @@ module CommonTop =
     /// that tags the Instruction class
     /// Similarly ErrInstr
     /// Similarly IMatch here is combination of module IMatches
+
+    
+
     let IMatch (ld: LineData) : Result<Parse<Instr>,ErrInstr> option =
         let pConv fr fe p = pResultInstrMap fr fe p |> Some
         match ld with
@@ -1181,13 +1227,17 @@ module CommonTop =
         /// If 2nd word is opcode 1st word must be label
         let matchLine words =
             let pNoLabel =
-                match words with
+                match words with 
+                |["END"] -> Some (Ok {PInstr = END; PLabel = None; PSize = 0u; PCond = Cal})
                 | opc :: operands -> 
                     makeLineData opc operands 
                     |> IMatch
                 | _ -> None
             match pNoLabel, words with
             | Some pa, _ -> pa
+            | None, label::["END"] -> 
+                let (WA addr) = loadAddr
+                Ok {PInstr = END; PLabel = Some (label, addr); PSize = 0u; PCond = Cal}
             | None, label :: opc :: operands -> 
                 match { makeLineData opc operands 
                         with Label=Some label} 
@@ -1202,6 +1252,120 @@ module CommonTop =
         |> Array.toList
         |> matchLine
     
+    let inputToLines inp = 
+        Regex.Split(inp, "[\r\n]+")
+        |>Array.toList
+
+    
+    let addSym (symtab:SymbolTable) parse= 
+        match parse.PLabel with
+        |Some label -> symtab.Add(label)
+        |None -> symtab
+
+    let parseAll lines symtab = 
+        let rec parseOneLine strlist addr parselist= 
+            match strlist with
+            |a::b -> 
+                let newparse = parseLine symtab (WA addr) a
+                match newparse with
+                |Ok parseres ->
+                    match b with
+                    |[] ->  
+                        parseres::parselist
+                        |>List.rev
+                        |>Ok
+                    |b' -> 
+                        let newAddr = addr+parseres.PSize
+                        parseOneLine b' newAddr (parseres::parselist)
+                |Error k -> Error k
+            |[] -> Ok []
+        parseOneLine lines 0u []
+        
+    let genSymTab parse1List = 
+        let initSymTab = Map.empty
+        let rec addSymbol parselist symtab= 
+            match parselist with
+            |[a] -> addSym symtab a
+            |a::b -> addSymbol b (addSym symtab a)
+            |[] -> symtab
+        addSymbol parse1List initSymTab
+
+    let parseOneTwo lines = 
+        let symtab = 
+            parseAll lines None
+            |>Result.map genSymTab
+        symtab
+        |>Result.map Some
+        |>Result.bind (parseAll lines)
+
+    let rec storeIns addr (datapath:DataPath<Instr>) (parses:Parse<Instr> list) = 
+        match parses with
+        |[a] -> {datapath with MM = datapath.MM.Add (WA addr,Code a.PInstr)}
+        |a::b -> storeIns (addr+a.PSize) {datapath with MM = datapath.MM.Add (WA addr,Code a.PInstr)} b
+        |[] -> datapath
+
+    
+    let initialDataPath:DataPath<Instr> = 
+        let regs = 
+            [0u;0x2000u;0u;0u;0u;0u;0u;0u;0u;0u;0u;0u;0u;0xFF000000u;0u;8u]
+            |>List.map2 (fun a b -> (register a, b)) [0..15]
+            |>Map.ofList
+        let mm = Map.empty
+        let flags  = { N=false; C=false; Z=false; V=false}
+        {Regs = regs; MM = mm; Fl = flags}
+
+    let genParsedDP initDP lines= 
+        parseOneTwo lines
+        |>Result.map (storeIns 0u initDP)
+
+    let executeAnyInstr (ins:Instr) (dp:DataPath<Instr>) : Result<DataPath<Instr>, string> = 
+        let execute dp= 
+            match ins with
+            | ILSM ins' -> LSM.execLSM ins' dp 
+            | ILS ins' -> LS.execLS ins' dp 
+            | IB ins' -> Branch.execB ins' dp 
+            | END -> Ok dp
+        execute dp    
+    
+    let rec simulate addr (dp:DataPath<Instr>) = 
+        let memContent = dp.MM.[WA addr]
+        match memContent with
+        |Code END -> dp
+        |Code ins -> 
+            let newDP = executeAnyInstr ins dp
+            match newDP with
+            |Ok newDP' -> simulate (newDP'.Regs.[R15]-8u) newDP'
+            |Error k -> failwithf "%s" k
+        |DataLoc _ -> failwithf "Error: data memory accessed when fetching instruction"
+
+
+    let input = 
+        "LDR R0,[R1] \r\n
+        END"
+
+    let output = 
+        input
+        |>inputToLines
+        |>genParsedDP initialDataPath
+        |>Result.map (simulate 0u)
+            
+    printf "%A" output
+
+
+
+    
+
+
+        
+    
+
+        
+        
+
+
+
+
+
 
         
 
