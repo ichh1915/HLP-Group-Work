@@ -13,13 +13,15 @@ open CommonLex
 open CommonData
 open System.Text.RegularExpressions
 
+
 /// allows different modules to return different instruction types
 type Instr =
     | ILSM of LSM.LSMInstr
     | ILS of LS.LSInstr
     | IB of Branch.BInstr
     | IDP of DP.Instr
-    | END        
+    | END
+    | EQU        //(label,value)
     
 
 /// allows different modules to return different error info
@@ -86,6 +88,12 @@ let parseLine (symtab: SymbolTable option) (loadAddr: WAddr) (asmLine:string) =
         | None, label::["END"] -> 
             let (WA addr) = loadAddr
             Ok {PInstr = END; PLabel = Some (label, addr); PSize = 0u; PCond = Cal}
+        | None, label:: "EQU" :: [lit] ->
+            match (Regex.IsMatch (label,"^[a-zA-Z][a-zA-Z0-9_]*$"), System.UInt32.TryParse lit )with
+            |true, (true, k) -> 
+                Ok {PInstr = EQU; PLabel = Some (label,uint32 k); PSize = 0u; PCond = Cal }
+            |_ -> Error (ERRTOPLEVEL "equ error")
+    
         | None, label :: opc :: operands -> 
             match { makeLineData opc operands 
                     with Label=Some label} 
@@ -179,6 +187,7 @@ let runErrorMap ins res=
         | IB _ -> Error (ERRILSM k )
         | END -> Error (ERRTOPLEVEL k)
         | IDP _ -> Error (ERRIDP k)
+        | EQU -> Error (ERRTOPLEVEL k)
 
 
 let executeAnyInstr (ins:Instr) (dp:DataPath<Instr>) : Result<DataPath<Instr>, ErrInstr> = 
@@ -189,6 +198,7 @@ let executeAnyInstr (ins:Instr) (dp:DataPath<Instr>) : Result<DataPath<Instr>, E
         | IB ins' -> Branch.execB ins' dp |>runErrorMap ins
         | IDP ins' -> DP.arith ins' dp |> runErrorMap ins
         | END -> Ok dp
+        | EQU -> Ok dp
     execute dp    
 
 let rec simulate addr (dp:DataPath<Instr>) = 

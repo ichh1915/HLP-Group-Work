@@ -2,7 +2,10 @@ open CommonTop
 
 
 let input = 
-        "ADD R0,R0,#25*6"
+        """ADD R0,R0,#25*6
+        abc EQU 0x80000
+        ADD R1, R0,#abc
+        """
 
 // let output = 
 //     input
