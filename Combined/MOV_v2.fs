@@ -6,7 +6,7 @@ module MV2
     open CommonData
     open CommonLex
     open TokenizeOperandsV2
-    open SF2
+    open LS
 
     type MVCode = MOV| MVN
     let opcodeMap = 
@@ -16,6 +16,7 @@ module MV2
                    Setflag:bool;
                    Rdest:RName;
                    Op2:FlexOp2;
+                   Cond :Condition
     }
 
 
@@ -39,6 +40,7 @@ module MV2
                          Setflag=suffix|> function|"S"->true|_->false;  
                          Rdest=oprands.Dest;
                          Op2 = oprands.Op2;
+                         Cond = pCond
                  }; 
                  PLabel = None ; 
                  PSize = 4u; 
@@ -66,14 +68,12 @@ module MV2
 
 
 
-    let MovsExecute (cpuData:DataPath<'INS>) (instr:Parse<Instr>): DataPath<'INS> = 
-        let setC = instr.PInstr.Op2|>Op2SetCFlag cpuData
-        let rop2 = instr.PInstr.Op2|>FlexOp2 cpuData
-        let updateFlRegs'= updateFlRegs cpuData instr.PInstr.Rdest instr.PInstr.Setflag setC
-        match CheckCond cpuData instr.PCond with
-        |true -> 
-                match instr.PInstr.Opcode with
-                |MOV -> rop2|>updateFlRegs'
-                |MVN -> ~~~ rop2|>updateFlRegs'
-        |false->
-                cpuData
+    let MovsExecute (cpuData:DataPath<'INS>) (instr): DataPath<'INS> = 
+        let setC = instr.Op2|>Op2SetCFlag cpuData
+        let rop2 = instr.Op2|>FlexOp2 cpuData
+        let updateFlRegs'= updateFlRegs cpuData instr.Rdest instr.Setflag setC
+        
+        match instr.Opcode with
+        |MOV -> rop2|>updateFlRegs' |>PCPlus4
+        |MVN -> ~~~ rop2|>updateFlRegs'|>PCPlus4
+        

@@ -6,7 +6,8 @@ module BT2
     open CommonData
     open CommonLex
     open TokenizeOperandsV2
-    open SF2
+    open LS
+    
 
     type BTCode = AND|EOR|BIC|ORR
     let opcodeMap = 
@@ -17,6 +18,7 @@ module BT2
                    Rdest:RName;
                    Op1:RName;
                    Op2:FlexOp2;
+                   Cond :Condition
     }
 
 
@@ -41,6 +43,7 @@ module BT2
                          Rdest=oprands.Dest;
                          Op1 = oprands.Op1;
                          Op2 = oprands.Op2;
+                         Cond = pCond
                  }; 
                  PLabel = None ; 
                  PSize = 4u; 
@@ -68,17 +71,15 @@ module BT2
 
 
 
-    let BitwiseExecute (cpuData:DataPath<'INS>) (instr:Parse<Instr>): DataPath<'INS> = 
-        let rop1=cpuData.Regs.[instr.PInstr.Op1]
-        let setC = instr.PInstr.Op2|>Op2SetCFlag cpuData
-        let rop2 = instr.PInstr.Op2|>FlexOp2 cpuData
-        let updateFlRegs'= updateFlRegs cpuData instr.PInstr.Rdest instr.PInstr.Setflag setC
-        match CheckCond cpuData instr.PCond with
-        |true -> 
-                match instr.PInstr.Opcode with
-                |AND -> rop1 &&& rop2|>updateFlRegs'
-                |EOR -> rop1 ^^^ rop2|>updateFlRegs'
-                |BIC -> rop1 &&& (~~~rop2)|>updateFlRegs'
-                |ORR -> rop1 ||| rop2|>updateFlRegs'
-        |false->
-                cpuData
+    let BitwiseExecute (cpuData:DataPath<'INS>) (instr): DataPath<'INS> = 
+        let rop1=cpuData.Regs.[instr.Op1]
+        let setC = instr.Op2|>Op2SetCFlag cpuData
+        let rop2 = instr.Op2|>FlexOp2 cpuData
+        let updateFlRegs'= updateFlRegs cpuData instr.Rdest instr.Setflag setC
+        
+        match instr.Opcode with
+        |AND -> rop1 &&& rop2|>updateFlRegs' |>PCPlus4
+        |EOR -> rop1 ^^^ rop2|>updateFlRegs' |>PCPlus4
+        |BIC -> rop1 &&& (~~~rop2)|>updateFlRegs'|>PCPlus4
+        |ORR -> rop1 ||| rop2|>updateFlRegs'|>PCPlus4
+        

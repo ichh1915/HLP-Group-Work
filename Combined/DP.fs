@@ -47,7 +47,7 @@ type Suf =
     | NoFSet
 
 //type AriInstr = {Dest: RName option; Op1: RName option; Op2: Op2 option; Suffix: bool; arithType: ArithType}
-type AriInstr = {Dest: RName option; Op1: RName option; Op2: Op2 option; Suffix: Suf; arithType: ArithType option}
+type AriInstr = {Dest: RName option; Op1: RName option; Op2: Op2 option; Suffix: Suf; arithType: ArithType option;Cond:Condition}
 
 
 //Might want to add different type of Instruction in the future
@@ -389,7 +389,7 @@ let arithParse (ls: LineData): Result<Parse<Instr>, string> option =
             if arithTypeMap.ContainsKey (root.ToUpper()) 
                 then Some (arithTypeMap.[root.ToUpper()])
                 else None
-        let instr = {Dest = dest; Op1 = op1; Op2 = op2; Suffix = suf; arithType = arithType}       
+        let instr = {Dest = dest; Op1 = op1; Op2 = op2; Suffix = suf; arithType = arithType;Cond = pCond}       
 
         match instr with
         | {Dest = None; Op1 = None; Op2 = None} -> Error (sprintf "Syntax error")

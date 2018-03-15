@@ -1,10 +1,11 @@
+open CommonData
 open CommonTop
 open System
 
 
 let input = 
         """
-        Mov R0,#5
+        Moveq R0,#5
         ADD R0,R0,#0X25
         pokemon EQU 3456
         ADD R3,R4, #pokemon       

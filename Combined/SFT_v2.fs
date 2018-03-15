@@ -6,6 +6,7 @@ module SF2
     open CommonData
     open CommonLex
     open TokenizeOperandsV2
+    open LS
 
     type ShiftCode = |LSL |LSR |ASR |ROR |RRX
 
@@ -18,6 +19,7 @@ module SF2
                    Rdest:RName;
                    Op1:RName;
                    Op2:FlexOp2;
+                   Cond:Condition
     }
 
     type ErrInstr = string
@@ -47,6 +49,7 @@ module SF2
                          Rdest= operands.Dest;                                               
                          Op1=operands.Op1;
                          Op2=operands.Op2;
+                         Cond = pCond
                 }; 
                 PLabel = ls.Label |> Option.map (fun lab -> lab, la) ; 
                 PSize = 4u; 
@@ -115,39 +118,37 @@ module SF2
 
 
     //Execute Shift Operations
-    let ShiftExecute (cpuData:DataPath<'INS>) (instr:Parse<Instr>) : DataPath<'INS> = 
-        let r1=cpuData.Regs.[instr.PInstr.Op1]
-        let r2=instr.PInstr.Op2|>FlexOp2 cpuData
-        let updateFlRegs' = updateFlRegs cpuData instr.PInstr.Opcode instr.PInstr.Rdest r1 r2 instr.PInstr.Setflag 
+    let ShiftExecute (cpuData:DataPath<'INS>) (instr) : DataPath<'INS> = 
+        let r1=cpuData.Regs.[instr.Op1]
+        let r2=instr.Op2|>FlexOp2 cpuData
+        let updateFlRegs' = updateFlRegs cpuData instr.Opcode instr.Rdest r1 r2 instr.Setflag 
 
         //For the case Rd and Op1 are the same register
-        let op1BeforeExecuting = instr.PInstr.Op1
+        let op1BeforeExecuting = instr.Op1
 
         //Only the least significant 5 bits of the literal are used for shift
         let modulo32 op2 = int32 (op2<<<27)>>>27
 
-        match CheckCond cpuData instr.PCond with
-        |true->
-               match instr.PInstr.Opcode with
-               |LSL-> if r2 > 31u then 0u |> updateFlRegs' 
-                      else (r1) <<< modulo32 r2 |> updateFlRegs'
-                   
-               |LSR-> if r2 > 31u then 0u |> updateFlRegs'
-                      else (r1) >>> modulo32 r2 |> updateFlRegs'
 
-               |ASR-> if r2 > 31u then 0u |> updateFlRegs' 
-                      else uint32(int32(r1) >>> modulo32 r2) |> updateFlRegs'
+        match instr.Opcode with
+        |LSL-> if r2 > 31u then 0u |> updateFlRegs' |>PCPlus4
+                else (r1) <<< modulo32 r2 |> updateFlRegs'|>PCPlus4
+               
+        |LSR-> if r2 > 31u then 0u |> updateFlRegs'|>PCPlus4
+                  else (r1) >>> modulo32 r2 |> updateFlRegs'|>PCPlus4
 
-               |ROR-> ( (r1<<<(32-modulo32 r2)) ||| (r1>>>modulo32 r2))|> updateFlRegs'
+        |ASR-> if r2 > 31u then 0u |> updateFlRegs' |>PCPlus4
+                  else uint32(int32(r1) >>> modulo32 r2) |> updateFlRegs'|>PCPlus4
 
-               |RRX->match cpuData.Fl.C with
-                     |true -> ( r1>>>1 ||| uint32 (1<<<31) ) |> updateFlRegs'
-                     |false -> r1>>>1 |> updateFlRegs'
-        |false-> 
-                cpuData
-                  
-             
+        |ROR-> ( (r1<<<(32-modulo32 r2)) ||| (r1>>>modulo32 r2))|> updateFlRegs'|>PCPlus4
+
+        |RRX->match cpuData.Fl.C with
+                 |true -> ( r1>>>1 ||| uint32 (1<<<31) ) |> updateFlRegs'|>PCPlus4
+                 |false -> r1>>>1 |> updateFlRegs'|>PCPlus4
+
+              
+         
 
 
-                                                      
+                                              
 

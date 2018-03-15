@@ -22,7 +22,7 @@ type LORS = |L|S
 type IndexMode = |PRE|POST 
 
 /// instruction type for ldr and str
-type LSInstr =  {Ins: LORS; Byte: bool ; Reg1:RName; Reg2:RName ; Offset: Op2 Option ; PointerUpdate :IndexMode Option}
+type LSInstr =  {Ins: LORS; Byte: bool ; Reg1:RName; Reg2:RName ; Offset: Op2 Option ; PointerUpdate :IndexMode Option; Cond:Condition}
 
 /// parse error, string used
 type ErrInstr = string
@@ -268,13 +268,13 @@ let parse (ls: LineData) : Result<Parse<LSInstr>,string> option =
                     |(_,_,Some (Error k),_,_) -> Error k
                     |(_,_,_,Some (Error k), _) -> Error k
                     //No Offset
-                    |(Some reg1',Some reg2',None, None, false) -> Ok {Ins = ins; Byte = byte; Reg1 = reg1'; Reg2 = reg2'; Offset = None; PointerUpdate = None }
+                    |(Some reg1',Some reg2',None, None, false) -> Ok {Ins = ins; Byte = byte; Reg1 = reg1'; Reg2 = reg2'; Offset = None; PointerUpdate = None; Cond = pCond }
                     //Offset in bkt found, no pointer update
-                    |(Some reg1',Some reg2',Some (Ok offset) , None, false) -> Ok {Ins = ins; Byte = byte; Reg1 = reg1'; Reg2 = reg2'; Offset = Some offset; PointerUpdate = None }
+                    |(Some reg1',Some reg2',Some (Ok offset) , None, false) -> Ok {Ins = ins; Byte = byte; Reg1 = reg1'; Reg2 = reg2'; Offset = Some offset; PointerUpdate = None;Cond = pCond }
                     //Offset in bkt found, pre-index
-                    |(Some reg1',Some reg2',Some (Ok offset), None, true) -> Ok {Ins = ins; Byte = byte; Reg1 = reg1'; Reg2 = reg2'; Offset = Some offset; PointerUpdate = Some PRE }
+                    |(Some reg1',Some reg2',Some (Ok offset), None, true) -> Ok {Ins = ins; Byte = byte; Reg1 = reg1'; Reg2 = reg2'; Offset = Some offset; PointerUpdate = Some PRE;Cond = pCond }
                     //Offset out bkt found, post index
-                    |(Some reg1',Some reg2',None, Some (Ok offset) , false) -> Ok {Ins = ins; Byte = byte; Reg1 = reg1'; Reg2 = reg2'; Offset = Some offset; PointerUpdate = Some POST }
+                    |(Some reg1',Some reg2',None, Some (Ok offset) , false) -> Ok {Ins = ins; Byte = byte; Reg1 = reg1'; Reg2 = reg2'; Offset = Some offset; PointerUpdate = Some POST;Cond = pCond }
                     //Error for unexpected type
                     |_ -> Error "Offset error"
                 |Error k -> Error k

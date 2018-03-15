@@ -11,6 +11,7 @@ module CommonTop
 
 open CommonLex
 open CommonData
+open LS
 open System.Text.RegularExpressions
 
 
@@ -20,8 +21,12 @@ type Instr =
     | ILS of LS.LSInstr
     | IB of Branch.BInstr
     | IDP of DP.Instr
+    | ITST of TT2.Instr
+    | IBIT of BT2.Instr
+    | IMOV of MV2.Instr
+    | ISFT of SF2.Instr
     | END
-    | EQU        //(label,value)
+    | EQU        
     
 
 /// allows different modules to return different error info
@@ -30,6 +35,10 @@ type ErrInstr =
     | ERRILSM of LSM.ErrInstr
     | ERRILS of LS.ErrInstr
     | ERRIB of Branch.ErrInstr
+    | ERRITST of TT2.ErrInstr
+    | ERRIBIT of BT2.ErrInstr
+    | ERRIMOV of MV2.ErrInstr
+    | ERRISFT of SF2.ErrInstr
     | ERRIDP of DP.ErrInstr
     | ERRTOPLEVEL of string
 
@@ -48,6 +57,10 @@ let IMatch (ld: LineData) : Result<Parse<Instr>,ErrInstr> option =
     | LS.IMatch pa -> pConv ILS ERRILS pa
     | LSM.IMatch pa -> pConv ILSM ERRILSM pa
     | DP.IMatch pa -> pConv IDP ERRIDP pa
+    | TT2.IMatch pa -> pConv ITST ERRITST pa
+    | BT2.IMatch pa -> pConv IBIT ERRIBIT pa
+    | MV2.IMatch pa -> pConv IMOV ERRIMOV pa
+    | SF2.IMatch pa -> pConv ISFT ERRISFT pa
     | _ -> None
 
 
@@ -78,7 +91,7 @@ let parseLine (symtab: SymbolTable option) (loadAddr: WAddr) (asmLine:string) =
     let matchLine words =
         let pNoLabel =
             match words with 
-            |["END"] -> Some (Ok {PInstr = END; PLabel = None; PSize = 0u; PCond = Cal})
+            |["END"] -> Some (Ok {PInstr = END; PLabel = None; PSize = 4u; PCond = Cal})
             | opc :: operands -> 
                 makeLineData opc operands 
                 |> IMatch
@@ -87,7 +100,7 @@ let parseLine (symtab: SymbolTable option) (loadAddr: WAddr) (asmLine:string) =
         | Some pa, _ -> pa
         | None, label::["END"] -> 
             let (WA addr) = loadAddr
-            Ok {PInstr = END; PLabel = Some (label, addr); PSize = 0u; PCond = Cal}
+            Ok {PInstr = END; PLabel = Some (label, addr); PSize = 4u; PCond = Cal}
         | None, label:: "EQU" :: [lit] ->
             match (Regex.IsMatch (label,"^[a-zA-Z][a-zA-Z0-9_]*$")) with
             |true -> 
@@ -190,17 +203,57 @@ let runErrorMap ins res=
         | END -> Error (ERRTOPLEVEL k)
         | IDP _ -> Error (ERRIDP k)
         | EQU -> Error (ERRTOPLEVEL k)
+        | IBIT _ -> Error (ERRIBIT k)
+        | IMOV _ -> Error (ERRIMOV k)
+        | ITST _ -> Error (ERRITST k)
+        | ISFT _ -> Error (ERRISFT k)
+
+let CheckCond (cpuData:DataPath<'INS>) (cond:Condition): bool = 
+    match cond with
+    |Ceq when cpuData.Fl.Z=true-> true
+    |Cne when cpuData.Fl.Z=false-> true
+    |Cmi when cpuData.Fl.N=true-> true
+    |Cpl when cpuData.Fl.N=false-> true
+
+    |Cvs when cpuData.Fl.V=true-> true
+    |Cvc when cpuData.Fl.V=false-> true
+    |Chs when cpuData.Fl.C=true-> true
+    |Clo when cpuData.Fl.C=false-> true
+
+    |Chi when cpuData.Fl.C=true && cpuData.Fl.Z=false-> true
+    |Cls when cpuData.Fl.C=false || cpuData.Fl.Z=true-> true
+    |Cge when cpuData.Fl.N = cpuData.Fl.V-> true
+    |Clt when cpuData.Fl.N <> cpuData.Fl.V-> true
+
+    |Cgt when cpuData.Fl.Z=false && cpuData.Fl.N = cpuData.Fl.V-> true
+    |Cle when cpuData.Fl.Z=true || cpuData.Fl.N <> cpuData.Fl.V-> true
+    |Cnv-> false
+    |Cal-> true
+
+    |_-> false    
+
+let execIfTrue func bool obj = 
+    match bool with
+    |true -> func obj
+    |false -> obj
 
 
 let executeAnyInstr (ins:Instr) (dp:DataPath<Instr>) : Result<DataPath<Instr>, ErrInstr> = 
     let execute dp= 
         match ins with
-        | ILSM ins' -> LSM.execLSM ins' dp |> runErrorMap ins
-        | ILS ins' -> LS.execLS ins' dp |> runErrorMap ins
-        | IB ins' -> Branch.execB ins' dp |>runErrorMap ins
-        | IDP ins' -> DP.arith ins' dp |> runErrorMap ins
+        | ILSM ins' when CheckCond dp ins'.Cond-> LSM.execLSM ins' dp |> runErrorMap ins
+        | ILS ins' when CheckCond dp ins'.Cond-> LS.execLS ins' dp |> runErrorMap ins
+        | IB ins' when CheckCond dp ins'.Cond-> Branch.execB ins' dp |>runErrorMap ins
+        | IDP ins' when CheckCond dp ins'.Cond-> DP.arith ins' dp |> runErrorMap ins
+        | IBIT ins' when CheckCond dp ins'.Cond-> BT2.BitwiseExecute dp ins' |>Ok
+        | IMOV ins' when CheckCond dp ins'.Cond-> MV2.MovsExecute dp ins' |> Ok
+        | ITST ins' when CheckCond dp ins'.Cond-> TT2.TestExecute dp ins' |> Ok
+        | ISFT ins' when CheckCond dp ins'.Cond-> SF2.ShiftExecute dp ins' |> Ok
         | END -> Ok dp
         | EQU -> Ok dp
+        |_ -> Ok ( PCPlus4 dp)
+    
+    let condMet = CheckCond dp 
     execute dp    
 
 let rec simulate addr (dp:DataPath<Instr>) = 

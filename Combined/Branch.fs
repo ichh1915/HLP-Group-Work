@@ -19,7 +19,7 @@ open LS
 
 
 /// instruction type for branch 
-type BInstr =  {R14Val:uint32 Option; TargetAddr: uint32 Option}
+type BInstr =  {R14Val:uint32 Option; TargetAddr: uint32 Option;Cond :Condition}
 
 /// parse error, default used
 type ErrInstr = string
@@ -60,13 +60,13 @@ let parse (ls: LineData) : Result<Parse<BInstr>,string> option =
             match target with
             |Ok (Some addr) -> //Symbol Table present, and symbol found in table 
                 match root with
-                |"B" -> Ok {R14Val=None; TargetAddr =Some addr}
-                |"BL" ->Ok {R14Val =Some (la+4u); TargetAddr =Some addr}
+                |"B" -> Ok {R14Val=None; TargetAddr =Some addr;Cond = pCond}
+                |"BL" ->Ok {R14Val =Some (la+4u); TargetAddr =Some addr;Cond = pCond}
                 |_ -> failwithf "will not happen"
             |Ok (None) -> 
                 match root with //Symbol Table absent
-                |"B" -> Ok {R14Val=None; TargetAddr = None}
-                |"BL" ->Ok {R14Val =Some (la+4u); TargetAddr = None}
+                |"B" -> Ok {R14Val=None; TargetAddr = None;Cond = pCond}
+                |"BL" ->Ok {R14Val =Some (la+4u); TargetAddr = None;Cond = pCond}
                 |_ -> failwithf "will not happen"
             |Error k -> Error k //Error propagated
 

@@ -25,7 +25,7 @@ open LS
 type DIR = |FA|FD|EA|ED
 
 /// instruction type for ldm and stm
-type LSMInstr =  {Ins: LORS; Dir: DIR; Reg1:RName; RegList:RName list; PtrUpdate: bool}
+type LSMInstr =  {Ins: LORS; Dir: DIR; Reg1:RName; RegList:RName list; PtrUpdate: bool;Cond:Condition}
 
 /// parse error. use default string type
 type ErrInstr = string
@@ -123,7 +123,7 @@ let parse (ls: LineData) : Result<Parse<LSMInstr>,string> option =
             let inbkt = parseInBkt bkt.InBkt
             let outbkt = bkt.PostBkt
             match (prebkt,inbkt,outbkt) with
-            |((Some reg1,ptrUpdate),Some regList, "") -> Ok {Ins= ins; Dir=dir; Reg1=reg1; RegList=regList; PtrUpdate = ptrUpdate}
+            |((Some reg1,ptrUpdate),Some regList, "") -> Ok {Ins= ins; Dir=dir; Reg1=reg1; RegList=regList; PtrUpdate = ptrUpdate;Cond = pCond}
             |((None,_),_,_) -> Error "Invalid Reg 1"
             |(_,None,_) -> Error "Invalid Reg List"
             |(_,_,k) -> Error "Unexpected chars after brackets"
