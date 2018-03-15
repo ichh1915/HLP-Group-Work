@@ -1,15 +1,13 @@
 open CommonTop
+open System
 
 
 let input = 
-        """ADD R0,R0,#25*6
-        abc EQU 0x80000
-        ADD R1, R0,#abc
+        """ADD R0,R0,#0X25
+        pokemon EQU 3456
+        ADD R3,R4, #pokemon       
+        END
         """
-
-// let output = 
-//     input
-//     |> parseLine None (WA 0x1000u)
 
 let output = 
     input
@@ -18,3 +16,5 @@ let output =
     |>Result.bind (simulate 0u)
         
 printf "%A" output
+
+// uint32 "0x123"

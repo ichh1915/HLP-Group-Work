@@ -11,6 +11,7 @@ module LS
 open CommonData
 open CommonLex
 open FlexOp2
+open System.Text.RegularExpressions
 
 //----------------------------------Type Definition-------------------------------------------//
 
@@ -105,10 +106,18 @@ let shiftMode =
 let convExp2Lit (str:string)  (symtab:SymbolTable) = 
     let charList = Seq.toList str
 
-    let convStr2Lit symtab str = 
-        match System.UInt32.TryParse str with
-        |(true, lit') -> makeLiteral lit'
-        |(false,_) -> Map.tryFind str symtab |> Option.bind makeLiteral
+    let convStr2Lit symtab (str:string) = 
+        match str.StartsWith ("0X") with
+        |false -> 
+            match Regex.IsMatch (str,"^[0-9][0-9]*$") with
+            |true-> uint32 str |> makeLiteral
+            |false -> Map.tryFind str symtab |> Option.bind makeLiteral
+        |true -> 
+            let numWithout0x = str.[2..] 
+            
+            match Regex.IsMatch (numWithout0x,"^[0-9A-F][0-9A-F]*$") with
+            |true -> uint32 str |> makeLiteral
+            |false -> None
     let detectFirst list= 
         let firstOpIndex = List.tryFindIndex (fun k -> (k = '+' )|| (k = '-') || (k = '*')) list
         match firstOpIndex with

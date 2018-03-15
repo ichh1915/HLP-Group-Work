@@ -89,9 +89,9 @@ let parseLine (symtab: SymbolTable option) (loadAddr: WAddr) (asmLine:string) =
             let (WA addr) = loadAddr
             Ok {PInstr = END; PLabel = Some (label, addr); PSize = 0u; PCond = Cal}
         | None, label:: "EQU" :: [lit] ->
-            match (Regex.IsMatch (label,"^[a-zA-Z][a-zA-Z0-9_]*$"), System.UInt32.TryParse lit )with
-            |true, (true, k) -> 
-                Ok {PInstr = EQU; PLabel = Some (label,uint32 k); PSize = 0u; PCond = Cal }
+            match (Regex.IsMatch (label,"^[a-zA-Z][a-zA-Z0-9_]*$")) with
+            |true -> 
+                Ok {PInstr = EQU; PLabel = Some (label,uint32 lit); PSize = 0u; PCond = Cal }
             |_ -> Error (ERRTOPLEVEL "equ error")
     
         | None, label :: opc :: operands -> 
@@ -108,7 +108,9 @@ let parseLine (symtab: SymbolTable option) (loadAddr: WAddr) (asmLine:string) =
     |> Array.toList
     |> matchLine
 
-let inputToLines inp = 
+let inputToLines (inp:string) = 
+    
+  
     Regex.Split(inp, "[\r\n]+")
     |>Array.toList
     |> List.map (fun k -> k.Trim ())
