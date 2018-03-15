@@ -1114,46 +1114,6 @@ module Branch=
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                                       END                                                    //
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// module End=
-
-//     open CommonData
-//     open CommonLex
-   
-//     type ENDInstr = END'
-
-//     ///Branch Instruction Specs
-//     let bSpec = {
-//         InstrC = END
-//         Roots = ["END"]
-//         Suffixes = [""]
-//     }
-
-//     /// map of all possible opcodes recognised
-//     let opCodes = opCodeExpand bSpec
-
-
-//     //----------------------------Branch Parsing----------------------------//
-//     let parse (ls: LineData) : Result<Parse<ENDInstr>,string> option =
-//         let parse' (instrC, (root,suffix,pCond)) =
-//             let (WA la) = ls.LoadAddr 
-//             Ok {
-//                 PInstr=END'
-//                 PLabel = ls.Label |> Option.map (fun lab -> lab, la) ;
-//                 PSize = 0u; 
-//                 PCond = pCond 
-//                 }
-
-
-//         Map.tryFind ls.OpCode opCodes // lookup opcode to see if it is known
-//         |> Option.map parse' // if unknown keep none, if known parse it.
-
-
-//     /// Parse Active Pattern used by top-level code
-//     let (|IMatch|_|) = parse
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                      CommonTop                                                     //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1255,6 +1215,8 @@ module CommonTop =
     let inputToLines inp = 
         Regex.Split(inp, "[\r\n]+")
         |>Array.toList
+        |> List.map (fun k -> k.Trim ())
+        |> List.filter (fun k -> k <>"")
 
     
     let addSym (symtab:SymbolTable) parse= 
@@ -1294,9 +1256,10 @@ module CommonTop =
         let symtab = 
             parseAll lines None
             |>Result.map genSymTab
+        printf "%A" symtab
         symtab
         |>Result.map Some
-        |>Result.bind (parseAll lines)
+        |>Result.bind (parseAll (lines@["END"]))
 
     let rec storeIns addr (datapath:DataPath<Instr>) (parses:Parse<Instr> list) = 
         match parses with
@@ -1307,7 +1270,7 @@ module CommonTop =
     
     let initialDataPath:DataPath<Instr> = 
         let regs = 
-            [0u;0x2000u;0u;0u;0u;0u;0u;0u;0u;0u;0u;0u;0u;0xFF000000u;0u;8u]
+            [0u;0u;0u;0u;0u;0u;0u;0u;0u;0u;0u;0u;0u;0xFF000000u;0u;8u]
             |>List.map2 (fun a b -> (register a, b)) [0..15]
             |>Map.ofList
         let mm = Map.empty
@@ -1318,58 +1281,44 @@ module CommonTop =
         parseOneTwo lines
         |>Result.map (storeIns 0u initDP)
 
-    let executeAnyInstr (ins:Instr) (dp:DataPath<Instr>) : Result<DataPath<Instr>, string> = 
+    let runErrorMap ins res= 
+        match res with
+        |Ok k -> Ok k
+        |Error k -> 
+            match ins with
+            | ILSM _ -> Error (ERRILSM k )
+            | ILS _ -> Error (ERRILSM k )
+            | IB _ -> Error (ERRILSM k )
+            | END -> Error (ERRTOPLEVEL k)
+
+
+    let executeAnyInstr (ins:Instr) (dp:DataPath<Instr>) : Result<DataPath<Instr>, ErrInstr> = 
         let execute dp= 
             match ins with
-            | ILSM ins' -> LSM.execLSM ins' dp 
-            | ILS ins' -> LS.execLS ins' dp 
-            | IB ins' -> Branch.execB ins' dp 
+            | ILSM ins' -> LSM.execLSM ins' dp |> runErrorMap ins
+            | ILS ins' -> LS.execLS ins' dp |> runErrorMap ins
+            | IB ins' -> Branch.execB ins' dp |>runErrorMap ins
             | END -> Ok dp
         execute dp    
     
     let rec simulate addr (dp:DataPath<Instr>) = 
         let memContent = dp.MM.[WA addr]
         match memContent with
-        |Code END -> dp
+        |Code END -> Ok dp
         |Code ins -> 
             let newDP = executeAnyInstr ins dp
-            match newDP with
-            |Ok newDP' -> simulate (newDP'.Regs.[R15]-8u) newDP'
-            |Error k -> failwithf "%s" k
-        |DataLoc _ -> failwithf "Error: data memory accessed when fetching instruction"
+            Result.bind (fun k -> simulate (k.Regs.[R15]-8u) k) newDP
+        |DataLoc _ -> Error (ERRTOPLEVEL "Error: data memory accessed when fetching instruction")
 
 
     let input = 
-        "LDR R0,[R1] \r\n
-        END"
+        """STR R0,[R1]
+        POKEMON END"""
 
     let output = 
         input
         |>inputToLines
         |>genParsedDP initialDataPath
-        |>Result.map (simulate 0u)
+        |>Result.bind (simulate 0u)
             
     printf "%A" output
-
-
-
-    
-
-
-        
-    
-
-        
-        
-
-
-
-
-
-
-        
-
-
-        
-
-            

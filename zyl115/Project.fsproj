@@ -6,7 +6,14 @@
     <DebugType>portable</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Code.fs" />
+    <Compile Include="CommonData.fs" />
+    <Compile Include="CommonLex.fs" />
+    <Compile Include="FlexOp2.fs" />
+    <Compile Include="LS.fs" />
+    <Compile Include="LSM.fs" />
+    <Compile Include="Branch.fs" />
+    <Compile Include="CommonTop.fs" />
+    <Compile Include="TopLevelTest.fs" />
     <None Include="App.config" />
   </ItemGroup>
   <Import Project=".paket\Paket.Restore.targets" />
