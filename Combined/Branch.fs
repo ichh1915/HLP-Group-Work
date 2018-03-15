@@ -14,7 +14,6 @@ module Branch
 open CommonData
 open CommonLex
 open LS
-open FlexOp2
 
 //------------------------------Branch Instruction Type Definition--------------------//
 

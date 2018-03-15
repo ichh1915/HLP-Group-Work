@@ -1,6 +1,7 @@
 open CommonTop
 let input = 
         """STR R0,[R1]
+        
         POKEMON END"""
 
 let output = 

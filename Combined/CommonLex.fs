@@ -11,6 +11,7 @@
 module CommonLex
 
 open CommonData
+open System.Runtime.InteropServices
 
 /// ARM execution conditions
 type Condition =

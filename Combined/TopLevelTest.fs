@@ -1,7 +1,12 @@
 open CommonTop
+
+
 let input = 
-        """STR R0,[R1]
-        POKEMON END"""
+        "ADD R0,R0,#25*6"
+
+// let output = 
+//     input
+//     |> parseLine None (WA 0x1000u)
 
 let output = 
     input

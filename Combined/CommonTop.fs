@@ -18,7 +18,8 @@ type Instr =
     | ILSM of LSM.LSMInstr
     | ILS of LS.LSInstr
     | IB of Branch.BInstr
-    |END        
+    | IDP of DP.Instr
+    | END        
     
 
 /// allows different modules to return different error info
@@ -27,6 +28,7 @@ type ErrInstr =
     | ERRILSM of LSM.ErrInstr
     | ERRILS of LS.ErrInstr
     | ERRIB of Branch.ErrInstr
+    | ERRIDP of DP.ErrInstr
     | ERRTOPLEVEL of string
 
 /// Note that Instr in Mem and DP modules is NOT same as Instr in this module
@@ -43,6 +45,7 @@ let IMatch (ld: LineData) : Result<Parse<Instr>,ErrInstr> option =
     | Branch.IMatch pa -> pConv IB ERRIB pa
     | LS.IMatch pa -> pConv ILS ERRILS pa
     | LSM.IMatch pa -> pConv ILSM ERRILSM pa
+    | DP.IMatch pa -> pConv IDP ERRIDP pa
     | _ -> None
 
 
@@ -175,6 +178,7 @@ let runErrorMap ins res=
         | ILS _ -> Error (ERRILSM k )
         | IB _ -> Error (ERRILSM k )
         | END -> Error (ERRTOPLEVEL k)
+        | IDP _ -> Error (ERRIDP k)
 
 
 let executeAnyInstr (ins:Instr) (dp:DataPath<Instr>) : Result<DataPath<Instr>, ErrInstr> = 
@@ -183,6 +187,7 @@ let executeAnyInstr (ins:Instr) (dp:DataPath<Instr>) : Result<DataPath<Instr>, E
         | ILSM ins' -> LSM.execLSM ins' dp |> runErrorMap ins
         | ILS ins' -> LS.execLS ins' dp |> runErrorMap ins
         | IB ins' -> Branch.execB ins' dp |>runErrorMap ins
+        | IDP ins' -> DP.arith ins' dp |> runErrorMap ins
         | END -> Ok dp
     execute dp    
 
