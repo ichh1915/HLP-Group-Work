@@ -1,0 +1,24 @@
+﻿<Properties StartupConfiguration="{F44D1308-BDB2-4286-874C-C548E66BC57C}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="MyVTest.fs">
+    <Files>
+      <File FileName="VProgram.fs" Line="35" Column="22" />
+      <File FileName="DP.fs" Line="275" Column="24" />
+      <File FileName="Visual.fs" Line="36" Column="45" />
+      <File FileName="VCommon.fs" Line="15" Column="6" />
+      <File FileName="VData.fs" Line="32" Column="1" />
+      <File FileName="VLog.fs" Line="120" Column="16" />
+      <File FileName="CommonData.fs" Line="82" Column="23" />
+      <File FileName="CommonLex.fs" Line="69" Column="1" />
+      <File FileName="CommonTop.fs" Line="44" Column="28" />
+      <File FileName="VTest.fs" Line="46" Column="80" />
+      <File FileName="MyVTest.fs" Line="284" Column="67" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.VisualTest PreferredExecutionTarget="MonoDevelop.Default" />
+</Properties>

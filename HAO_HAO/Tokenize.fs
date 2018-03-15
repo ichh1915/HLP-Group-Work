@@ -154,7 +154,7 @@ let (|LexMatchD|_|) debug regex state =
         let mChars = String.length mStr
         if mChars = 0 then 
             failwithf "Unexpected 0 character match in LexMatch '%s'" regex
-        if debug then
+        if debug then 
             printfn "Match of '%s' with '%s' OK: match is '%s" state.Txt regex mStr; 
         let state' = {state with Txt = state.Txt.[mChars..]}
         Some (mStr,state')
