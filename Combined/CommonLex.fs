@@ -11,7 +11,6 @@
 module CommonLex
 
 open CommonData
-open System.Runtime.InteropServices
 
 /// ARM execution conditions
 type Condition =
@@ -34,7 +33,7 @@ type Condition =
     | Cal // the "always executed condition "AL". Used by default on no condition
 
 /// classes of instructions (example, add/change this is needed)
-type InstrClass = | ARI | LOG | LS | LSM | Branch 
+type InstrClass = | ARI | BITC | LS | LSM | Branch |MOVC |SFTC |TSTC
 
 /// specification of set of instructions
 type OpSpec = {

@@ -13,7 +13,13 @@
     <Compile Include="LS.fs" />
     <Compile Include="LSM.fs" />
     <Compile Include="Branch.fs" />
+    <Compile Include="TokenizeOperands_v2.fs" />
     <Compile Include="DP.fs" />
+    <Compile Include="SFT_v2.fs" />
+    <Compile Include="MOV_v2.fs" />
+    
+    <Compile Include="BIT_v2.fs" />
+    <Compile Include="TST_v2.fs" />
     <Compile Include="CommonTop.fs" />
     <Compile Include="TopLevelTest.fs" />
     <None Include="App.config" />
