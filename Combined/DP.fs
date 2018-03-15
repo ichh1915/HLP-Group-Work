@@ -9,28 +9,29 @@ open EEExtensions
 open CommonLex
 open CommonData
 open LS
+open FlexOp2
 
 // ----------------------------- Types ------------------------------------------------ //
 
-type Literal = {K: uint32; R: int}
+// type Literal = {K: uint32; R: int}
 
-type Reg = RName
+// type Reg = RName
 
-type SVal = 
-    | Nms of Literal
-    | Rg of Reg
+// type SVal = 
+//     | Nms of Literal
+//     | Rg of Reg
 
-type Shift = 
-    | LSL 
-    | LSR 
-    | ASR 
-    | ROR 
+// type Shift = 
+//     | LSL 
+//     | LSR 
+//     | ASR 
+//     | ROR 
 
-type Op2 = 
-    | Nm of Literal
-    | Ro of Reg
-    | Shifted of Reg * Shift * SVal
-    | RRX of Reg
+// type Op2 = 
+//     | Nm of Literal
+//     | Ro of Reg
+//     | Shifted of Reg * Shift * SVal
+//     | RRX of Reg
 
 type ArithType = 
     | ADD
@@ -47,7 +48,7 @@ type Suf =
     | NoFSet
 
 //type AriInstr = {Dest: RName option; Op1: RName option; Op2: Op2 option; Suffix: bool; arithType: ArithType}
-type AriInstr = {Dest: RName option; Op1: RName option; Op2: Op2 option; Suffix: Suf; arithType: ArithType option;Cond:Condition}
+type AriInstr = {Dest: RName option; Op1: RName; Op2: Op2; Suffix: Suf; arithType: ArithType;Cond:Condition}
 
 
 //Might want to add different type of Instruction in the future
@@ -56,13 +57,13 @@ type Instr =  AriInstr
 /// parse error (dummy, but will do)
 type ErrInstr = string
 
-type Token = 
-    | R of string*int // R0-R15, straight away use RName * int
-    | Opr of string     // e.g LSL, straight away use Shift
-    | Exp of string     // e.g #expression, use more D.U Type
-    | END
+// type Token = 
+//     | R of string*int // R0-R15, straight away use RName * int
+//     | Opr of string     // e.g LSL, straight away use Shift
+//     | Exp of string     // e.g #expression, use more D.U Type
+//     | END
 
-type LexData = {Txt: string; Num: int}
+// type LexData = {Txt: string; Num: int}
 
 type SumData = {Actual: uint32; CSum: uint64 ; VSum: int64}
 
@@ -93,7 +94,7 @@ let arithTypeMap =
 /// sample specification for set of instructions
 let dPSpec = {
     InstrC = ARI
-    Roots = ["add";"sub";"rsb";"adc";"sbc";"rsc";"cmp";"cmn"]
+    Roots = ["ADD";"SUB";"RSB";"ADC";"SBC";"RSC";"CMP";"CMN"]
     Suffixes = [""; "s"]
 }
 
@@ -119,7 +120,7 @@ let doArith op1Val (op2Val: uint64) carry =
 /// Do arithmetic operation from instr 
 let arith (instr: Instr) (data: DataPath<'INS>) : Result<DataPath<'INS>, string> = 
     let dest = instr.Dest
-    let op1 = instr.Op1.Value
+    let op1 = instr.Op1
     let op2 = instr.Op2
     let suf = instr.Suffix
     let operator = instr.arithType
@@ -152,15 +153,15 @@ let arith (instr: Instr) (data: DataPath<'INS>) : Result<DataPath<'INS>, string>
         let negVal (opVal: uint32) = uint64(~~~opVal) + 1UL
 
         match operator with
-        |Some ADD -> doArith op1Val (uint64 op2Val) 0u
-        |Some CMN -> doArith op1Val (uint64 op2Val) 0u
-        |Some SUB -> doArith op1Val (negVal op2Val) 0u
-        |Some CMP -> doArith op1Val (negVal op2Val) 0u
-        |Some RSB -> doArith op2Val (negVal op1Val) 0u
-        |Some ADC -> doArith op1Val (uint64 op2Val) carry
-        |Some SBC -> doArith op1Val (negVal (op2Val+1u)) carry
-        |Some RSC -> doArith op2Val (negVal (op1Val+1u)) carry
-        |None -> failwithf "Not supposed to happen!"
+        |ADD -> doArith op1Val (uint64 op2Val) 0u
+        |CMN -> doArith op1Val (uint64 op2Val) 0u
+        |SUB -> doArith op1Val (negVal op2Val) 0u
+        |CMP -> doArith op1Val (negVal op2Val) 0u
+        |RSB -> doArith op2Val (negVal op1Val) 0u
+        |ADC -> doArith op1Val (uint64 op2Val) carry
+        |SBC -> doArith op1Val (negVal (op2Val+1u)) carry
+        |RSC -> doArith op2Val (negVal (op1Val+1u)) carry
+        
 
     
     let createNewReg dest (sum: SumData) = 
@@ -170,19 +171,19 @@ let arith (instr: Instr) (data: DataPath<'INS>) : Result<DataPath<'INS>, string>
             [(y, (sum.Actual))]
             |> fun lst -> List.fold (fun prev x -> curReg.Add x) curReg lst //TODO:- increment PC count
         | None -> data.Regs
-    
-    let updateData dest op1Val op2Val = 
+
+    let updateData (dest:RName option) op1Val op2Val = 
         let sum = createSum op1Val op2Val
-        let fl = if (suf = FSet || operator = Some CMN|| operator = Some CMP) then setFlag sum else data.Fl
+        let fl = if (suf = FSet || operator = CMN|| operator =  CMP) then setFlag sum else data.Fl
         let newReg = createNewReg dest sum
         Ok (PCPlus4 {Fl = fl; Regs = newReg; MM = data.MM})
                       
     match op2 with
-    | Some (Shifted (reg, shiftOp, sVal)) -> 
+    | (RegS (reg, shiftOp, sVal)) -> 
         let n = 
             match sVal with
-            | Nms y -> y.R
-            | Rg r -> int(data.Regs.[r])
+            | Lit y -> int(y)
+            | RShift r -> int(data.Regs.[r])
         
         let op2Val = 
             match shiftOp with
@@ -200,21 +201,21 @@ let arith (instr: Instr) (data: DataPath<'INS>) : Result<DataPath<'INS>, string>
         
         updateData dest op1Val op2Val
 
-    | Some (RRX reg) -> 
+    | (RegRRX reg) -> 
         let op2Val = (carry <<< 31 ||| data.Regs.[reg] >>> 1)
 
         updateData dest op1Val op2Val
 
-    | Some (Ro reg) -> //if op2 is a register
+    | (Reg reg) -> //if op2 is a register
         let op2Val = data.Regs.[reg]
 
         updateData dest op1Val op2Val
 
-    | Some (Nm litNum) ->
-        let op2Val = litNum.K
+    | (Literal litNum) ->
+        let op2Val = litNum
         updateData dest op1Val op2Val
 
-    | None -> Error (sprintf "Not supposed to happen!")
+   
 
 
 
@@ -223,186 +224,186 @@ let arith (instr: Instr) (data: DataPath<'INS>) : Result<DataPath<'INS>, string>
 // ----------------------------- Useful Functions ------------------------------------------------ //
 
 // TODO:- Use a LexData instead of lit
-let evalExp (st: SymbolTable option) (lit: string) = 
-    let exp = lit.[1..] //Remove the # sign
+// let evalExp (st: SymbolTable option) (lit: string) = 
+//     let exp = lit.[1..] //Remove the # sign
     
-    let opMap = 
-            Map.ofList [ 
-                '+', (+)  
-                '-', (-) 
-                '*', (*)
-                ]
+//     let opMap = 
+//             Map.ofList [ 
+//                 '+', (+)  
+//                 '-', (-) 
+//                 '*', (*)
+//                 ]
     
-    //create a list of symbols/literals                
-    let symSeq = 
-        exp.Split([|'+' ; '-' ; '*' |], System.StringSplitOptions.RemoveEmptyEntries)
-        |> List.ofArray
+//     //create a list of symbols/literals                
+//     let symSeq = 
+//         exp.Split([|'+' ; '-' ; '*' |], System.StringSplitOptions.RemoveEmptyEntries)
+//         |> List.ofArray
     
-    //create a list of operators
-    let opSeq = 
-        exp 
-        |> fun str -> if (str.[0] = '-' || str.[0] = '+') then str else "+" + str
-        |> Seq.toList
-        |> List.collect (fun x -> if opMap.ContainsKey x then [x] else []) 
+//     //create a list of operators
+//     let opSeq = 
+//         exp 
+//         |> fun str -> if (str.[0] = '-' || str.[0] = '+') then str else "+" + str
+//         |> Seq.toList
+//         |> List.collect (fun x -> if opMap.ContainsKey x then [x] else []) 
     
-    //Use List.fold to evalute the expression
-    let folder state litOrSym =
-        match state, litOrSym with
-        | (cummSum, hd::rst), y -> 
-            let createSum sum num = opMap.[hd] sum num
+//     //Use List.fold to evalute the expression
+//     let folder state litOrSym =
+//         match state, litOrSym with
+//         | (cummSum, hd::rst), y -> 
+//             let createSum sum num = opMap.[hd] sum num
 
-            match y, st with 
-            | y, Some symTab when symTab.ContainsKey y -> 
-                createSum cummSum (int(symTab.[y])) , rst
-            | y, _ -> 
-                createSum cummSum (int(y)) , rst
-        | _ ->
-            (state)    
+//             match y, st with 
+//             | y, Some symTab when symTab.ContainsKey y -> 
+//                 createSum cummSum (int(symTab.[y])) , rst
+//             | y, _ -> 
+//                 createSum cummSum (int(y)) , rst
+//         | _ ->
+//             (state)    
 
-    List.fold folder (0, opSeq) symSeq
-    |> fun (x, y) -> x
+//     List.fold folder (0, opSeq) symSeq
+//     |> fun (x, y) -> x
 
 
 
 // ------------------------------- Lex Functions -------------------------------------------------//
 
 
-let (|LexMatchD|_|) debug regex (lexData: LexData) = 
-    match String.regexMatch regex (lexData.Txt) with
-    | None -> 
-        if debug 
-        then printfn "Match of '%s' with '%s' failed." lexData.Txt regex
-        None
-    | Some (mStr, rst) -> 
-        let mChars = String.length mStr
-        if mChars = 0 then
-            failwithf "Unexpected 0 character match '%s' " regex
-        if debug then
-            printfn "Match of '%s' with '%s' OK: match is '%s'" lexData.Txt regex mStr
-        let lexData' = {lexData with Txt = lexData.Txt.[mChars..]}
-        Some (mStr, lexData')
+// let (|LexMatchD|_|) debug regex (lexData: LexData) = 
+//     match String.regexMatch regex (lexData.Txt) with
+//     | None -> 
+//         if debug 
+//         then printfn "Match of '%s' with '%s' failed." lexData.Txt regex
+//         None
+//     | Some (mStr, rst) -> 
+//         let mChars = String.length mStr
+//         if mChars = 0 then
+//             failwithf "Unexpected 0 character match '%s' " regex
+//         if debug then
+//             printfn "Match of '%s' with '%s' OK: match is '%s'" lexData.Txt regex mStr
+//         let lexData' = {lexData with Txt = lexData.Txt.[mChars..]}
+//         Some (mStr, lexData')
 
-let (|LexMatch|_|) = (|LexMatchD|_|) false
+// let (|LexMatch|_|) = (|LexMatchD|_|) false
 
-let nextToken ld = 
-    let incr ld = {ld with Num = ld.Num + 1}
-    match ld with
-    | LexMatch @"^\," (_, ld') -> None, ld'
-    | LexMatch @"^[ ]" (_, ld') -> None, ld'
-    | LexMatch @"^#.*" (exp, ld') -> Some (Exp (exp)), ld'
-    | LexMatch @"^[rR][0-9]+" (reg, ld') -> Some (R (reg, ld'.Num)), incr ld'
-    | LexMatch @"^[lL][sS][lL]" (opr, ld') -> Some (Opr (opr)), ld'
-    | LexMatch @"^[lL][sS][rR]" (opr, ld') -> Some(Opr(opr)), ld'
-    | LexMatch @"^[aA][sS][rR]" (opr, ld') -> Some(Opr(opr)), ld'
-    | LexMatch @"^[rR][rR][xX]" (opr, ld') -> Some(Opr(opr)), ld'
-    | LexMatch @"^[rR][oO][rR]" (opr, ld') -> Some(Opr(opr)), ld'
-    | _ -> failwithf "Matching failed in lexer" 
+// let nextToken ld = 
+//     let incr ld = {ld with Num = ld.Num + 1}
+//     match ld with
+//     | LexMatch @"^\," (_, ld') -> None, ld'
+//     | LexMatch @"^[ ]" (_, ld') -> None, ld'
+//     | LexMatch @"^#.*" (exp, ld') -> Some (Exp (exp)), ld'
+//     | LexMatch @"^[rR][0-9]+" (reg, ld') -> Some (R (reg, ld'.Num)), incr ld'
+//     | LexMatch @"^[lL][sS][lL]" (opr, ld') -> Some (Opr (opr)), ld'
+//     | LexMatch @"^[lL][sS][rR]" (opr, ld') -> Some(Opr(opr)), ld'
+//     | LexMatch @"^[aA][sS][rR]" (opr, ld') -> Some(Opr(opr)), ld'
+//     | LexMatch @"^[rR][rR][xX]" (opr, ld') -> Some(Opr(opr)), ld'
+//     | LexMatch @"^[rR][oO][rR]" (opr, ld') -> Some(Opr(opr)), ld'
+//     | _ -> failwithf "Matching failed in lexer" 
 
-let tokenize (line: string): Token List = 
-    let rec tokenize' ld = 
-        match ld.Txt with
-        | "" -> [END]
-        | _ -> 
-            let nt, st' = nextToken ld
-            match nt with 
-            | None -> tokenize' st'
-            | Some tok -> tok :: tokenize' st'
-    tokenize' {Txt = line; Num = 0}
+// let tokenize (line: string): Token List = 
+//     let rec tokenize' ld = 
+//         match ld.Txt with
+//         | "" -> [END]
+//         | _ -> 
+//             let nt, st' = nextToken ld
+//             match nt with 
+//             | None -> tokenize' st'
+//             | Some tok -> tok :: tokenize' st'
+//     tokenize' {Txt = line; Num = 0}
 
 
 // ---------------------- Parse line data ------------------------------------- //
 
-let parseTok (symTb: SymbolTable option) (tok: Token List) = 
+// let parseTok (symTb: SymbolTable option) (tok: Token List) = 
 
-    let genR r = if regNames.ContainsKey r then Some regNames.[r] else None
-    let genOp2 r = 
-        match genR r with
-        | Some op2' -> Some (Ro op2')
-        | None -> None
+//     let genR r = if regNames.ContainsKey r then Some regNames.[r] else None
+//     let genOp2 r = 
+//         match genR r with
+//         | Some op2' -> Some (Ro op2')
+//         | None -> None
 
-    match tok with
-    | [R (dest, 0) ; R (op1, 1) ; Exp(exp); END] -> 
+//     match tok with
+//     | [R (dest, 0) ; R (op1, 1) ; Exp(exp); END] -> 
 
-        let destR = genR dest
-        let op1R = genR op1
-        let op2 = 
-            //TODO: - let numberCheck = System.Text.RegularExpressions.Regex("^[0-9]+$")   
-            match symTb with
-            |Some symtab -> 
-                let expRes = convExp2Lit exp.[1..] symtab
-                match expRes with
-                |Ok res -> 
-                    Some (Nm {K = res ; R = int32(res)})
-                |Error _ -> None    
-            |None ->     
-                Some (Nm {K = uint32(0) ; R = 0})
+//         let destR = genR dest
+//         let op1R = genR op1
+//         let op2 = 
+//             //TODO: - let numberCheck = System.Text.RegularExpressions.Regex("^[0-9]+$")   
+//             match symTb with
+//             |Some symtab -> 
+//                 let expRes = convExp2Lit exp.[1..] symtab
+//                 match expRes with
+//                 |Ok res -> 
+//                     Some (Literal res)
+//                 |Error _ -> None    
+//             |None ->     
+//                 Some (Literal 0u)
 
-        destR, op1R, op2
-    // TODO:- Expression case
-    //| [R (dest, 0) ; R (op1, 1) ; R(op2, 2); Opr(opr) ; Exp(exp) ; END] -> 
-        //let destR = genR dest
-        //let op1R = genR op1 
-        //let op2R = 
-             //Shifted of Reg * Shift * SVal
+//         destR, op1R, op2
+//     // TODO:- Expression case
+//     //| [R (dest, 0) ; R (op1, 1) ; R(op2, 2); Opr(opr) ; Exp(exp) ; END] -> 
+//         //let destR = genR dest
+//         //let op1R = genR op1 
+//         //let op2R = 
+//              //Shifted of Reg * Shift * SVal
        
-    | [R (dest, 0) ; R (op1, 1) ; R(op2, 2); END] -> 
-        let destR = genR dest
-        let op1R = genR op1
-        let op2R = genOp2 op2
-        destR, op1R, op2R
+//     | [R (dest, 0) ; R (op1, 1) ; R(op2, 2); END] -> 
+//         let destR = genR dest
+//         let op1R = genR op1
+//         let op2R = genOp2 op2
+//         destR, op1R, op2R
 
-    | [R (op1, 0) ; R (op2, 1); END] -> //CMP Case
-        let op1R = genR op1
-        let op2R = genOp2 op2
+//     | [R (op1, 0) ; R (op2, 1); END] -> //CMP Case
+//         let op1R = genR op1
+//         let op2R = genOp2 op2
 
-        None, op1R, op2R
+//         None, op1R, op2R
 
-    | [R (op1, 0) ; Exp(exp) ; END] -> //CMP Case
-        let op1R = genR op1
-        let op2 = 
-            match symTb with
-            |Some symtab -> 
-                let expRes = convExp2Lit exp.[1..]  symtab
-                match expRes with
-                |Ok res -> 
-                    Some (Nm {K = res ; R = int32(res)})
-                |Error _ -> None    
-            |None ->     
-                Some (Nm {K = uint32(0) ; R = 0})
+//     | [R (op1, 0) ; Exp(exp) ; END] -> //CMP Case
+//         let op1R = genR op1
+//         let op2 = 
+//             match symTb with
+//             |Some symtab -> 
+//                 let expRes = convExp2Lit exp.[1..]  symtab
+//                 match expRes with
+//                 |Ok res -> 
+//                     Some (Literal res)
+//                 |Error _ -> None    
+//             |None ->     
+//                 Some (Literal 0u)
         
-        None, op1R, op2
+//         None, op1R, op2
 
-    | _ -> 
-        None, None, None
+//     | _ -> 
+//         None, None, None
 
-let arithParse (ls: LineData): Result<Parse<Instr>, string> option = 
-    let parse' (instrC, ((root: string), suffix: string, pCond)) = 
-        let suf = 
-            match suffix with
-            |"" -> NoFSet  
-            |"s" -> FSet
-            |_ -> failwithf "Impossible, it will be filtered by Option.map"
+// let arithParse (ls: LineData): Result<Parse<Instr>, string> option = 
+//     let parse' (instrC, ((root: string), suffix: string, pCond)) = 
+//         let suf = 
+//             match suffix with
+//             |"" -> NoFSet  
+//             |"s" -> FSet
+//             |_ -> failwithf "Impossible, it will be filtered by Option.map"
 
-        let tokenList = tokenize ls.Operands
-        let dest, op1, op2 = parseTok ls.SymTab tokenList
-        let arithType = 
-            if arithTypeMap.ContainsKey (root.ToUpper()) 
-                then Some (arithTypeMap.[root.ToUpper()])
-                else None
-        let instr = {Dest = dest; Op1 = op1; Op2 = op2; Suffix = suf; arithType = arithType;Cond = pCond}       
+//         let tokenList = tokenize ls.Operands
+//         let dest, op1, op2 = parseTok ls.SymTab tokenList
+//         let arithType = 
+//             if arithTypeMap.ContainsKey (root.ToUpper()) 
+//                 then Some (arithTypeMap.[root.ToUpper()])
+//                 else None
+//         let instr = {Dest = dest; Op1 = op1; Op2 = op2; Suffix = suf; arithType = arithType;Cond = pCond}       
 
-        match instr with
-        | {Dest = None; Op1 = None; Op2 = None} -> Error (sprintf "Syntax error")
-        | {Dest = None} -> 
-            match root with
-            | x when (x = "cmp") || (x = "cmn") -> Ok { PInstr = instr ; PLabel = None ; PSize = 4u ; PCond = pCond }
-            | _ -> Error (sprintf "Error Dest")
-        | {Op1 = None} -> Error (sprintf "Error Op1")
-        | {Op2 = None} -> Error (sprintf "Error Op2")
-        | _ -> Ok { PInstr = instr ; PLabel = None ; PSize = 4u; PCond = pCond }
+//         match instr with
+//         | {Dest = None; Op1 = None; Op2 = None} -> Error (sprintf "Syntax error")
+//         | {Dest = None} -> 
+//             match root with
+//             | x when (x = "cmp") || (x = "cmn") -> Ok { PInstr = instr ; PLabel = None ; PSize = 4u ; PCond = pCond }
+//             | _ -> Error (sprintf "Error Dest")
+//         | {Op1 = None} -> Error (sprintf "Error Op1")
+//         | {Op2 = None} -> Error (sprintf "Error Op2")
+//         | _ -> Ok { PInstr = instr ; PLabel = None ; PSize = 4u; PCond = pCond }
        
-    Map.tryFind (ls.OpCode.ToLower()) opCodes
-    |> Option.map parse'
+//     Map.tryFind (ls.OpCode.ToLower()) opCodes
+//     |> Option.map parse'
 
 //let parse (ls: LineData) : Result<Parse<Instr>,string> option = //Only parse the right instruction
     //let parse' (instrC, ((root: string), suffix: string, pCond)) =
@@ -560,4 +561,65 @@ let arithParse (ls: LineData): Result<Parse<Instr>, string> option =
 
 
 /// Parse Active Pattern used by top-level code
-let (|IMatch|_|) = arithParse
+
+
+let arithParse2 (ls: LineData): Result<Parse<AriInstr>, string> option =
+    let parse' (instrC, ((root: string), suffix: string, pCond)) = 
+        let (WA la) = ls.LoadAddr 
+        let suf = 
+            match suffix with
+            |"" -> NoFSet  
+            |"s" -> FSet
+            |_ -> failwithf "Impossible, it will be filtered by Option.map"
+        let arithType = (arithTypeMap.[root.ToUpper()])
+            
+        let opStrList = splitIntoWords ls.Operands [|','|]
+        printf "%A" opStrList
+        let destReg,op1Reg,op2 = 
+            match opStrList,arithType with
+            |op1::op2, CMP |op1::op2, CMN -> 
+                let op1Reg = Map.tryFind op1 regNames
+                let op2' = 
+                    match ls.SymTab with
+                    |None -> Some (Ok (Literal 0u))
+                    |Some symtab -> Some (strList2Offset op2 symtab)
+                (None,op1Reg,op2')
+            |dest::op1::op2,_ |dest::op1::op2,_  -> 
+                
+                let destReg = Map.tryFind dest regNames
+                let op1Reg = Map.tryFind op1 regNames
+                let op2' = 
+                    match ls.SymTab with
+                    |None -> Some (Ok (Literal 0u))
+                    |Some symtab -> Some (strList2Offset op2 symtab)
+                (destReg,op1Reg,op2')
+            
+            |_ -> (None,None,None)
+
+        printf "%A" (destReg,op1Reg,op2) 
+        let instr = 
+            match destReg,op1Reg,op2 with
+            |Some dest,Some op1, Some (Ok op2) -> Ok {Dest = Some dest; Op1 = op1; Op2 = op2; Suffix = suf; arithType = arithType;Cond = pCond} 
+            |None,Some op1, Some (Ok op2) -> Ok {Dest = None; Op1 = op1; Op2 = op2; Suffix = suf; arithType = arithType;Cond = pCond} 
+            |None,_,_ -> 
+                
+                Error "Dest Error"
+            |_,None,_ -> Error "Op1 Error"
+            |_,_,Some (Error k ) -> Error k
+            |_ -> Error "unexpected Error in DP"
+
+        ///output Parse Type
+        match instr with 
+        |Ok (instrLS' ) -> 
+            Ok {
+                PInstr=instrLS'; 
+                PLabel = ls.Label |> Option.map (fun lab -> lab, la) ;
+                PSize = 4u; 
+                PCond = pCond 
+                }
+        |Error k -> Error k            
+
+    Map.tryFind ls.OpCode opCodes // lookup opcode to see if it is known
+    |> Option.map parse' // if unknown keep none, if known parse it.
+
+let (|IMatch|_|) = arithParse2

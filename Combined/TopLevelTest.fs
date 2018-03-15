@@ -5,11 +5,8 @@ open System
 
 let input = 
         """
-        Moveq R0,#5
-        ADD R0,R0,#0X25
-        pokemon EQU 3456
-        ADD R3,R4, #pokemon       
-        END
+        cmp R0, #1
+        
         """
 
 let output = 
