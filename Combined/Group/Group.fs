@@ -11,6 +11,8 @@ let main argv =
 
     let input = 
             """
+            mov r1,#0x8000
+            tst r1,r2
             adds R0,R0, #1
             
             """

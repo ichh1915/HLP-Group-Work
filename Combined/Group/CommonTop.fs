@@ -167,7 +167,6 @@ let parseOneTwo lines =
     let symtab = 
         parseAll lines None
         |>Result.map genSymTab
-    printf "%A" symtab
     symtab
     |>Result.map Some
     |>Result.bind (parseAll (lines@["END"]))

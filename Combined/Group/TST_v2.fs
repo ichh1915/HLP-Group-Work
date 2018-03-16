@@ -7,6 +7,7 @@ module TT2
     open CommonLex
     open TokenizeOperandsV2
     open LS
+    open FlexOp2
 
     type TTCode = TST|TEQ
     let opcodeMap = 
@@ -14,7 +15,7 @@ module TT2
 
     type Instr =  {Opcode:TTCode;
                    Op1:RName;
-                   Op2:FlexOp2;
+                   Op2:Op2;
                    Cond : Condition
     }
 
@@ -32,17 +33,21 @@ module TT2
     let opCodes = opCodeExpand MVSpec
 
     let TTparse (ls: LineData) : Result<Parse<Instr>,string> option =
+        let (WA la) = ls.LoadAddr
         let parse' (instrC, (root,suffix,pCond)) =
-              let oprands = ls.Operands|>tokenize|>ParseTSTOps 
-              Ok { 
-                 PInstr={Opcode=opcodeMap.[root];
-                         Op1 = oprands.Op1;
-                         Op2 = oprands.Op2;
-                         Cond = pCond
-                 }; 
-                 PLabel = None ; 
-                 PSize = 4u; 
-                 PCond = pCond }
+              let oprands = ls.Operands|>splitStrIntoList|>ParseTSTOps ls
+              match oprands with
+              |Ok op -> 
+                  Ok { 
+                     PInstr={Opcode=opcodeMap.[root];
+                             Op1 = op.Op1;
+                             Op2 = op.Op2;
+                             Cond = pCond
+                     }; 
+                     PLabel = ls.Label |> Option.map (fun lab -> lab, la) ; 
+                     PSize = 4u; 
+                     PCond = pCond }
+               |Error k -> Error k
 
         Map.tryFind ls.OpCode opCodes
         |> Option.map parse'
@@ -66,7 +71,7 @@ module TT2
     let TestExecute (cpuData:DataPath<'INS>) (instr):DataPath<'INS> = 
         let rop1=cpuData.Regs.[instr.Op1]
         let setC = instr.Op2|>Op2SetCFlag cpuData
-        let rop2 = instr.Op2|>FlexOp2 cpuData
+        let rop2 = instr.Op2|>fun k -> flexOp2 k cpuData
         let updateFlRegs'= updateFl cpuData setC
         
         match instr.Opcode with

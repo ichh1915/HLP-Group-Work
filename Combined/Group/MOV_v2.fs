@@ -7,6 +7,7 @@ module MV2
     open CommonLex
     open TokenizeOperandsV2
     open LS
+    open FlexOp2
 
     type MVCode = MOV| MVN
     let opcodeMap = 
@@ -15,7 +16,7 @@ module MV2
     type Instr =  {Opcode:MVCode;
                    Setflag:bool;
                    Rdest:RName;
-                   Op2:FlexOp2;
+                   Op2:Op2;
                    Cond :Condition
     }
 
@@ -33,18 +34,22 @@ module MV2
     let opCodes = opCodeExpand MVSpec
 
     let MVparse (ls: LineData) : Result<Parse<Instr>,string> option =
+        let (WA la) = ls.LoadAddr
         let parse' (instrC, (root,suffix,pCond)) =
-              let oprands = ls.Operands|>tokenize|>ParseMOVOps 
-              Ok { 
-                 PInstr={Opcode=opcodeMap.[root];
-                         Setflag=suffix|> function|"S"->true|_->false;  
-                         Rdest=oprands.Dest;
-                         Op2 = oprands.Op2;
-                         Cond = pCond
-                 }; 
-                 PLabel = None ; 
-                 PSize = 4u; 
-                 PCond = pCond }
+              let oprands = ls.Operands|>splitStrIntoList|>ParseMOVOps ls
+              match oprands with
+              |Ok op -> 
+                  Ok { 
+                     PInstr={Opcode=opcodeMap.[root];
+                             Setflag=suffix|> function|"S"->true|_->false;  
+                             Rdest=op.Dest;
+                             Op2 = op.Op2;
+                             Cond = pCond
+                     }; 
+                     PLabel = ls.Label |> Option.map (fun lab -> lab, la) ;
+                     PSize = 4u; 
+                     PCond = pCond }
+               |Error k -> Error k
 
         Map.tryFind ls.OpCode opCodes
         |> Option.map parse'
@@ -70,7 +75,7 @@ module MV2
 
     let MovsExecute (cpuData:DataPath<'INS>) (instr): DataPath<'INS> = 
         let setC = instr.Op2|>Op2SetCFlag cpuData
-        let rop2 = instr.Op2|>FlexOp2 cpuData
+        let rop2 = instr.Op2|> fun k -> flexOp2 k cpuData
         let updateFlRegs'= updateFlRegs cpuData instr.Rdest instr.Setflag setC
         
         match instr.Opcode with

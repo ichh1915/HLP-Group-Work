@@ -5,7 +5,7 @@
 
 module DP 
 
-open EEExtensions
+
 open CommonLex
 open CommonData
 open LS

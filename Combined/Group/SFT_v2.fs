@@ -7,6 +7,7 @@ module SF2
     open CommonLex
     open TokenizeOperandsV2
     open LS
+    open FlexOp2
 
     type ShiftCode = |LSL |LSR |ASR |ROR |RRX
 
@@ -18,7 +19,7 @@ module SF2
                    Setflag:bool;
                    Rdest:RName;
                    Op1:RName;
-                   Op2:FlexOp2;
+                   Op2:Op2 option;
                    Cond:Condition
     }
 
@@ -41,20 +42,24 @@ module SF2
             let (WA la) = ls.LoadAddr // address this instruction is loaded into memory
 
             ///string of all operands->{Dest:RName; Op1:Uint32 option; op2:uint32}
-            let operands = ls.Operands|>tokenize|>ParseSHIFTOps 
-            Ok { 
-               PInstr= {
-                         Opcode= opcodeMap.[root];
-                         Setflag= suffix|> function|"S"->true|_->false;                                                    
-                         Rdest= operands.Dest;                                               
-                         Op1=operands.Op1;
-                         Op2=operands.Op2;
-                         Cond = pCond
-                }; 
+            let operands = ls.Operands|>splitStrIntoList|>ParseSHIFTOps root ls
+            match operands with 
+            |Ok op -> 
+                 
+                Ok { 
+                   PInstr= {
+                             Opcode= opcodeMap.[root];
+                             Setflag= suffix|> function|"S"->true|_->false;                                                    
+                             Rdest= op.Dest;                                               
+                             Op1=op.Op1;
+                             Op2=op.Op2;
+                             Cond = pCond
+                    }; 
                 PLabel = ls.Label |> Option.map (fun lab -> lab, la) ; 
                 PSize = 4u; 
                 PCond = pCond;           
                 }
+            |Error k -> Error k
 
         Map.tryFind ls.OpCode opCodes // lookup opcode to see if it is known
         |> Option.map parse' // if unknown keep none, if known parse it.
@@ -113,14 +118,17 @@ module SF2
                     else if int32 (op1>>>(int32 op2-1)) &&& 1 = 1 then true else false //note here shift is in the range 0-31
             |RRX -> if (int32 op1) &&& 1 = 1 then true else false
         match setF with
-            |true ->  { Fl={N=checkN; Z=checkZ; C=checkC; V=cpuData'.Fl.V}; Regs=Map.add rdest result cpuData'.Regs ; MM = cpuData'.MM}
+            |true->  { Fl={N=checkN; Z=checkZ; C=checkC; V=cpuData'.Fl.V}; Regs=Map.add rdest result cpuData'.Regs ; MM = cpuData'.MM}
             |false -> { Fl=cpuData'.Fl; Regs=Map.add rdest result cpuData'.Regs ; MM = cpuData'.MM}  
-
+            
 
     //Execute Shift Operations
     let ShiftExecute (cpuData:DataPath<'INS>) (instr) : DataPath<'INS> = 
         let r1=cpuData.Regs.[instr.Op1]
-        let r2=instr.Op2|>FlexOp2 cpuData
+        let r2=
+            match instr.Op2 with
+            |Some op2 -> flexOp2 op2 cpuData
+            |None -> 0u
         let updateFlRegs' = updateFlRegs cpuData instr.Opcode instr.Rdest r1 r2 instr.Setflag 
 
         //For the case Rd and Op1 are the same register
