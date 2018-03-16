@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Expecto</id>
+    <version>5.1.2</version>
+    <title>Expecto</title>
+    <authors>Anthony Lloyd and contributors</authors>
+    <owners>Anthony Lloyd and contributors</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/haf/expecto/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/haf/expecto</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/haf/expecto/master/docs/expecto-logo-small.png</iconUrl>
+    <description>Advanced testing library for F#</description>
+    <releaseNotes>Update Mono.Cecil to 0.10.0-beta7. #215 thanks @MNie
+Expecto.BenchmarkDotNet .NETCoreApp versions. #214 thanks @AnthonyLloyd</releaseNotes>
+    <copyright>Copyright © 2017</copyright>
+    <tags>test testing fsharp assert expect stress performance unit random property</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.6.1">
+        <dependency id="Argu" version="3.7.0" exclude="Build,Analyzers" />
+        <dependency id="FSharp.Core" version="4.1.18" exclude="Build,Analyzers" />
+        <dependency id="Mono.Cecil" version="0.10.0-beta7" exclude="Build,Analyzers" />
+        <dependency id="System.ValueTuple" version="4.4.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard1.6">
+        <dependency id="Argu" version="3.7.0" exclude="Build,Analyzers" />
+        <dependency id="FSharp.Core" version="4.1.18" exclude="Build,Analyzers" />
+        <dependency id="Mono.Cecil" version="0.10.0-beta7" exclude="Build,Analyzers" />
+        <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+        <dependency id="System.Diagnostics.FileVersionInfo" version="4.3.0" exclude="Build,Analyzers" />
+        <dependency id="System.ValueTuple" version="4.4.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Argu" version="3.7.0" exclude="Build,Analyzers" />
+        <dependency id="FSharp.Core" version="4.1.18" exclude="Build,Analyzers" />
+        <dependency id="Mono.Cecil" version="0.10.0-beta7" exclude="Build,Analyzers" />
+        <dependency id="System.Diagnostics.FileVersionInfo" version="4.3.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>
