@@ -11,9 +11,11 @@ let main argv =
 
     let input = 
             """
-            mov r1,#0x8000
-            tst r1,r2
-            adds R0,R0, #1
+            mov r1,#5
+            BACKHERE SUBS R1,R1,#1
+            BNE BACKHERE
+            MOV R0,#55
+            END
             
             """
 
@@ -22,7 +24,16 @@ let main argv =
         |>inputToLines
         |>genParsedDP initialDataPath
         |>Result.bind (simulate 0u)
-            
+
+    let regVals out = 
+        out.Regs
+        |>Map.toList
+        |>List.map (fun (_,b) -> b)
+
+    let valList = Result.map regVals output
+
     printf "%A" output
+    printf "%A" valList
+    
     printfn "%A" argv
     0 // return an integer exit code
