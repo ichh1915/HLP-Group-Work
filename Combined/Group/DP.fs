@@ -142,7 +142,7 @@ let arith (instr: Instr) (data: DataPath<'INS>) : Result<DataPath<'INS>, string>
 
         let cFlag = uint64(sum.Actual) <> sum.CSum // Can be just .. <> ..  //Think of the mathematical value, not operational
         let zFlag = sum.Actual = 0u 
-        let nFlag = int(sum.Actual) < 0 
+        let nFlag = sum.Actual>>>31 = 1u 
         let vFlag = int64(int32(sum.Actual)) <> sum.VSum 
 
         { N = nFlag; C = cFlag; Z = zFlag; V = vFlag}

@@ -11,9 +11,8 @@ let main argv =
 
     let input = 
             """
-            mov r0,#5
-            mov r1,#0x30
-            mov r2,#0b111
+            
+            subs r0,r0,#5
             
             
             
