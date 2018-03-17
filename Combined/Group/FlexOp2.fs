@@ -61,6 +61,7 @@ let checkLitValidity lit =
 let makeLiteral (literalData:uint32) = 
     match literalData with
     | lit when checkLitValidity lit -> Some (Literal lit)
+    | lit when checkLitValidity (~~~lit+1u) -> Some (Literal lit)
     | _ -> None
 
 

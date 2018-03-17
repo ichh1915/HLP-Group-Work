@@ -122,10 +122,10 @@ let convExp2Lit (str:string)  (symtab:SymbolTable) =
             |true->  System.Convert.ToInt32 (numWithout0b,2) |>uint32|> makeLiteral
             |false -> None
         |str -> 
-            match Regex.IsMatch (str,"^[0-9][0-9]*$") with
+            match Regex.IsMatch (str,"^[0-9\-][0-9]*$") with
             |true-> System.Int32.Parse str |>uint32|> makeLiteral
             |false -> Map.tryFind str symtab |> Option.bind makeLiteral
-        
+
     let detectFirst list= 
         let firstOpIndex = List.tryFindIndex (fun k -> (k = '+' )|| (k = '-') || (k = '*')) list
         match firstOpIndex with
@@ -136,7 +136,10 @@ let convExp2Lit (str:string)  (symtab:SymbolTable) =
         |Some index -> 
             let (first,rest) = List.splitAt index list
             let firstLitStr = convCharListToStr first
-            (convStr2Lit symtab firstLitStr,(List.tail rest),list.[index])
+            printf "%A" firstLitStr
+            match list.[index] with
+            |'-' when index = 0-> (Some(Literal 0u),(List.tail rest),list.[index])
+            |_ -> (convStr2Lit symtab firstLitStr,(List.tail rest),list.[index])
            
     let rec parseExp firstLit operator cList (symtab:SymbolTable) = 
         let (lit,rest,op) = detectFirst cList
