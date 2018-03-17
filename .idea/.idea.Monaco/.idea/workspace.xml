@@ -2,8 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9f176b1c-3f95-4b51-b27b-5c730e280add" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/arm-monaco/app/css/my-style.css" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/arm-monaco/app/modal.html" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Monaco/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/.idea.Monaco/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/arm-monaco" afterPath="$PROJECT_DIR$/arm-monaco" />
+      <change beforePath="$PROJECT_DIR$/arm-monaco/app/index.html" afterPath="$PROJECT_DIR$/arm-monaco/app/index.html" />
+      <change beforePath="$PROJECT_DIR$/arm-monaco/app/js/editor.js" afterPath="$PROJECT_DIR$/arm-monaco/app/js/editor.js" />
+      <change beforePath="$PROJECT_DIR$/arm-monaco/package.json" afterPath="$PROJECT_DIR$/arm-monaco/package.json" />
+      <change beforePath="$PROJECT_DIR$/arm-monaco/src/Emulator/Common.fs" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/arm-monaco/src/Emulator/Emulator.fsproj" afterPath="$PROJECT_DIR$/arm-monaco/src/Emulator/Emulator.fsproj" />
+      <change beforePath="$PROJECT_DIR$/arm-monaco/src/Emulator/Tests.fs" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/arm-monaco/src/Emulator/paket.references" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/arm-monaco/src/Renderer/Renderer.fs" afterPath="$PROJECT_DIR$/arm-monaco/src/Renderer/Renderer.fs" />
+      <change beforePath="$PROJECT_DIR$/arm-monaco/src/Renderer/Update.fs" afterPath="$PROJECT_DIR$/arm-monaco/src/Renderer/Update.fs" />
+      <change beforePath="$PROJECT_DIR$/arm-monaco/yarn.lock" afterPath="$PROJECT_DIR$/arm-monaco/yarn.lock" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -14,117 +26,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="DP.fs" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/DP.fs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-411">
-              <caret line="217" column="2" lean-forward="true" selection-start-line="217" selection-start-column="2" selection-end-line="217" selection-end-column="2" />
-              <folding>
-                <marker date="1521329395369" expanded="true" signature="267:9007" ph="  ..." />
-                <marker date="1521329395369" expanded="false" signature="276:322" ph="..." />
-                <marker date="1521329395369" expanded="true" signature="476:534" ph="// type SVal =  ..." />
-                <marker date="1521329395369" expanded="true" signature="536:607" ph="// type Shift =  ..." />
-                <marker date="1521329395369" expanded="true" signature="610:725" ph="// type Op2 =  ..." />
-                <marker date="1521329395369" expanded="true" signature="742:824" ph="=  ..." />
-                <marker date="1521329395369" expanded="true" signature="749:824" ph="| ADD ..." />
-                <marker date="1521329395369" expanded="true" signature="835:861" ph="=  ..." />
-                <marker date="1521329395369" expanded="true" signature="842:861" ph="| FSet ..." />
-                <marker date="1521329395369" expanded="true" signature="1235:1458" ph="// type Token =  ..." />
-                <marker date="1521329395369" expanded="true" signature="4793:4801" ph=" ..." />
-                <marker date="1521329395369" expanded="true" signature="4793:6548" ph=" : Result&lt;DataPath&lt;'INS&gt;, string&gt; =  ..." />
-                <marker date="1521329395369" expanded="true" signature="4854:5099" ph=" =  ..." />
-                <marker date="1521329395369" expanded="true" signature="4881:5099" ph="  ..." />
-                <marker date="1521329395369" expanded="true" signature="4899:5043" ph=" -&gt;  ..." />
-                <marker date="1521329395369" expanded="true" signature="5153:5400" ph=" =  ..." />
-                <marker date="1521329395369" expanded="true" signature="5442:6548" ph=" ..." />
-                <marker date="1521329395369" expanded="true" signature="5476:6211" ph=" -&gt;  ..." />
-                <marker date="1521329395369" expanded="true" signature="5525:5600" ph=" ..." />
-                <marker date="1521329395369" expanded="true" signature="5628:6164" ph=" =  ..." />
-                <marker date="1521329395369" expanded="true" signature="5662:6164" ph=" ..." />
-                <marker date="1521329395369" expanded="true" signature="5741:5945" ph=" -&gt;  ..." />
-                <marker date="1521329395369" expanded="true" signature="6022:6114" ph=" -&gt;  ..." />
-                <marker date="1521329395369" expanded="true" signature="6231:6336" ph=" -&gt;  ..." />
-                <marker date="1521329395369" expanded="true" signature="6353:6455" ph=" -&gt; //if op2 is a register ..." />
-                <marker date="1521329395369" expanded="true" signature="6479:6548" ph=" -&gt; ..." />
-                <marker date="1521329395369" expanded="true" signature="6633:8931" ph=": Result&lt;Parse&lt;AriInstr&gt;, string&gt; option = ..." />
-                <marker date="1521329395369" expanded="true" signature="6740:8820" ph=" =  ..." />
-                <marker date="1521329395369" expanded="true" signature="6794:6956" ph=" =  ..." />
-                <marker date="1521329395369" expanded="true" signature="6827:6956" ph=" ..." />
-                <marker date="1521329395369" expanded="true" signature="7115:7942" ph=" =  ..." />
-                <marker date="1521329395369" expanded="true" signature="7161:7942" ph=" ..." />
-                <marker date="1521329395369" expanded="true" signature="7203:7486" ph=" -&gt;  ..." />
-                <marker date="1521329395369" expanded="true" signature="7286:7451" ph=" =  ..." />
-                <marker date="1521329395369" expanded="true" signature="7330:7451" ph=" ..." />
-                <marker date="1521329395369" expanded="true" signature="7534:7894" ph="  -&gt;  ..." />
-                <marker date="1521329395369" expanded="true" signature="7691:7856" ph=" =  ..." />
-                <marker date="1521329395369" expanded="true" signature="7735:7856" ph=" ..." />
-                <marker date="1521329395369" expanded="true" signature="7961:8500" ph=" =  ..." />
-                <marker date="1521329395369" expanded="true" signature="8006:8500" ph=" ..." />
-                <marker date="1521329395369" expanded="true" signature="8555:8820" ph="  ..." />
-                <marker date="1521329395369" expanded="true" signature="8580:8792" ph=" -&gt;  ..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BIT_v2.fs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/BIT_v2.fs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="261">
-              <caret line="67" column="41" lean-forward="false" selection-start-line="67" selection-start-column="41" selection-end-line="67" selection-end-column="41" />
-              <folding>
-                <marker date="1521250618872" expanded="true" signature="243:3377" ph="  ..." />
-                <marker date="1521250618872" expanded="false" signature="255:341" ph="..." />
-                <marker date="1521250618872" expanded="true" signature="399:463" ph=" =  ..." />
-                <marker date="1521250618872" expanded="true" signature="480:662" ph="=  {Opcode:BTCode; ..." />
-                <marker date="1521250618872" expanded="true" signature="748:851" ph=" = { ..." />
-                <marker date="1521250618872" expanded="true" signature="969:1805" ph=" : Result&lt;Parse&lt;Instr&gt;,string&gt; option = ..." />
-                <marker date="1521250618872" expanded="true" signature="1057:1737" ph=" = ..." />
-                <marker date="1521250618872" expanded="true" signature="1200:1737" ph=" ..." />
-                <marker date="1521250618872" expanded="true" signature="1219:1705" ph=" -&gt;  ..." />
-                <marker date="1521250618872" expanded="true" signature="1273:1557" ph="Opcode=opcodeMap.[root]; ..." />
-                <marker date="1521250618872" expanded="true" signature="2247:2805" ph=":DataPath&lt;'INS&gt; = ..." />
-                <marker date="1521250618872" expanded="true" signature="2283:2421" ph=" = match setC with ..." />
-                <marker date="1521250618872" expanded="true" signature="2569:2805" ph=" ..." />
-                <marker date="1521250618872" expanded="true" signature="2866:3377" ph=": DataPath&lt;'INS&gt; =  ..." />
-                <marker date="1521250618872" expanded="true" signature="3154:3377" ph=" ..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FlexOp2.fs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/FlexOp2.fs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-235">
-              <caret line="25" column="34" lean-forward="false" selection-start-line="25" selection-start-column="34" selection-end-line="25" selection-end-column="34" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Group.fs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/Group.fs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="350">
-              <caret line="29" column="8" lean-forward="false" selection-start-line="29" selection-start-column="8" selection-end-line="31" selection-end-column="77" />
-              <folding>
-                <marker date="1521293421003" expanded="true" signature="45:827" ph=" = ..." />
-                <marker date="1521293421003" expanded="true" signature="57:86" ph="..." />
-                <marker date="1521293421003" expanded="true" signature="108:827" ph=" =  ..." />
-                <marker date="1521293421003" expanded="true" signature="127:257" ph=" =  ..." />
-                <marker date="1521293421003" expanded="true" signature="287:399" ph=" =  ..." />
-                <marker date="1521293421003" expanded="true" signature="317:399" ph=" ..." />
-                <marker date="1521293421003" expanded="true" signature="430:540" ph=" =  ..." />
-                <marker date="1521293421003" expanded="true" signature="460:540" ph=" ..." />
-                <marker date="1521293421003" expanded="true" signature="576:675" ph=" =  ..." />
-                <marker date="1521293421003" expanded="true" signature="703:802" ph=" =  ..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Renderer.fs" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Renderer.fs" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/arm-monaco/src/Renderer/Renderer.fs">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="165">
@@ -241,7 +143,7 @@
     </findStrings>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/arm-monaco" />
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/arm-monaco/src/Main/Main.fs" root0="FORCE_HIGHLIGHTING" />
@@ -299,14 +201,12 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="NodeModulesDirectoryManager">
-    <handled-path value="$PROJECT_DIR$/arm-monaco/node_modules" />
-  </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="22" />
     <option name="width" value="1440" />
     <option name="height" value="878" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator currentView="SolutionExplorer" proportions="" version="1">
       <flattenPackages />
@@ -415,6 +315,111 @@
       <option name="PROJECT_KIND" value="None" />
       <option name="PROJECT_TFM" value="" />
     </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="riderModule" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="riderModule" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="riderModule" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Nosetests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="riderModule" />
+      <option name="_new_regexPattern" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Twisted Trial">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="riderModule" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Unittests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="riderModule" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="py.test">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="riderModule" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+    </configuration>
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
@@ -443,7 +448,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="66105000" />
+    <option name="totallyTimeSpent" value="66143000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -455,7 +460,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1440" height="878" extended-state="0" />
+    <frame x="0" y="22" width="1440" height="878" extended-state="6" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Errors In Solution" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297568" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -684,7 +689,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="28" lean-forward="false" selection-start-line="7" selection-start-column="22" selection-end-line="7" selection-end-column="28" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -692,7 +696,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="22" lean-forward="false" selection-start-line="0" selection-start-column="22" selection-end-line="0" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -730,7 +733,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -765,7 +767,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="193">
           <caret line="101" column="18" lean-forward="false" selection-start-line="101" selection-start-column="18" selection-end-line="101" selection-end-column="18" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -876,14 +877,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/FlexOp2.fs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-235">
-          <caret line="25" column="34" lean-forward="false" selection-start-line="25" selection-start-column="34" selection-end-line="25" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/arm-monaco/src/Renderer/util.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -908,45 +901,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/Group.fs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="350">
-          <caret line="29" column="8" lean-forward="false" selection-start-line="29" selection-start-column="8" selection-end-line="31" selection-end-column="77" />
-          <folding>
-            <marker date="1521293421003" expanded="true" signature="45:827" ph=" = ..." />
-            <marker date="1521293421003" expanded="true" signature="57:86" ph="..." />
-            <marker date="1521293421003" expanded="true" signature="108:827" ph=" =  ..." />
-            <marker date="1521293421003" expanded="true" signature="127:257" ph=" =  ..." />
-            <marker date="1521293421003" expanded="true" signature="287:399" ph=" =  ..." />
-            <marker date="1521293421003" expanded="true" signature="317:399" ph=" ..." />
-            <marker date="1521293421003" expanded="true" signature="430:540" ph=" =  ..." />
-            <marker date="1521293421003" expanded="true" signature="460:540" ph=" ..." />
-            <marker date="1521293421003" expanded="true" signature="576:675" ph=" =  ..." />
-            <marker date="1521293421003" expanded="true" signature="703:802" ph=" =  ..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Renderer/Renderer.fs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="64" column="8" lean-forward="false" selection-start-line="64" selection-start-column="8" selection-end-line="64" selection-end-column="8" />
-          <folding>
-            <marker date="1521315095018" expanded="true" signature="347:480" ph="..." />
-            <marker date="1521315095018" expanded="true" signature="521:598" ph="// open DevTools to see the message ..." />
-            <marker date="1521315095018" expanded="true" signature="661:690" ph="..." />
-            <marker date="1521315095018" expanded="true" signature="785:2640" ph=" = ..." />
-            <marker date="1521315095018" expanded="true" signature="1166:1435" ph=" -&gt; ..." />
-            <marker date="1521315095018" expanded="true" signature="1206:1291" ph="// TODO: error-prone, hardcoded index ..." />
-            <marker date="1521315095018" expanded="true" signature="1533:1613" ph=" -&gt; ..." />
-            <marker date="1521315095018" expanded="true" signature="1661:1722" ph=" -&gt; ..." />
-            <marker date="1521315095018" expanded="true" signature="1799:2203" ph=" -&gt; ..." />
-            <marker date="1521315095018" expanded="true" signature="2371:2492" ph=" -&gt; ..." />
-            <marker date="1521315095018" expanded="true" signature="2546:2634" ph=" -&gt; ..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/arm-monaco/src/Renderer/Update.fs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="20">
@@ -963,37 +917,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/BIT_v2.fs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="67" column="41" lean-forward="false" selection-start-line="67" selection-start-column="41" selection-end-line="67" selection-end-column="41" />
-          <folding>
-            <marker date="1521250618872" expanded="true" signature="243:3377" ph="  ..." />
-            <marker date="1521250618872" expanded="false" signature="255:341" ph="..." />
-            <marker date="1521250618872" expanded="true" signature="399:463" ph=" =  ..." />
-            <marker date="1521250618872" expanded="true" signature="480:662" ph="=  {Opcode:BTCode; ..." />
-            <marker date="1521250618872" expanded="true" signature="748:851" ph=" = { ..." />
-            <marker date="1521250618872" expanded="true" signature="969:1805" ph=" : Result&lt;Parse&lt;Instr&gt;,string&gt; option = ..." />
-            <marker date="1521250618872" expanded="true" signature="1057:1737" ph=" = ..." />
-            <marker date="1521250618872" expanded="true" signature="1200:1737" ph=" ..." />
-            <marker date="1521250618872" expanded="true" signature="1219:1705" ph=" -&gt;  ..." />
-            <marker date="1521250618872" expanded="true" signature="1273:1557" ph="Opcode=opcodeMap.[root]; ..." />
-            <marker date="1521250618872" expanded="true" signature="2247:2805" ph=":DataPath&lt;'INS&gt; = ..." />
-            <marker date="1521250618872" expanded="true" signature="2283:2421" ph=" = match setC with ..." />
-            <marker date="1521250618872" expanded="true" signature="2569:2805" ph=" ..." />
-            <marker date="1521250618872" expanded="true" signature="2866:3377" ph=": DataPath&lt;'INS&gt; =  ..." />
-            <marker date="1521250618872" expanded="true" signature="3154:3377" ph=" ..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/DP.fs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-411">
-          <caret line="217" column="2" lean-forward="true" selection-start-line="217" selection-start-column="2" selection-end-line="217" selection-end-column="2" />
+        <state relative-caret-position="-750">
+          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
           <folding>
             <marker date="1521329395369" expanded="true" signature="267:9007" ph="  ..." />
-            <marker date="1521329395369" expanded="false" signature="276:322" ph="..." />
+            <marker date="1521329395369" expanded="true" signature="276:322" ph="..." />
             <marker date="1521329395369" expanded="true" signature="476:534" ph="// type SVal =  ..." />
             <marker date="1521329395369" expanded="true" signature="536:607" ph="// type Shift =  ..." />
             <marker date="1521329395369" expanded="true" signature="610:725" ph="// type Op2 =  ..." />
@@ -1034,6 +964,77 @@
             <marker date="1521329395369" expanded="true" signature="8006:8500" ph=" ..." />
             <marker date="1521329395369" expanded="true" signature="8555:8820" ph="  ..." />
             <marker date="1521329395369" expanded="true" signature="8580:8792" ph=" -&gt;  ..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/BIT_v2.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="261">
+          <caret line="67" column="41" lean-forward="false" selection-start-line="67" selection-start-column="41" selection-end-line="67" selection-end-column="41" />
+          <folding>
+            <marker date="1521250618872" expanded="true" signature="243:3377" ph="  ..." />
+            <marker date="1521250618872" expanded="false" signature="255:341" ph="..." />
+            <marker date="1521250618872" expanded="true" signature="399:463" ph=" =  ..." />
+            <marker date="1521250618872" expanded="true" signature="480:662" ph="=  {Opcode:BTCode; ..." />
+            <marker date="1521250618872" expanded="true" signature="748:851" ph=" = { ..." />
+            <marker date="1521250618872" expanded="true" signature="969:1805" ph=" : Result&lt;Parse&lt;Instr&gt;,string&gt; option = ..." />
+            <marker date="1521250618872" expanded="true" signature="1057:1737" ph=" = ..." />
+            <marker date="1521250618872" expanded="true" signature="1200:1737" ph=" ..." />
+            <marker date="1521250618872" expanded="true" signature="1219:1705" ph=" -&gt;  ..." />
+            <marker date="1521250618872" expanded="true" signature="1273:1557" ph="Opcode=opcodeMap.[root]; ..." />
+            <marker date="1521250618872" expanded="true" signature="2247:2805" ph=":DataPath&lt;'INS&gt; = ..." />
+            <marker date="1521250618872" expanded="true" signature="2283:2421" ph=" = match setC with ..." />
+            <marker date="1521250618872" expanded="true" signature="2569:2805" ph=" ..." />
+            <marker date="1521250618872" expanded="true" signature="2866:3377" ph=": DataPath&lt;'INS&gt; =  ..." />
+            <marker date="1521250618872" expanded="true" signature="3154:3377" ph=" ..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/FlexOp2.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-235">
+          <caret line="25" column="34" lean-forward="false" selection-start-line="25" selection-start-column="34" selection-end-line="25" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/Group.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="29" column="8" lean-forward="false" selection-start-line="29" selection-start-column="8" selection-end-line="31" selection-end-column="77" />
+          <folding>
+            <marker date="1521293421003" expanded="true" signature="45:827" ph=" = ..." />
+            <marker date="1521293421003" expanded="true" signature="57:86" ph="..." />
+            <marker date="1521293421003" expanded="true" signature="108:827" ph=" =  ..." />
+            <marker date="1521293421003" expanded="true" signature="127:257" ph=" =  ..." />
+            <marker date="1521293421003" expanded="true" signature="287:399" ph=" =  ..." />
+            <marker date="1521293421003" expanded="true" signature="317:399" ph=" ..." />
+            <marker date="1521293421003" expanded="true" signature="430:540" ph=" =  ..." />
+            <marker date="1521293421003" expanded="true" signature="460:540" ph=" ..." />
+            <marker date="1521293421003" expanded="true" signature="576:675" ph=" =  ..." />
+            <marker date="1521293421003" expanded="true" signature="703:802" ph=" =  ..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Renderer/Renderer.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="64" column="8" lean-forward="false" selection-start-line="64" selection-start-column="8" selection-end-line="64" selection-end-column="8" />
+          <folding>
+            <marker date="1521315095018" expanded="true" signature="347:480" ph="..." />
+            <marker date="1521315095018" expanded="true" signature="521:598" ph="// open DevTools to see the message ..." />
+            <marker date="1521315095018" expanded="true" signature="661:690" ph="..." />
+            <marker date="1521315095018" expanded="true" signature="785:2640" ph=" = ..." />
+            <marker date="1521315095018" expanded="true" signature="1166:1435" ph=" -&gt; ..." />
+            <marker date="1521315095018" expanded="true" signature="1206:1291" ph="// TODO: error-prone, hardcoded index ..." />
+            <marker date="1521315095018" expanded="true" signature="1533:1613" ph=" -&gt; ..." />
+            <marker date="1521315095018" expanded="true" signature="1661:1722" ph=" -&gt; ..." />
+            <marker date="1521315095018" expanded="true" signature="1799:2203" ph=" -&gt; ..." />
+            <marker date="1521315095018" expanded="true" signature="2371:2492" ph=" -&gt; ..." />
+            <marker date="1521315095018" expanded="true" signature="2546:2634" ph=" -&gt; ..." />
           </folding>
         </state>
       </provider>
