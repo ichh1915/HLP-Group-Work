@@ -112,14 +112,14 @@ let convExp2Lit (str:string)  (symtab:SymbolTable) =
             let numWithout0x = str.[2..] 
             
             match Regex.IsMatch (numWithout0x,"^[0-9A-F][0-9A-F]*$") with
-            |true->  int str |>uint32|> makeLiteral
+            |true->  System.Convert.ToInt32 (numWithout0x,16) |>uint32|> makeLiteral
             |false -> None
 
         |str when str.StartsWith "0B" -> 
             let numWithout0b = str.[2..] 
             
             match Regex.IsMatch (numWithout0b,"^[0-1][0-1]*$") with
-            |true->  int str |>uint32|> makeLiteral
+            |true->  System.Convert.ToInt32 (numWithout0b,2) |>uint32|> makeLiteral
             |false -> None
         |str -> 
             match Regex.IsMatch (str,"^[0-9][0-9]*$") with
