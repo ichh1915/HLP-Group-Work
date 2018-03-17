@@ -99,7 +99,7 @@ let dPSpec = {
 }
 
 /// map of all possible opcodes recognised, cmps and cmns are not possible
-let opCodes = opCodeExpand dPSpec |> Map.remove "cmps" |> Map.remove "cmns"
+let opCodes = opCodeExpand dPSpec |> Map.remove "CMPS" |> Map.remove "CMNS"
 
 
 // --------------------------------- Arithmetic Functions ---------------------------------------- //

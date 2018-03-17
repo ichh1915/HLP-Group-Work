@@ -110,13 +110,13 @@ let convExp2Lit (str:string)  (symtab:SymbolTable) =
         match str.StartsWith ("0X") with
         |false -> 
             match Regex.IsMatch (str,"^[0-9][0-9]*$") with
-            |true-> uint32 str |> makeLiteral
+            |true-> System.Int32.Parse str |>uint32|> makeLiteral
             |false -> Map.tryFind str symtab |> Option.bind makeLiteral
         |true -> 
             let numWithout0x = str.[2..] 
             
             match Regex.IsMatch (numWithout0x,"^[0-9A-F][0-9A-F]*$") with
-            |true -> uint32 str |> makeLiteral
+            |true->  System.Int32.Parse (numWithout0x,System.Globalization.NumberStyles.HexNumber) |>uint32|> makeLiteral
             |false -> None
     let detectFirst list= 
         let firstOpIndex = List.tryFindIndex (fun k -> (k = '+' )|| (k = '-') || (k = '*')) list
