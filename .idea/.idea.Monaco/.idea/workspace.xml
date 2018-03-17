@@ -1,0 +1,1039 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="9f176b1c-3f95-4b51-b27b-5c730e280add" name="Default" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="DP.fs" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/DP.fs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-411">
+              <caret line="217" column="2" lean-forward="true" selection-start-line="217" selection-start-column="2" selection-end-line="217" selection-end-column="2" />
+              <folding>
+                <marker date="1521329395369" expanded="true" signature="267:9007" ph="  ..." />
+                <marker date="1521329395369" expanded="false" signature="276:322" ph="..." />
+                <marker date="1521329395369" expanded="true" signature="476:534" ph="// type SVal =  ..." />
+                <marker date="1521329395369" expanded="true" signature="536:607" ph="// type Shift =  ..." />
+                <marker date="1521329395369" expanded="true" signature="610:725" ph="// type Op2 =  ..." />
+                <marker date="1521329395369" expanded="true" signature="742:824" ph="=  ..." />
+                <marker date="1521329395369" expanded="true" signature="749:824" ph="| ADD ..." />
+                <marker date="1521329395369" expanded="true" signature="835:861" ph="=  ..." />
+                <marker date="1521329395369" expanded="true" signature="842:861" ph="| FSet ..." />
+                <marker date="1521329395369" expanded="true" signature="1235:1458" ph="// type Token =  ..." />
+                <marker date="1521329395369" expanded="true" signature="4793:4801" ph=" ..." />
+                <marker date="1521329395369" expanded="true" signature="4793:6548" ph=" : Result&lt;DataPath&lt;'INS&gt;, string&gt; =  ..." />
+                <marker date="1521329395369" expanded="true" signature="4854:5099" ph=" =  ..." />
+                <marker date="1521329395369" expanded="true" signature="4881:5099" ph="  ..." />
+                <marker date="1521329395369" expanded="true" signature="4899:5043" ph=" -&gt;  ..." />
+                <marker date="1521329395369" expanded="true" signature="5153:5400" ph=" =  ..." />
+                <marker date="1521329395369" expanded="true" signature="5442:6548" ph=" ..." />
+                <marker date="1521329395369" expanded="true" signature="5476:6211" ph=" -&gt;  ..." />
+                <marker date="1521329395369" expanded="true" signature="5525:5600" ph=" ..." />
+                <marker date="1521329395369" expanded="true" signature="5628:6164" ph=" =  ..." />
+                <marker date="1521329395369" expanded="true" signature="5662:6164" ph=" ..." />
+                <marker date="1521329395369" expanded="true" signature="5741:5945" ph=" -&gt;  ..." />
+                <marker date="1521329395369" expanded="true" signature="6022:6114" ph=" -&gt;  ..." />
+                <marker date="1521329395369" expanded="true" signature="6231:6336" ph=" -&gt;  ..." />
+                <marker date="1521329395369" expanded="true" signature="6353:6455" ph=" -&gt; //if op2 is a register ..." />
+                <marker date="1521329395369" expanded="true" signature="6479:6548" ph=" -&gt; ..." />
+                <marker date="1521329395369" expanded="true" signature="6633:8931" ph=": Result&lt;Parse&lt;AriInstr&gt;, string&gt; option = ..." />
+                <marker date="1521329395369" expanded="true" signature="6740:8820" ph=" =  ..." />
+                <marker date="1521329395369" expanded="true" signature="6794:6956" ph=" =  ..." />
+                <marker date="1521329395369" expanded="true" signature="6827:6956" ph=" ..." />
+                <marker date="1521329395369" expanded="true" signature="7115:7942" ph=" =  ..." />
+                <marker date="1521329395369" expanded="true" signature="7161:7942" ph=" ..." />
+                <marker date="1521329395369" expanded="true" signature="7203:7486" ph=" -&gt;  ..." />
+                <marker date="1521329395369" expanded="true" signature="7286:7451" ph=" =  ..." />
+                <marker date="1521329395369" expanded="true" signature="7330:7451" ph=" ..." />
+                <marker date="1521329395369" expanded="true" signature="7534:7894" ph="  -&gt;  ..." />
+                <marker date="1521329395369" expanded="true" signature="7691:7856" ph=" =  ..." />
+                <marker date="1521329395369" expanded="true" signature="7735:7856" ph=" ..." />
+                <marker date="1521329395369" expanded="true" signature="7961:8500" ph=" =  ..." />
+                <marker date="1521329395369" expanded="true" signature="8006:8500" ph=" ..." />
+                <marker date="1521329395369" expanded="true" signature="8555:8820" ph="  ..." />
+                <marker date="1521329395369" expanded="true" signature="8580:8792" ph=" -&gt;  ..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BIT_v2.fs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/BIT_v2.fs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="261">
+              <caret line="67" column="41" lean-forward="false" selection-start-line="67" selection-start-column="41" selection-end-line="67" selection-end-column="41" />
+              <folding>
+                <marker date="1521250618872" expanded="true" signature="243:3377" ph="  ..." />
+                <marker date="1521250618872" expanded="false" signature="255:341" ph="..." />
+                <marker date="1521250618872" expanded="true" signature="399:463" ph=" =  ..." />
+                <marker date="1521250618872" expanded="true" signature="480:662" ph="=  {Opcode:BTCode; ..." />
+                <marker date="1521250618872" expanded="true" signature="748:851" ph=" = { ..." />
+                <marker date="1521250618872" expanded="true" signature="969:1805" ph=" : Result&lt;Parse&lt;Instr&gt;,string&gt; option = ..." />
+                <marker date="1521250618872" expanded="true" signature="1057:1737" ph=" = ..." />
+                <marker date="1521250618872" expanded="true" signature="1200:1737" ph=" ..." />
+                <marker date="1521250618872" expanded="true" signature="1219:1705" ph=" -&gt;  ..." />
+                <marker date="1521250618872" expanded="true" signature="1273:1557" ph="Opcode=opcodeMap.[root]; ..." />
+                <marker date="1521250618872" expanded="true" signature="2247:2805" ph=":DataPath&lt;'INS&gt; = ..." />
+                <marker date="1521250618872" expanded="true" signature="2283:2421" ph=" = match setC with ..." />
+                <marker date="1521250618872" expanded="true" signature="2569:2805" ph=" ..." />
+                <marker date="1521250618872" expanded="true" signature="2866:3377" ph=": DataPath&lt;'INS&gt; =  ..." />
+                <marker date="1521250618872" expanded="true" signature="3154:3377" ph=" ..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FlexOp2.fs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/FlexOp2.fs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-235">
+              <caret line="25" column="34" lean-forward="false" selection-start-line="25" selection-start-column="34" selection-end-line="25" selection-end-column="34" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Group.fs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/Group.fs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="350">
+              <caret line="29" column="8" lean-forward="false" selection-start-line="29" selection-start-column="8" selection-end-line="31" selection-end-column="77" />
+              <folding>
+                <marker date="1521293421003" expanded="true" signature="45:827" ph=" = ..." />
+                <marker date="1521293421003" expanded="true" signature="57:86" ph="..." />
+                <marker date="1521293421003" expanded="true" signature="108:827" ph=" =  ..." />
+                <marker date="1521293421003" expanded="true" signature="127:257" ph=" =  ..." />
+                <marker date="1521293421003" expanded="true" signature="287:399" ph=" =  ..." />
+                <marker date="1521293421003" expanded="true" signature="317:399" ph=" ..." />
+                <marker date="1521293421003" expanded="true" signature="430:540" ph=" =  ..." />
+                <marker date="1521293421003" expanded="true" signature="460:540" ph=" ..." />
+                <marker date="1521293421003" expanded="true" signature="576:675" ph=" =  ..." />
+                <marker date="1521293421003" expanded="true" signature="703:802" ph=" =  ..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Renderer.fs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/arm-monaco/src/Renderer/Renderer.fs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="64" column="8" lean-forward="false" selection-start-line="64" selection-start-column="8" selection-end-line="64" selection-end-column="8" />
+              <folding>
+                <marker date="1521315095018" expanded="true" signature="347:480" ph="..." />
+                <marker date="1521315095018" expanded="true" signature="521:598" ph="// open DevTools to see the message ..." />
+                <marker date="1521315095018" expanded="true" signature="661:690" ph="..." />
+                <marker date="1521315095018" expanded="true" signature="785:2640" ph=" = ..." />
+                <marker date="1521315095018" expanded="true" signature="1166:1435" ph=" -&gt; ..." />
+                <marker date="1521315095018" expanded="true" signature="1206:1291" ph="// TODO: error-prone, hardcoded index ..." />
+                <marker date="1521315095018" expanded="true" signature="1533:1613" ph=" -&gt; ..." />
+                <marker date="1521315095018" expanded="true" signature="1661:1722" ph=" -&gt; ..." />
+                <marker date="1521315095018" expanded="true" signature="1799:2203" ph=" -&gt; ..." />
+                <marker date="1521315095018" expanded="true" signature="2371:2492" ph=" -&gt; ..." />
+                <marker date="1521315095018" expanded="true" signature="2546:2634" ph=" -&gt; ..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="util.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/arm-monaco/src/Renderer/util.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Ref.fs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/arm-monaco/src/Renderer/Ref.fs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="260">
+              <caret line="18" column="35" lean-forward="false" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="35" />
+              <folding>
+                <marker date="1520803415762" expanded="true" signature="313:393" ph="..." />
+                <marker date="1520803415762" expanded="true" signature="407:499" ph=": HTMLSelectElement = ..." />
+                <marker date="1520803415762" expanded="true" signature="522:591" ph=": HTMLElement = ..." />
+                <marker date="1520803415762" expanded="true" signature="603:693" ph=": HTMLButtonElement = ..." />
+                <marker date="1520803415762" expanded="true" signature="702:789" ph=": HTMLButtonElement = ..." />
+                <marker date="1520803415762" expanded="true" signature="797:883" ph=": HTMLButtonElement = ..." />
+                <marker date="1520803415762" expanded="true" signature="905:978" ph=": HTMLElement = ..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Update.fs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/arm-monaco/src/Renderer/Update.fs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="20">
+              <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LS.fs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/LS.fs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="516">
+              <caret line="125" column="66" lean-forward="false" selection-start-line="125" selection-start-column="66" selection-end-line="125" selection-end-column="66" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ConvertTests.fs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/ConvertTests.fs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="300">
+              <caret line="20" column="19" lean-forward="false" selection-start-line="20" selection-start-column="19" selection-end-line="20" selection-end-column="19" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>fable-loader</find>
+      <find>output</find>
+      <find>Txt</find>
+      <find>document</find>
+      <find>view</find>
+      <find>query</find>
+      <find>getO</find>
+      <find>getContex</find>
+      <find>reg.</find>
+      <find>PCPlus4</find>
+      <find>Literal</find>
+      <find>Regex</find>
+      <find>Update</find>
+      <find>mov</find>
+      <find>code</find>
+      <find>Input string</find>
+      <find>convExp</find>
+      <find>true</find>
+      <find>String.Int32</find>
+      <find>System.Int32.Parse</find>
+      <find>number</find>
+      <find>number.</find>
+      <find>mo</find>
+      <find>Fl</find>
+      <find>result</find>
+      <find>setC</find>
+      <find>Op2SetCFlag</find>
+      <find>add</find>
+      <find>instr</find>
+      <find>Actual</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/arm-monaco/src/Main/Main.fs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/Old/Tests.fs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/arm-monaco/build.fsx" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/BIT_v2.fs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/arm-monaco/src/Renderer/Update.fs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/Code.fs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/LS.fs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/Group.fs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/LSM.fs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/TST_v2.fs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/arm-monaco/src/Renderer/Renderer.fs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/TopLevelTest.fs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/arm-monaco/paket-files/fable-compiler/Fable/src/dotnet/Fable.JS/Interfaces.fs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/FlexOp2.fs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/arm-monaco/src/Renderer/Ref.fs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/CommonTop.fs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/DP.fs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/Branch.fs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/CommonData.fs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/ConvertTests.fs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/EEExtensions.fs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/Old/Common.fs" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/arm-monaco/src/Renderer/Ref.fs" />
+        <option value="$PROJECT_DIR$/arm-monaco/src/Emulator/Common.fs" />
+        <option value="$PROJECT_DIR$/arm-monaco/app/modal.html" />
+        <option value="$PROJECT_DIR$/arm-monaco/src/Emulator/EEExtensions.fs" />
+        <option value="$PROJECT_DIR$/arm-monaco/src/Renderer/Renderer.fsproj" />
+        <option value="$PROJECT_DIR$/arm-monaco/src/Main/Main.fs" />
+        <option value="$PROJECT_DIR$/arm-monaco/main.js" />
+        <option value="$PROJECT_DIR$/arm-monaco/src/Emulator/DP.fsx" />
+        <option value="$PROJECT_DIR$/arm-monaco/webpack.config.js" />
+        <option value="$PROJECT_DIR$/arm-monaco/src/Emulator/TopLevelTest.fs" />
+        <option value="$PROJECT_DIR$/arm-monaco/app/js/my-script.js" />
+        <option value="$PROJECT_DIR$/arm-monaco/app/js/editor.js" />
+        <option value="$PROJECT_DIR$/arm-monaco/app/index.html" />
+        <option value="$PROJECT_DIR$/arm-monaco/src/Emulator/CommonData.fs" />
+        <option value="$PROJECT_DIR$/arm-monaco/src/Emulator/Emulator.fsproj" />
+        <option value="$PROJECT_DIR$/arm-monaco/src/Emulator/LS.fs" />
+        <option value="$PROJECT_DIR$/arm-monaco/src/Emulator/Group.fs" />
+        <option value="$PROJECT_DIR$/arm-monaco/src/Renderer/Update.fs" />
+        <option value="$PROJECT_DIR$/arm-monaco/src/Renderer/Renderer.fs" />
+        <option value="$PROJECT_DIR$/arm-monaco/src/Emulator/DP.fs" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodeModulesDirectoryManager">
+    <handled-path value="$PROJECT_DIR$/arm-monaco/node_modules" />
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="y" value="22" />
+    <option name="width" value="1440" />
+    <option name="height" value="878" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="SolutionExplorer" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="SolutionExplorer">
+        <subPane>
+          <expand>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="Monaco" type="6f407253:SolutionExplorerNodeFileSystem" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="Monaco" type="6f407253:SolutionExplorerNodeFileSystem" />
+              <item name="arm-monaco" type="6f407253:SolutionExplorerNodeFileSystem" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="Monaco" type="6f407253:SolutionExplorerNodeFileSystem" />
+              <item name="arm-monaco" type="6f407253:SolutionExplorerNodeFileSystem" />
+              <item name="app" type="6f407253:SolutionExplorerNodeFileSystem" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="Monaco" type="6f407253:SolutionExplorerNodeFileSystem" />
+              <item name="arm-monaco" type="6f407253:SolutionExplorerNodeFileSystem" />
+              <item name="app" type="6f407253:SolutionExplorerNodeFileSystem" />
+              <item name="js" type="6f407253:SolutionExplorerNodeFileSystem" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="Monaco" type="6f407253:SolutionExplorerNodeFileSystem" />
+              <item name="arm-monaco" type="6f407253:SolutionExplorerNodeFileSystem" />
+              <item name="src" type="6f407253:SolutionExplorerNodeFileSystem" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="Monaco" type="6f407253:SolutionExplorerNodeFileSystem" />
+              <item name="arm-monaco" type="6f407253:SolutionExplorerNodeFileSystem" />
+              <item name="src" type="6f407253:SolutionExplorerNodeFileSystem" />
+              <item name="Emulator" type="6f407253:SolutionExplorerNodeFileSystem" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="Monaco" type="6f407253:SolutionExplorerNodeFileSystem" />
+              <item name="arm-monaco" type="6f407253:SolutionExplorerNodeFileSystem" />
+              <item name="src" type="6f407253:SolutionExplorerNodeFileSystem" />
+              <item name="Main" type="6f407253:SolutionExplorerNodeFileSystem" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="Monaco" type="6f407253:SolutionExplorerNodeFileSystem" />
+              <item name="arm-monaco" type="6f407253:SolutionExplorerNodeFileSystem" />
+              <item name="src" type="6f407253:SolutionExplorerNodeFileSystem" />
+              <item name="Renderer" type="6f407253:SolutionExplorerNodeFileSystem" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+        <option name="show-file-system" value="false" />
+        <option name="show-all-items" value="false" />
+      </pane>
+      <pane id="Scratches" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="HbShouldOpenHtmlAsHb" value="" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="Default" type="DotNetProject" factoryName=".NET Project">
+      <option name="EXE_PATH" value="" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <envs />
+      <option name="USE_MONO" value="0" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="PROJECT_PATH" value="" />
+      <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
+      <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
+      <option name="PROJECT_WORKING_DIRECTORY_TRACKING" value="1" />
+      <option name="PROJECT_KIND" value="None" />
+      <option name="PROJECT_TFM" value="" />
+    </configuration>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9f176b1c-3f95-4b51-b27b-5c730e280add" name="Default" comment="" />
+      <created>1520806116384</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1520806116384</updated>
+      <workItem from="1520806117629" duration="6385000" />
+      <workItem from="1520899590849" duration="4755000" />
+      <workItem from="1520962621324" duration="2185000" />
+      <workItem from="1520991474970" duration="110000" />
+      <workItem from="1521064114884" duration="11258000" />
+      <workItem from="1521123918651" duration="18223000" />
+      <workItem from="1521154693154" duration="1003000" />
+      <workItem from="1521158085017" duration="4540000" />
+      <workItem from="1521205909050" duration="1293000" />
+      <workItem from="1521243692494" duration="16227000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="65979000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="22" width="1440" height="878" extended-state="0" />
+    <layout>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Errors In Solution" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297568" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Unit Tests" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32950193" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32950193" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="NuGet" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25894135" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="2" />
+    </breakpoint-manager>
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/arm-monaco/app/js/renderer.js.map">
+      <provider editor-type-id="sourcemapFileViewerProvider">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/paket-files/fable-compiler/Fable/src/dotnet/Fable.JS/Interfaces.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-340">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/node_modules/regex-cache/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-632">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/node_modules/regexpu-core/rewrite-pattern.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/Old/Emulator.fsproj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="37" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/node_modules/fable-compiler/babelPlugins.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/node_modules/fable-providers-regex/src/Fable.Providers.Regex.fsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/node_modules/fable/source/Fable.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/node_modules/fable/config/Fable-Config-DEFAULT.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/node_modules/fable-compiler/lib.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="76" column="11" lean-forward="false" selection-start-line="76" selection-start-column="11" selection-end-line="76" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/node_modules/fable-compiler/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="18" lean-forward="false" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/node_modules/fable-compiler/constants.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="42" lean-forward="false" selection-start-line="1" selection-start-column="42" selection-end-line="1" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/node_modules/fable-compiler/build.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/node_modules/fable-compiler/bundle.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="27" column="51" lean-forward="false" selection-start-line="27" selection-start-column="51" selection-end-line="27" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/node_modules/fable-compiler/options.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="11" lean-forward="false" selection-start-line="2" selection-start-column="11" selection-end-line="2" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/node_modules/fable-compiler/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="15" lean-forward="false" selection-start-line="9" selection-start-column="15" selection-end-line="9" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/node_modules/fable-compiler/types.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/ARM.Monaco.Editor.sln">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-625">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/ARM.Monaco.Editor.sln.DotSettings.user">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/build.cmd">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/build.fsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-685">
+          <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/DP.fsx" />
+    <entry file="file://$PROJECT_DIR$/arm-monaco/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-9002">
+          <caret line="1501" column="14" lean-forward="false" selection-start-line="1501" selection-start-column="14" selection-end-line="1501" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/node_modules/fable-compiler-loader/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="8" lean-forward="false" selection-start-line="18" selection-start-column="8" selection-end-line="18" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/node_modules/fable-loader/RELEASE_NOTES.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/EEExtensions.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="15" lean-forward="false" selection-start-line="8" selection-start-column="4" selection-end-line="8" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/webpack.config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="38" column="25" lean-forward="false" selection-start-line="38" selection-start-column="25" selection-end-line="38" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Renderer/Renderer.fsproj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="28" lean-forward="false" selection-start-line="7" selection-start-column="22" selection-end-line="7" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Main/Main.fsproj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="22" lean-forward="false" selection-start-line="0" selection-start-column="22" selection-end-line="0" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Main/Main.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="990">
+          <caret line="66" column="0" lean-forward="false" selection-start-line="65" selection-start-column="12" selection-end-line="66" selection-end-column="0" />
+          <folding>
+            <marker date="1521135694064" expanded="true" signature="289:388" ph="..." />
+            <marker date="1521135694064" expanded="true" signature="390:544" ph="// Keep a global reference of the window object, if you don't, the window will ..." />
+            <marker date="1521135694064" expanded="true" signature="628:1790" ph=" = ..." />
+            <marker date="1521135694064" expanded="true" signature="687:800" ph="// Complete list of window options ..." />
+            <marker date="1521135694064" expanded="true" signature="1422:1698" ph="&quot;closed&quot;, unbox(fun () -&gt; ..." />
+            <marker date="1521135694064" expanded="true" signature="1456:1658" ph="// Dereference the window object, usually you would store windows ..." />
+            <marker date="1521135694064" expanded="true" signature="1792:1906" ph="// This method will be called when Electron has finished ..." />
+            <marker date="1521135694064" expanded="true" signature="2020:2290" ph="&quot;window-all-closed&quot;, unbox(fun () -&gt; ..." />
+            <marker date="1521135694064" expanded="true" signature="2061:2187" ph="// On OS X it is common for applications and their menu bar ..." />
+            <marker date="1521135694064" expanded="true" signature="2255:2288" ph=" then ..." />
+            <marker date="1521135694064" expanded="true" signature="2319:2539" ph="&quot;activate&quot;, unbox(fun () -&gt; ..." />
+            <marker date="1521135694064" expanded="true" signature="2351:2480" ph="// On OS X it's common to re-create a window in the app when the ..." />
+            <marker date="1521135694064" expanded="true" signature="2505:2537" ph=" then ..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/TST_v2.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Main/Main.sln">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/TopLevelTest.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding>
+            <marker date="1521250590652" expanded="true" signature="48:123" ph=" = ..." />
+            <marker date="1521250590652" expanded="true" signature="111:123" ph=" =  ..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/app/js/my-script.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="25" column="25" lean-forward="false" selection-start-line="25" selection-start-column="25" selection-end-line="25" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/app/js/editor.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="237">
+          <caret line="182" column="32" lean-forward="false" selection-start-line="182" selection-start-column="32" selection-end-line="182" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/app/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="101" column="18" lean-forward="false" selection-start-line="101" selection-start-column="18" selection-end-line="101" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/CommonData.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="50" lean-forward="false" selection-start-line="12" selection-start-column="50" selection-end-line="12" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/LSM.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3204">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1521160975675" expanded="true" signature="364:776" ph="///Module contains LDM, STM Instruction Parse and Execution ..." />
+            <marker date="1521160975675" expanded="true" signature="787:8886" ph=" ..." />
+            <marker date="1521160975675" expanded="false" signature="794:827" ph="..." />
+            <marker date="1521160975675" expanded="true" signature="1344:1735" ph=" =  ..." />
+            <marker date="1521160975675" expanded="true" signature="1353:1717" ph="(&quot;LDM&quot;,(L,FD));(&quot;LDMFD&quot;,(L,FD));(&quot;LDMIA&quot;,(L,FD)); ..." />
+            <marker date="1521160975675" expanded="true" signature="1748:1860" ph=" = { ..." />
+            <marker date="1521160975675" expanded="true" signature="2124:2201" ph="///parse prebkt into (Reg1, pointerupdate) ..." />
+            <marker date="1521160975675" expanded="true" signature="2230:2610" ph=" =  ..." />
+            <marker date="1521160975675" expanded="true" signature="2252:2610" ph=" ..." />
+            <marker date="1521160975675" expanded="true" signature="2259:2588" ph=" when k.EndsWith &quot;,&quot;-&gt;  ..." />
+            <marker date="1521160975675" expanded="true" signature="2357:2588" ph=" ..." />
+            <marker date="1521160975675" expanded="true" signature="2370:2537" ph=" when reg.EndsWith &quot;!&quot; -&gt;   ..." />
+            <marker date="1521160975675" expanded="true" signature="2612:2739" ph="///Function to convert string into rname list ..." />
+            <marker date="1521160975675" expanded="true" signature="2762:3241" ph=" =  ..." />
+            <marker date="1521160975675" expanded="true" signature="2841:3241" ph=" ..." />
+            <marker date="1521160975675" expanded="true" signature="2860:3122" ph=" -&gt;  ..." />
+            <marker date="1521160975675" expanded="true" signature="2978:3122" ph=" ..." />
+            <marker date="1521160975675" expanded="true" signature="3008:3103" ph=" -&gt;  ..." />
+            <marker date="1521160975675" expanded="true" signature="3133:3208" ph=" -&gt;  ..." />
+            <marker date="1521160975675" expanded="true" signature="3350:3709" ph=" =  ..." />
+            <marker date="1521160975675" expanded="true" signature="3380:3472" ph=" =  ..." />
+            <marker date="1521160975675" expanded="true" signature="3406:3472" ph=" ..." />
+            <marker date="1521160975675" expanded="true" signature="3488:3560" ph=" =  ..." />
+            <marker date="1521160975675" expanded="true" signature="3603:3709" ph=" ..." />
+            <marker date="1521160975675" expanded="true" signature="3632:3709" ph=" -&gt;  ..." />
+            <marker date="1521160975675" expanded="true" signature="3769:5022" ph=" : Result&lt;Parse&lt;LSMInstr&gt;,string&gt; option = ..." />
+            <marker date="1521160975675" expanded="true" signature="3856:4911" ph=" = ..." />
+            <marker date="1521160975675" expanded="true" signature="4041:4532" ph=" =  ..." />
+            <marker date="1521160975675" expanded="true" signature="4219:4532" ph=" ..." />
+            <marker date="1521160975675" expanded="true" signature="4561:4623" ph=" =   ..." />
+            <marker date="1521160975675" expanded="true" signature="4652:4911" ph="  ..." />
+            <marker date="1521160975675" expanded="true" signature="4678:4883" ph=" -&gt;  ..." />
+            <marker date="1521160975675" expanded="true" signature="5327:6978" ph=" =  ..." />
+            <marker date="1521160975675" expanded="true" signature="5388:5685" ph=" =      ..." />
+            <marker date="1521160975675" expanded="true" signature="5423:5685" ph=" ..." />
+            <marker date="1521160975675" expanded="true" signature="5460:5554" ph=" -&gt; ..." />
+            <marker date="1521160975675" expanded="true" signature="5591:5685" ph=" -&gt; ..." />
+            <marker date="1521160975675" expanded="true" signature="5906:6978" ph=" ..." />
+            <marker date="1521160975675" expanded="true" signature="5925:6856" ph=" -&gt;  ..." />
+            <marker date="1521160975675" expanded="true" signature="5962:6304" ph=" -&gt;  ..." />
+            <marker date="1521160975675" expanded="true" signature="6102:6180" ph=" =  ..." />
+            <marker date="1521160975675" expanded="true" signature="6315:6856" ph=" -&gt;  ..." />
+            <marker date="1521160975675" expanded="true" signature="6432:6636" ph=" -&gt; ..." />
+            <marker date="1521160975675" expanded="true" signature="6468:6636" ph=" ..." />
+            <marker date="1521160975675" expanded="true" signature="6665:6728" ph=" =  ..." />
+            <marker date="1521160975675" expanded="true" signature="7134:8581" ph=" = ..." />
+            <marker date="1521160975675" expanded="true" signature="7162:7310" ph="=  ..." />
+            <marker date="1521160975675" expanded="true" signature="7193:7310" ph=" ..." />
+            <marker date="1521160975675" expanded="true" signature="7330:7446" ph=" =  ..." />
+            <marker date="1521160975675" expanded="true" signature="7505:7667" ph=" =  ..." />
+            <marker date="1521160975675" expanded="true" signature="7537:7667" ph=" ..." />
+            <marker date="1521160975675" expanded="true" signature="7692:8125" ph=" =  ..." />
+            <marker date="1521160975675" expanded="true" signature="7727:8125" ph=" ..." />
+            <marker date="1521160975675" expanded="true" signature="8157:8581" ph=" ..." />
+            <marker date="1521160975675" expanded="true" signature="8179:8554" ph=" -&gt; ..." />
+            <marker date="1521160975675" expanded="true" signature="8242:8476" ph=" ..." />
+            <marker date="1521160975675" expanded="true" signature="8290:8476" ph=" -&gt;  ..." />
+            <marker date="1521160975675" expanded="true" signature="8689:8886" ph=" =  ..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/Code.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/Branch.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/Emulator.fsproj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="35" lean-forward="false" selection-start-line="14" selection-start-column="35" selection-end-line="14" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/ConvertTests.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="19" lean-forward="false" selection-start-line="20" selection-start-column="19" selection-end-line="20" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/FlexOp2.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-235">
+          <caret line="25" column="34" lean-forward="false" selection-start-line="25" selection-start-column="34" selection-end-line="25" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Renderer/util.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Renderer/Ref.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="18" column="35" lean-forward="false" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="35" />
+          <folding>
+            <marker date="1520803415762" expanded="true" signature="313:393" ph="..." />
+            <marker date="1520803415762" expanded="true" signature="407:499" ph=": HTMLSelectElement = ..." />
+            <marker date="1520803415762" expanded="true" signature="522:591" ph=": HTMLElement = ..." />
+            <marker date="1520803415762" expanded="true" signature="603:693" ph=": HTMLButtonElement = ..." />
+            <marker date="1520803415762" expanded="true" signature="702:789" ph=": HTMLButtonElement = ..." />
+            <marker date="1520803415762" expanded="true" signature="797:883" ph=": HTMLButtonElement = ..." />
+            <marker date="1520803415762" expanded="true" signature="905:978" ph=": HTMLElement = ..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/Group.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="29" column="8" lean-forward="false" selection-start-line="29" selection-start-column="8" selection-end-line="31" selection-end-column="77" />
+          <folding>
+            <marker date="1521293421003" expanded="true" signature="45:827" ph=" = ..." />
+            <marker date="1521293421003" expanded="true" signature="57:86" ph="..." />
+            <marker date="1521293421003" expanded="true" signature="108:827" ph=" =  ..." />
+            <marker date="1521293421003" expanded="true" signature="127:257" ph=" =  ..." />
+            <marker date="1521293421003" expanded="true" signature="287:399" ph=" =  ..." />
+            <marker date="1521293421003" expanded="true" signature="317:399" ph=" ..." />
+            <marker date="1521293421003" expanded="true" signature="430:540" ph=" =  ..." />
+            <marker date="1521293421003" expanded="true" signature="460:540" ph=" ..." />
+            <marker date="1521293421003" expanded="true" signature="576:675" ph=" =  ..." />
+            <marker date="1521293421003" expanded="true" signature="703:802" ph=" =  ..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Renderer/Renderer.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="64" column="8" lean-forward="false" selection-start-line="64" selection-start-column="8" selection-end-line="64" selection-end-column="8" />
+          <folding>
+            <marker date="1521315095018" expanded="true" signature="347:480" ph="..." />
+            <marker date="1521315095018" expanded="true" signature="521:598" ph="// open DevTools to see the message ..." />
+            <marker date="1521315095018" expanded="true" signature="661:690" ph="..." />
+            <marker date="1521315095018" expanded="true" signature="785:2640" ph=" = ..." />
+            <marker date="1521315095018" expanded="true" signature="1166:1435" ph=" -&gt; ..." />
+            <marker date="1521315095018" expanded="true" signature="1206:1291" ph="// TODO: error-prone, hardcoded index ..." />
+            <marker date="1521315095018" expanded="true" signature="1533:1613" ph=" -&gt; ..." />
+            <marker date="1521315095018" expanded="true" signature="1661:1722" ph=" -&gt; ..." />
+            <marker date="1521315095018" expanded="true" signature="1799:2203" ph=" -&gt; ..." />
+            <marker date="1521315095018" expanded="true" signature="2371:2492" ph=" -&gt; ..." />
+            <marker date="1521315095018" expanded="true" signature="2546:2634" ph=" -&gt; ..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Renderer/Update.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="20">
+          <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/LS.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="516">
+          <caret line="125" column="66" lean-forward="false" selection-start-line="125" selection-start-column="66" selection-end-line="125" selection-end-column="66" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/BIT_v2.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="261">
+          <caret line="67" column="41" lean-forward="false" selection-start-line="67" selection-start-column="41" selection-end-line="67" selection-end-column="41" />
+          <folding>
+            <marker date="1521250618872" expanded="true" signature="243:3377" ph="  ..." />
+            <marker date="1521250618872" expanded="false" signature="255:341" ph="..." />
+            <marker date="1521250618872" expanded="true" signature="399:463" ph=" =  ..." />
+            <marker date="1521250618872" expanded="true" signature="480:662" ph="=  {Opcode:BTCode; ..." />
+            <marker date="1521250618872" expanded="true" signature="748:851" ph=" = { ..." />
+            <marker date="1521250618872" expanded="true" signature="969:1805" ph=" : Result&lt;Parse&lt;Instr&gt;,string&gt; option = ..." />
+            <marker date="1521250618872" expanded="true" signature="1057:1737" ph=" = ..." />
+            <marker date="1521250618872" expanded="true" signature="1200:1737" ph=" ..." />
+            <marker date="1521250618872" expanded="true" signature="1219:1705" ph=" -&gt;  ..." />
+            <marker date="1521250618872" expanded="true" signature="1273:1557" ph="Opcode=opcodeMap.[root]; ..." />
+            <marker date="1521250618872" expanded="true" signature="2247:2805" ph=":DataPath&lt;'INS&gt; = ..." />
+            <marker date="1521250618872" expanded="true" signature="2283:2421" ph=" = match setC with ..." />
+            <marker date="1521250618872" expanded="true" signature="2569:2805" ph=" ..." />
+            <marker date="1521250618872" expanded="true" signature="2866:3377" ph=": DataPath&lt;'INS&gt; =  ..." />
+            <marker date="1521250618872" expanded="true" signature="3154:3377" ph=" ..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arm-monaco/src/Emulator/DP.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-411">
+          <caret line="217" column="2" lean-forward="true" selection-start-line="217" selection-start-column="2" selection-end-line="217" selection-end-column="2" />
+          <folding>
+            <marker date="1521329395369" expanded="true" signature="267:9007" ph="  ..." />
+            <marker date="1521329395369" expanded="false" signature="276:322" ph="..." />
+            <marker date="1521329395369" expanded="true" signature="476:534" ph="// type SVal =  ..." />
+            <marker date="1521329395369" expanded="true" signature="536:607" ph="// type Shift =  ..." />
+            <marker date="1521329395369" expanded="true" signature="610:725" ph="// type Op2 =  ..." />
+            <marker date="1521329395369" expanded="true" signature="742:824" ph="=  ..." />
+            <marker date="1521329395369" expanded="true" signature="749:824" ph="| ADD ..." />
+            <marker date="1521329395369" expanded="true" signature="835:861" ph="=  ..." />
+            <marker date="1521329395369" expanded="true" signature="842:861" ph="| FSet ..." />
+            <marker date="1521329395369" expanded="true" signature="1235:1458" ph="// type Token =  ..." />
+            <marker date="1521329395369" expanded="true" signature="4793:4801" ph=" ..." />
+            <marker date="1521329395369" expanded="true" signature="4793:6548" ph=" : Result&lt;DataPath&lt;'INS&gt;, string&gt; =  ..." />
+            <marker date="1521329395369" expanded="true" signature="4854:5099" ph=" =  ..." />
+            <marker date="1521329395369" expanded="true" signature="4881:5099" ph="  ..." />
+            <marker date="1521329395369" expanded="true" signature="4899:5043" ph=" -&gt;  ..." />
+            <marker date="1521329395369" expanded="true" signature="5153:5400" ph=" =  ..." />
+            <marker date="1521329395369" expanded="true" signature="5442:6548" ph=" ..." />
+            <marker date="1521329395369" expanded="true" signature="5476:6211" ph=" -&gt;  ..." />
+            <marker date="1521329395369" expanded="true" signature="5525:5600" ph=" ..." />
+            <marker date="1521329395369" expanded="true" signature="5628:6164" ph=" =  ..." />
+            <marker date="1521329395369" expanded="true" signature="5662:6164" ph=" ..." />
+            <marker date="1521329395369" expanded="true" signature="5741:5945" ph=" -&gt;  ..." />
+            <marker date="1521329395369" expanded="true" signature="6022:6114" ph=" -&gt;  ..." />
+            <marker date="1521329395369" expanded="true" signature="6231:6336" ph=" -&gt;  ..." />
+            <marker date="1521329395369" expanded="true" signature="6353:6455" ph=" -&gt; //if op2 is a register ..." />
+            <marker date="1521329395369" expanded="true" signature="6479:6548" ph=" -&gt; ..." />
+            <marker date="1521329395369" expanded="true" signature="6633:8931" ph=": Result&lt;Parse&lt;AriInstr&gt;, string&gt; option = ..." />
+            <marker date="1521329395369" expanded="true" signature="6740:8820" ph=" =  ..." />
+            <marker date="1521329395369" expanded="true" signature="6794:6956" ph=" =  ..." />
+            <marker date="1521329395369" expanded="true" signature="6827:6956" ph=" ..." />
+            <marker date="1521329395369" expanded="true" signature="7115:7942" ph=" =  ..." />
+            <marker date="1521329395369" expanded="true" signature="7161:7942" ph=" ..." />
+            <marker date="1521329395369" expanded="true" signature="7203:7486" ph=" -&gt;  ..." />
+            <marker date="1521329395369" expanded="true" signature="7286:7451" ph=" =  ..." />
+            <marker date="1521329395369" expanded="true" signature="7330:7451" ph=" ..." />
+            <marker date="1521329395369" expanded="true" signature="7534:7894" ph="  -&gt;  ..." />
+            <marker date="1521329395369" expanded="true" signature="7691:7856" ph=" =  ..." />
+            <marker date="1521329395369" expanded="true" signature="7735:7856" ph=" ..." />
+            <marker date="1521329395369" expanded="true" signature="7961:8500" ph=" =  ..." />
+            <marker date="1521329395369" expanded="true" signature="8006:8500" ph=" ..." />
+            <marker date="1521329395369" expanded="true" signature="8555:8820" ph="  ..." />
+            <marker date="1521329395369" expanded="true" signature="8580:8792" ph=" -&gt;  ..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
