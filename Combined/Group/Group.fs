@@ -11,10 +11,12 @@ let main argv =
 
     let input = 
             """
-            mov r1,#5
-            BACKHERE SUBS R1,R1,#0x55
+            mov r0,#5
+            mov r1,#0x30
+            mov r2,#0b111
             
-            MOV R0,#55
+            
+            
             
             END
             
