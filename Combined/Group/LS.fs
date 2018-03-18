@@ -111,19 +111,19 @@ let convExp2Lit (str:string)  (symtab:SymbolTable) =
         |str when str.StartsWith "0X" -> 
             let numWithout0x = str.[2..] 
             match Regex.IsMatch (numWithout0x,"^[0-9A-F][0-9A-F]*$") with
-            |true->  System.Convert.ToInt32 (numWithout0x,16) |>uint32|> makeLiteral
+            |true->  System.Convert.ToUInt32 (numWithout0x,16) |> makeLiteral
             |false -> None
 
         |str when str.StartsWith "0B" -> 
             let numWithout0b = str.[2..] 
             
             match Regex.IsMatch (numWithout0b,"^[0-1][0-1]*$") with
-            |true->  System.Convert.ToInt32 (numWithout0b,2) |>uint32|> makeLiteral
+            |true->  System.Convert.ToUInt32 (numWithout0b,2) |> makeLiteral
             |false -> None
         |str -> 
             match Regex.IsMatch (str,"^[0-9\-][0-9]*$") with
             |true->
-                System.Int32.Parse str |>uint32|> makeLiteral
+                System.UInt32.Parse str |> makeLiteral
             |false -> Map.tryFind str symtab |> Option.bind makeLiteral
 
     let detectFirst list= 
