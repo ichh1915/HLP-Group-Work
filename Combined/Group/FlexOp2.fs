@@ -55,13 +55,14 @@ let makeShift (shiftType:ShiftRotateOption) (rOp2:RName) (rShift: RName option) 
 
 let checkLitValidity lit = 
     [0u..15u]
-    |> List.map (fun n -> rOR lit n) 
+    |> List.map (fun n -> rOR lit 2u*n) 
     |> List.exists (fun x -> (x>=0u) && (x <=255u))
 
 let makeLiteral (literalData:uint32) = 
+    printf "%A " literalData
     match literalData with
     | lit when checkLitValidity lit -> Some (Literal lit)
-    | lit when checkLitValidity (~~~lit+1u) -> Some (Literal lit)
+    | lit when checkLitValidity (~~~lit) -> Some (Literal lit)
     | _ -> None
 
 

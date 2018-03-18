@@ -12,7 +12,7 @@ let main argv =
     let input = 
             """
             
-            mov r0,#-55
+            mov r0,#0xFFFFFF
             
             
             
@@ -38,7 +38,6 @@ let main argv =
 
     printf "%A" output
     printf "%A" valList
-
     printfn "%A" argv
     0 // return an integer exit code
 
