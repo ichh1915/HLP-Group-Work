@@ -23,8 +23,7 @@ type Op2 =
 
 ///Basic Shift/Rotate Functions
 ///-----------------------------------------------------------------
-let rOR num (rBit:uint32) = (uint32(num)>>> int32(rBit)) + (uint32(num)<<<(32-int32(rBit)))
-
+let rOR num (rBit:uint32) = num>>>(int rBit)|||num<<<(32-int rBit)
 let lSR num sBit = (uint32(num))>>>int32(sBit)
 
 let lSL num sBit = (uint32(num))<<<int32(sBit)
@@ -53,16 +52,26 @@ let makeShift (shiftType:ShiftRotateOption) (rOp2:RName) (rShift: RName option) 
         |None,None -> Some (RegS (rOp2, shiftType, Lit (1u)))
         |_,_ -> None
 
-let checkLitValidity lit = 
-    [0u..15u]
-    |> List.map (fun n -> rOR lit 2u*n) 
-    |> List.exists (fun x -> (x>=0u) && (x <=255u))
+// let checkLitValidity lit = 
+//     [0u..15u]
+//     |> List.map (fun n -> rOR lit (2u*n)) 
+//     |> List.exists (fun x -> ((x>=0u) && (x <256u)))
+let checkLitValidity (literal:uint32) = 
+    let checkOri = 
+        [0..2..30]
+        |>List.map (fun x -> literal>>>x|||literal<<<(32-x))  //all 16 ROR results
+        |>List.exists(fun x-> uint32 0<=x && x<=uint32 255)
+    let checkInv = 
+        let inv = ~~~literal
+        [0..2..30]
+        |>List.map (fun x -> inv>>>x|||inv<<<(32-x))  //all 16 ROR results
+        |>List.exists(fun x-> uint32 0<=x && x<=uint32 255)
+    checkInv||checkOri
 
 let makeLiteral (literalData:uint32) = 
-    printf "%A " literalData
+    printf "%A" ~~~literalData
     match literalData with
-    | lit when checkLitValidity lit -> Some (Literal lit)
-    | lit when checkLitValidity (~~~lit) -> Some (Literal lit)
+    | lit when checkLitValidity lit-> Some (Literal lit)
     | _ -> None
 
 

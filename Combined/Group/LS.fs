@@ -110,7 +110,6 @@ let convExp2Lit (str:string)  (symtab:SymbolTable) =
         match str with
         |str when str.StartsWith "0X" -> 
             let numWithout0x = str.[2..] 
-            
             match Regex.IsMatch (numWithout0x,"^[0-9A-F][0-9A-F]*$") with
             |true->  System.Convert.ToInt32 (numWithout0x,16) |>uint32|> makeLiteral
             |false -> None
@@ -123,11 +122,12 @@ let convExp2Lit (str:string)  (symtab:SymbolTable) =
             |false -> None
         |str -> 
             match Regex.IsMatch (str,"^[0-9\-][0-9]*$") with
-            |true-> System.Int32.Parse str |>uint32|> makeLiteral
+            |true->
+                System.Int32.Parse str |>uint32|> makeLiteral
             |false -> Map.tryFind str symtab |> Option.bind makeLiteral
 
     let detectFirst list= 
-        let firstOpIndex = List.tryFindIndex (fun k -> (k = '+' )|| (k = '-') || (k = '*')) list
+        let firstOpIndex = List.tryFindIndex (fun k -> ((k = '+' )|| (k = '-') || (k = '*'))) list
         match firstOpIndex with
         |None -> 
             convCharListToStr list
@@ -136,7 +136,6 @@ let convExp2Lit (str:string)  (symtab:SymbolTable) =
         |Some index -> 
             let (first,rest) = List.splitAt index list
             let firstLitStr = convCharListToStr first
-            printf "%A" firstLitStr
             match list.[index] with
             |'-' when index = 0-> (Some(Literal 0u),(List.tail rest),list.[index])
             |_ -> (convStr2Lit symtab firstLitStr,(List.tail rest),list.[index])
@@ -146,7 +145,7 @@ let convExp2Lit (str:string)  (symtab:SymbolTable) =
         match op with 
         |'!' -> 
             match lit with
-            |None -> Error "Invalid Literal"
+            |None -> Error (sprintf "Invalid Literal %A" lit)
             |Some (Literal lit') -> Ok (arithOp firstLit lit' operator)
             |_ -> Error "unexpected. should not happen."
         |_ -> 
@@ -156,8 +155,13 @@ let convExp2Lit (str:string)  (symtab:SymbolTable) =
                 let newFirstLit = arithOp firstLit lit' operator
                 parseExp newFirstLit op rest symtab
             |_ -> Error "unexpected. should not happen."
-
+    let checkFinalResult inp = 
+        match checkLitValidity inp with
+        |true->Ok inp
+        |false -> Error (sprintf "Invalid Literal %A" inp)
     parseExp (0u) '+' charList symtab
+    |>Result.bind checkFinalResult
+     
                    
 
 

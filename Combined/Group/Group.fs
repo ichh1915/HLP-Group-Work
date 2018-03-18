@@ -3,6 +3,7 @@ module Group
 open CommonData
 open CommonTop
 open System
+open FlexOp2
 
 [<EntryPoint>]
 let main argv =
@@ -12,7 +13,9 @@ let main argv =
     let input = 
             """
             
-            mov r0,#0xFFFFFF
+            mov r0,#0xFFFFFFF
+            
+
             
             
             
@@ -35,10 +38,10 @@ let main argv =
         |>List.map (fun (_,b) -> b)
 
     let valList = Result.map regVals output
-
+   
     printf "%A" output
     printf "%A" valList
-    printfn "%A" argv
+    printfn "%A" (checkLitValidity 100u)
     0 // return an integer exit code
 
 
