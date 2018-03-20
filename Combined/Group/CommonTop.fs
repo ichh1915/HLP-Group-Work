@@ -14,6 +14,7 @@ open CommonData
 open LS
 open System.Text.RegularExpressions
 open DCD
+open EQUFILL
 
 
 /// allows different modules to return different instruction types
@@ -28,8 +29,9 @@ type Instr =
     | ISFT of SF2.Instr
     | IDCD of DCD.Instr
     | IADR of ADR.Instr
+    | IEQUFILL of EQUFILL.Instr
     | END
-    | EQU        
+    
     
 
 /// allows different modules to return different error info
@@ -45,6 +47,7 @@ type ErrInstr =
     | ERRIDP of DP.ErrInstr
     | ERRIDCD of DCD.ErrInstr
     | ERRIADR of ADR.ErrInstr
+    | ERRIEQUFILL of EQUFILL.ErrInstr
     | ERRTOPLEVEL of string
 
 /// Note that Instr in Mem and DP modules is NOT same as Instr in this module
@@ -68,6 +71,7 @@ let IMatch (ld: LineData) : Result<Parse<Instr>,ErrInstr> option =
     | SF2.IMatch pa -> pConv ISFT ERRISFT pa
     | DCD.IMatch pa -> pConv IDCD ERRIDCD pa
     | ADR.IMatch pa -> pConv IADR ERRIADR pa
+    | EQUFILL.IMatch pa -> pConv IEQUFILL ERRIEQUFILL pa
     | _ -> None
 
 
@@ -150,34 +154,32 @@ let initialDataPath:DataPath<Instr> =
 let executeSpecialIns startAddr ins dp = 
     match ins with
     |IDCD ins'-> DCD.exec startAddr ins' dp 
+    |IEQUFILL ins' when (ins'.Opcode = FILL)-> 
+        EQUFILL.execFILL startAddr ins' dp
     |_ -> dp
 
 let parseAll lines symtab dp= 
     let rec parseOneLine strlist addr parselist dp' startAddr = 
         match strlist with
+        |[] -> Ok (parselist,dp')
         |a::b -> 
             let newparse = parseLine symtab (WA addr) a
             match newparse with
             |Ok parseres ->
                 match parseres.PInstr with
-                |IDCD _ -> 
+                |IEQUFILL ins' when ins'.Opcode = EQU -> 
+                    parseOneLine b addr (parseres::parselist) dp startAddr
+                |IEQUFILL _| IDCD _ -> 
                     let newdp = executeSpecialIns startAddr parseres.PInstr dp'
-                    let updatedParse = {parseres with PLabel =  Some (opt2Val parseres.PLabel|>fun (a,b)->a,startAddr) }
+                    let updatedParse = {parseres with PLabel =  Some (opt2Val parseres.PLabel|>fun (a,_)->a,startAddr) }
                     parseOneLine b addr (updatedParse::parselist) newdp (startAddr+parseres.PSize*4u)
 
                 |_ ->
-                    match b with
-                    |[] ->  
-                        parseres::parselist
-                        |>List.rev
-                        |>fun k -> Ok(k,dp')
-                           
-                    |_ -> 
-                        let newAddr = addr+parseres.PSize
-                        parseOneLine b newAddr (parseres::parselist) dp' startAddr
+                    
+                    let newAddr = addr+parseres.PSize
+                    parseOneLine b newAddr (parseres::parselist) dp' startAddr
             |Error k -> Error k
-        |_ -> Ok (parselist,dp')
-            
+        
     parseOneLine lines 0u [] dp dataMemAddrStart
     
 let genSymTab parse1List = 
@@ -194,6 +196,7 @@ let parseOneTwo lines =
     match parseres with
     |Ok (parselist,dp) -> 
         let symtab = parselist|> genSymTab
+        printf "symtab is %A" symtab
         symtab
         |>Some
         |>(fun k -> parseAll lines k initialDataPath)
@@ -204,13 +207,12 @@ let parseOneTwo lines =
 
 let rec storeIns addr  (datapath:DataPath<Instr>) (parses:Parse<Instr> list) = 
     match parses with
-    |[a] -> 
-        let k = {datapath with MM = datapath.MM.Add (WA addr,Code a.PInstr)}
-        printf "%A" k 
-        k
+    // |[a] -> 
+    //     {datapath with MM = datapath.MM.Add (WA addr,Code a.PInstr)}
+        
     |a::b -> 
         match a.PInstr with
-        |IDCD _ -> 
+        |IDCD _ |IEQUFILL _-> 
             storeIns addr datapath b
         |_ -> storeIns (addr+a.PSize) {datapath with MM = datapath.MM.Add (WA addr,Code a.PInstr)} b
     |[] -> datapath
@@ -232,13 +234,13 @@ let runErrorMap ins res=
         | IB _ -> Error (ERRILSM k )
         | END -> Error (ERRTOPLEVEL k)
         | IDP _ -> Error (ERRIDP k)
-        | EQU -> Error (ERRTOPLEVEL k)
         | IBIT _ -> Error (ERRIBIT k)
         | IMOV _ -> Error (ERRIMOV k)
         | ITST _ -> Error (ERRITST k)
         | ISFT _ -> Error (ERRISFT k)
         | IDCD _ -> Error (ERRIDCD k)
         | IADR _ -> Error (ERRIADR k)
+        | IEQUFILL _ -> Error (ERRIEQUFILL k)
 
 let CheckCond (cpuData:DataPath<'INS>) (cond:Condition): bool = 
     match cond with
@@ -288,7 +290,6 @@ let executeAnyInstr (ins:Instr) (dp:DataPath<Instr>) : Result<DataPath<Instr>, E
     execute dp    
 
 let rec simulate addr (dp:DataPath<Instr>) = 
-    printf "%A" addr 
     let memContent = dp.MM.TryFind(WA addr)
     match memContent with
     |Some (Code END) -> Ok dp

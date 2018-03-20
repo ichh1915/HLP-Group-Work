@@ -1,27 +1,13 @@
-﻿module TokenizeOperandsV2
+module TokenizeOperandsV2
 
 open CommonData
+open CommonLex
 open FlexOp2
 open LS
-open CommonLex
 
-
-// type Token = |Reg of string*int     //R0-R12
-//              |Com of int            //,
-//              |Opr of string         //LSL 
-//              |Lit of string         //#1   #0xF
-//              |END
 
 // type Op2Shift = |ASR |LSL |LSR |ROR |RRX
 let op2codeMap = Map.ofList [ "LSL",LSL; "LSR",LSR; "ASR",ASR; "ROR", ROR; "RRX", RRX;]
-
-
-
-// type FlexOp2 =
-//      |Literal of uint32
-//      |FReg of RName
-//      |RegwithShift of RName*Op2Shift*int
-//      |RegwithRegShift of RName*Op2Shift*RName
 
 
 ///Returned type of the parsed shift operands   
@@ -43,6 +29,13 @@ type TSTOps = {Op1:RName;
                Op2:Op2;
                } 
 
+///Returned type of the parsed DCD/FILL/EQU operands    
+type DCDOps  = {Litlst:uint32 list;
+               }
+
+type FILLEQUOps = uint32
+
+
 type LexerState = Normal | InComment 
 type LexData = {Txt: string; State: LexerState; Numb: int}
 
@@ -57,41 +50,11 @@ let modulo256R (r:uint32) =
 let modulo32L (l:uint32) = 
     int32 (((l)<<<27)>>>27)
 
-// //Test if the immediate oprand is valid
-// let TestValid (literal:uint32) = 
-//     [0..2..30]
-//     |>List.map (fun x -> literal>>>x|||literal<<<(32-x))  //all 16 ROR results
-//     |>List.exists(fun x-> uint32 0<=x && x<=uint32 255)
-//     |>function|true -> literal |false -> failwithf "Invalid immediate operand value"
+let Checkfill (n:uint32)=
+    match (int n)%4 with
+    |0->true
+    |_->false
 
-// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// //                                    Obtain uint32 values of FlexOp2                                  
-// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// let FlexOp2 (cpuData:DataPath<'INS>) (op2:FlexOp2):uint32 =
-//     let mapRtoUint r= 
-//         cpuData.Regs.[r]
-                            
-//     match op2 with
-//     |Literal l->TestValid l 
-//     |FReg r -> mapRtoUint r
-//     |RegwithShift (r,ASR,i)-> int32 (mapRtoUint r >>> (i|>uint32|>TestValid|>modulo32L)) |> uint32
-//     |RegwithShift (r,LSL,i)-> mapRtoUint r <<< (i|>uint32|>TestValid|>modulo32L)
-//     |RegwithShift (r,LSR,i)-> mapRtoUint r >>> (i|>uint32|>TestValid|>modulo32L)
-//     |RegwithShift (r,ROR,i)-> (mapRtoUint r <<< 32-(i|>uint32|>TestValid|>modulo32L)) ||| (mapRtoUint r >>> (i|>uint32|>TestValid|>modulo32L))
-//     |RegwithShift (r,RRX,1)-> match cpuData.Fl.C with
-//                               |true -> (mapRtoUint r >>> 1) ||| (uint32 (1<<<31))
-//                               |false -> mapRtoUint r >>> 1
-    
-//     |RegwithRegShift (r,ASR,r')-> if modulo256R (mapRtoUint r') > 31 then 0u
-//                                   else int32 (mapRtoUint r >>> modulo256R (mapRtoUint r'))|> uint32       
-//     |RegwithRegShift (r,LSL,r')-> if modulo256R (mapRtoUint r') > 31 then 0u
-//                                   else mapRtoUint r <<< modulo256R (mapRtoUint r')
-//     |RegwithRegShift (r,LSR,r')-> if modulo256R (mapRtoUint r') > 31 then 0u
-//                                   else (mapRtoUint r) >>> (int (mapRtoUint r'))
-//     |RegwithRegShift (r,ROR,r')-> (mapRtoUint r <<< 32-(modulo256R (mapRtoUint r'))) ||| (mapRtoUint r >>> modulo256R (mapRtoUint r'))
-
-//     |RegwithShift _ -> failwithf "Literal Op2 failed"
-//     |RegwithRegShift _ -> failwithf "Register Op2 failed"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                    Check if Op2 set the C Flag                                  
@@ -206,7 +169,7 @@ let splitStrIntoList str = splitIntoWords str [|','|]
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                    Parse Token List to SHIFTOps                                  
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-let ParseSHIFTOps  root (ls:LineData)(tok:string list): Result<SHIFTOps,string> =
+let ParseSHIFTOps (root:string) (ls:LineData) (tok:string list): Result<SHIFTOps,string> =
     let (dest,op1,op2) = 
         match tok,root with
         |dest::[op1], "RRX" -> 
@@ -214,7 +177,8 @@ let ParseSHIFTOps  root (ls:LineData)(tok:string list): Result<SHIFTOps,string> 
             let op1' = 
                 Map.tryFind op1 regNames
             (destReg,op1',None)
-        |dest::op1::[op2],_ ->
+
+        |dest::op1::[op2], _ ->
             let destReg = Map.tryFind dest regNames
             let op1Reg = Map.tryFind op1 regNames
             let op2' = 
@@ -222,6 +186,7 @@ let ParseSHIFTOps  root (ls:LineData)(tok:string list): Result<SHIFTOps,string> 
                 |None -> (Literal 0u)|>Ok |>Some
                 |Some symtab -> Some (litOrReg op2 symtab)
             (destReg,op1Reg,op2')
+
         |_ -> (None,None,None)
        
     match (dest,op1,op2),root with
@@ -234,7 +199,45 @@ let ParseSHIFTOps  root (ls:LineData)(tok:string list): Result<SHIFTOps,string> 
 
 
 
+let ParseFILLEQUOps (root:string) (ls:LineData) (tok:string list): Result<FILLEQUOps,string> = 
 
+        match tok,root with
+        |[exp'],"FILL" -> 
+            let num = 
+                match ls.SymTab with
+                |None -> Ok (0u)
+                |Some symtab -> (convExp2LitNoCheck exp' symtab)
+            printf "num = %A" num
+            match num with
+            |Ok num' when num'%4u = 0u -> Ok num' 
+            |Ok _  -> Error "Number of bytes to fill not a multiple of 4"              
+            |Error k-> Error k
+
+        |[exp'],"EQU" -> 
+                match ls.SymTab with
+                |None -> Ok (0u)
+                |Some symtab -> (convExp2LitNoCheck exp' symtab)
+
+        |_ ->Error "Expression error"
+
+
+    //let dcd label valList state = 
+        //let rec loop mem vlist state = 
+        //    match vlist with
+        //    | (i,'i') :: tailList -> state
+        //                            |> writeMem mem i
+        //                            |> loop (mem+4) tailList
+
+        //    | (r,'r') :: tailList -> state
+        //                            |> writeMem mem (readReg r state)
+        //                            |> loop (mem+4) tailList
+        //    | (m,'m') :: tailList -> state
+        //                            |> writeMem mem (readMem m state)
+        //                            |> loop (mem+4) tailList
+        //    | [] -> state
+        //    | _ -> failwith "Invalid data type."
+        //loop label valList state
+    
 // let ParseSHIFTOps (tok:Token list): SHIFTOps =
 
 //     match tok with
@@ -307,7 +310,7 @@ let ParseMOVOps  (ls:LineData)(tok:string list): Result<MOVOps,string> =
 //                                    Parse Token List to BITOps                                  
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-let ParseBITOps (ls:LineData)(tok:string list) : Result<BITOps,string> =
+let ParseBITOps (ls:LineData) (tok:string list) : Result<BITOps,string> =
     let (dest,op1,op2) = 
         match tok with
         |dest::op1::op2 -> 
@@ -398,5 +401,4 @@ let ParseTSTOps  (ls:LineData)(tok:string list): Result<TSTOps,string> =
 //                                            Op2=RegwithRegShift (regNames.[op2], op2codeMap.[opcodeStr],regNames.[op3]);
 //                                            }
 //     |_->failwithf "Syntax Error!!"
-
-
+                            

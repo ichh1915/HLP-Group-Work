@@ -10,14 +10,10 @@ let main argv =
 
     let input = 
             """
-            
-            mov r0,#0xFFFFFFF
-            bl jumphere
-            add r5,r5,#5
-            end
-            mov r1,#3
-            jumphere mov r4,#22
-            mov pc,lr
+            here FILL 12
+            this equ 1
+            mov r0,#here
+            mov r1,#this
             END
 
             """
