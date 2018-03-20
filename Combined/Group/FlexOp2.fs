@@ -69,7 +69,7 @@ let checkLitValidity (literal:uint32) =
     checkInv||checkOri
 
 let makeLiteral (literalData:uint32) = 
-    printf "%A" ~~~literalData
+    // printf "%A" ~~~literalData
     match literalData with
     | lit when checkLitValidity lit-> Some (Literal lit)
     | _ -> None

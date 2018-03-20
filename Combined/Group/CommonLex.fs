@@ -33,7 +33,7 @@ type Condition =
     | Cal // the "always executed condition "AL". Used by default on no condition
 
 /// classes of instructions (example, add/change this is needed)
-type InstrClass = | ARI | BITC | LS | LSM | Branch |MOVC |SFTC |TSTC
+type InstrClass = | ARI | BITC | LS | LSM | Branch |MOVC |SFTC |TSTC |DCD |ADR
 
 /// specification of set of instructions
 type OpSpec = {

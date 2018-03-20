@@ -2,8 +2,6 @@ module Group
 
 open CommonData
 open CommonTop
-open System
-open FlexOp2
 
 [<EntryPoint>]
 let main argv =
@@ -14,22 +12,19 @@ let main argv =
             """
             
             mov r0,#0xFFFFFFF
-            
-
-            
-            
-            
-            
-            
-            
+            bl jumphere
+            end
+            mov r1,#3
+            jumphere mov r4,#22
+            mov pc,lr
             END
-            
+
             """
 
     let output = 
         input
         |>inputToLines
-        |>genParsedDP initialDataPath
+        |>genParsedDP 
         |>Result.bind (simulate 0u)
 
     let regVals out = 
@@ -38,10 +33,10 @@ let main argv =
         |>List.map (fun (_,b) -> b)
 
     let valList = Result.map regVals output
+
    
     printf "%A" output
     printf "%A" valList
-    printfn "%A" (checkLitValidity 100u)
     0 // return an integer exit code
 
 

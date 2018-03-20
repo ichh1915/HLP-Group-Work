@@ -13,6 +13,7 @@ open CommonLex
 open CommonData
 open LS
 open System.Text.RegularExpressions
+open DCD
 
 
 /// allows different modules to return different instruction types
@@ -25,6 +26,8 @@ type Instr =
     | IBIT of BT2.Instr
     | IMOV of MV2.Instr
     | ISFT of SF2.Instr
+    | IDCD of DCD.Instr
+    | IADR of ADR.Instr
     | END
     | EQU        
     
@@ -40,6 +43,8 @@ type ErrInstr =
     | ERRIMOV of MV2.ErrInstr
     | ERRISFT of SF2.ErrInstr
     | ERRIDP of DP.ErrInstr
+    | ERRIDCD of DCD.ErrInstr
+    | ERRIADR of ADR.ErrInstr
     | ERRTOPLEVEL of string
 
 /// Note that Instr in Mem and DP modules is NOT same as Instr in this module
@@ -61,6 +66,8 @@ let IMatch (ld: LineData) : Result<Parse<Instr>,ErrInstr> option =
     | BT2.IMatch pa -> pConv IBIT ERRIBIT pa
     | MV2.IMatch pa -> pConv IMOV ERRIMOV pa
     | SF2.IMatch pa -> pConv ISFT ERRISFT pa
+    | DCD.IMatch pa -> pConv IDCD ERRIDCD pa
+    | ADR.IMatch pa -> pConv IADR ERRIADR pa
     | _ -> None
 
 
@@ -91,7 +98,8 @@ let parseLine (symtab: SymbolTable option) (loadAddr: WAddr) (asmLine:string) =
     let matchLine words =
         let pNoLabel =
             match words with 
-            |["END"] -> Some (Ok {PInstr = END; PLabel = None; PSize = 4u; PCond = Cal})
+            | ["END"] -> {PInstr = END; PLabel =None; PSize = 4u; PCond = Cal}|>Ok |>Some
+
             | opc :: operands -> 
                 makeLineData opc operands 
                 |> IMatch
@@ -101,11 +109,6 @@ let parseLine (symtab: SymbolTable option) (loadAddr: WAddr) (asmLine:string) =
         | None, label::["END"] -> 
             let (WA addr) = loadAddr
             Ok {PInstr = END; PLabel = Some (label, addr); PSize = 4u; PCond = Cal}
-        | None, label:: "EQU" :: [lit] ->
-            match (Regex.IsMatch (label,"^[a-zA-Z][a-zA-Z0-9_]*$")) with
-            |true -> 
-                Ok {PInstr = EQU; PLabel = Some (label,uint32 lit); PSize = 0u; PCond = Cal }
-            |_ -> Error (ERRTOPLEVEL "equ error")
     
         | None, label :: opc :: operands -> 
             match { makeLineData opc operands 
@@ -135,24 +138,47 @@ let addSym (symtab:SymbolTable) parse=
     |Some label -> symtab.Add(label)
     |None -> symtab
 
-let parseAll lines symtab = 
-    let rec parseOneLine strlist addr parselist= 
+let initialDataPath:DataPath<Instr> = 
+    let regs = 
+        [0u;0u;0u;0u;0u;0u;0u;0u;0u;0u;0u;0u;0u;0xFF000000u;0u;8u]
+        |>List.map2 (fun a b -> (register a, b)) [0..15]
+        |>Map.ofList
+    let mm = Map.empty
+    let flags  = { N=false; C=false; Z=false; V=false}
+    {Regs = regs; MM = mm; Fl = flags}
+
+let executeSpecialIns startAddr ins dp = 
+    match ins with
+    |IDCD ins'-> DCD.exec startAddr ins' dp 
+    |_ -> dp
+
+let parseAll lines symtab dp= 
+    let rec parseOneLine strlist addr parselist dp' startAddr = 
         match strlist with
         |a::b -> 
             let newparse = parseLine symtab (WA addr) a
             match newparse with
             |Ok parseres ->
-                match b with
-                |[] ->  
-                    parseres::parselist
-                    |>List.rev
-                    |>Ok
-                |b' -> 
-                    let newAddr = addr+parseres.PSize
-                    parseOneLine b' newAddr (parseres::parselist)
+                match parseres.PInstr with
+                |IDCD _ -> 
+                    let newdp = executeSpecialIns startAddr parseres.PInstr dp'
+                    let updatedParse = {parseres with PLabel =  Some (opt2Val parseres.PLabel|>fun (a,b)->a,startAddr) }
+                    parseOneLine b addr (updatedParse::parselist) newdp (startAddr+parseres.PSize*4u)
+
+                |_ ->
+                    match b with
+                    |[] ->  
+                        parseres::parselist
+                        |>List.rev
+                        |>fun k -> Ok(k,dp')
+                           
+                    |_ -> 
+                        let newAddr = addr+parseres.PSize
+                        parseOneLine b newAddr (parseres::parselist) dp' startAddr
             |Error k -> Error k
-        |[] -> Ok []
-    parseOneLine lines 0u []
+        |_ -> Ok (parselist,dp')
+            
+    parseOneLine lines 0u [] dp dataMemAddrStart
     
 let genSymTab parse1List = 
     let initSymTab = Map.empty
@@ -164,32 +190,37 @@ let genSymTab parse1List =
     addSymbol parse1List initSymTab
 
 let parseOneTwo lines = 
-    let symtab = 
-        parseAll lines None
-        |>Result.map genSymTab
-    symtab
-    |>Result.map Some
-    |>Result.bind (parseAll (lines@["END"]))
+    let parseres = parseAll lines None initialDataPath
+    match parseres with
+    |Ok (parselist,dp) -> 
+        let symtab = parselist|> genSymTab
+        symtab
+        |>Some
+        |>(fun k -> parseAll lines k initialDataPath)
+    |Error k -> Error k
 
-let rec storeIns addr (datapath:DataPath<Instr>) (parses:Parse<Instr> list) = 
+
+
+
+let rec storeIns addr  (datapath:DataPath<Instr>) (parses:Parse<Instr> list) = 
     match parses with
-    |[a] -> {datapath with MM = datapath.MM.Add (WA addr,Code a.PInstr)}
-    |a::b -> storeIns (addr+a.PSize) {datapath with MM = datapath.MM.Add (WA addr,Code a.PInstr)} b
+    |[a] -> 
+        let k = {datapath with MM = datapath.MM.Add (WA addr,Code a.PInstr)}
+        printf "%A" k 
+        k
+    |a::b -> 
+        match a.PInstr with
+        |IDCD _ -> 
+            storeIns addr datapath b
+        |_ -> storeIns (addr+a.PSize) {datapath with MM = datapath.MM.Add (WA addr,Code a.PInstr)} b
     |[] -> datapath
+//Add instruction execution of equ, dcb, dcd, fill
 
 
-let initialDataPath:DataPath<Instr> = 
-    let regs = 
-        [0u;0u;0u;0u;0u;0u;0u;0u;0u;0u;0u;0u;0u;0xFF000000u;0u;8u]
-        |>List.map2 (fun a b -> (register a, b)) [0..15]
-        |>Map.ofList
-    let mm = Map.empty
-    let flags  = { N=false; C=false; Z=false; V=false}
-    {Regs = regs; MM = mm; Fl = flags}
 
-let genParsedDP initDP lines= 
+let genParsedDP lines= 
     parseOneTwo lines
-    |>Result.map (storeIns 0u initDP)
+    |>Result.map (fun (parselist,dp) -> storeIns  0u dp parselist)
 
 let runErrorMap ins res= 
     match res with
@@ -206,26 +237,28 @@ let runErrorMap ins res=
         | IMOV _ -> Error (ERRIMOV k)
         | ITST _ -> Error (ERRITST k)
         | ISFT _ -> Error (ERRISFT k)
+        | IDCD _ -> Error (ERRIDCD k)
+        | IADR _ -> Error (ERRIADR k)
 
 let CheckCond (cpuData:DataPath<'INS>) (cond:Condition): bool = 
     match cond with
-    |Ceq when cpuData.Fl.Z=true-> true
-    |Cne when cpuData.Fl.Z=false-> true
-    |Cmi when cpuData.Fl.N=true-> true
-    |Cpl when cpuData.Fl.N=false-> true
+    |Ceq when cpuData.Fl.Z-> true
+    |Cne when not cpuData.Fl.Z-> true
+    |Cmi when cpuData.Fl.N-> true
+    |Cpl when not cpuData.Fl.N-> true
 
-    |Cvs when cpuData.Fl.V=true-> true
-    |Cvc when cpuData.Fl.V=false-> true
-    |Chs when cpuData.Fl.C=true-> true
-    |Clo when cpuData.Fl.C=false-> true
+    |Cvs when cpuData.Fl.V-> true
+    |Cvc when not cpuData.Fl.V-> true
+    |Chs when cpuData.Fl.C-> true
+    |Clo when not cpuData.Fl.C-> true
 
-    |Chi when cpuData.Fl.C=true && cpuData.Fl.Z=false-> true
-    |Cls when cpuData.Fl.C=false || cpuData.Fl.Z=true-> true
+    |Chi when cpuData.Fl.C && not cpuData.Fl.Z-> true
+    |Cls when (not cpuData.Fl.C) || cpuData.Fl.Z-> true
     |Cge when cpuData.Fl.N = cpuData.Fl.V-> true
     |Clt when cpuData.Fl.N <> cpuData.Fl.V-> true
 
-    |Cgt when cpuData.Fl.Z=false && cpuData.Fl.N = cpuData.Fl.V-> true
-    |Cle when cpuData.Fl.Z=true || cpuData.Fl.N <> cpuData.Fl.V-> true
+    |Cgt when (not cpuData.Fl.Z) && cpuData.Fl.N = cpuData.Fl.V-> true
+    |Cle when cpuData.Fl.Z || cpuData.Fl.N <> cpuData.Fl.V-> true
     |Cnv-> false
     |Cal-> true
 
@@ -248,18 +281,20 @@ let executeAnyInstr (ins:Instr) (dp:DataPath<Instr>) : Result<DataPath<Instr>, E
         | IMOV ins' when CheckCond dp ins'.Cond-> MV2.MovsExecute dp ins' |> Ok
         | ITST ins' when CheckCond dp ins'.Cond-> TT2.TestExecute dp ins' |> Ok
         | ISFT ins' when CheckCond dp ins'.Cond-> SF2.ShiftExecute dp ins' |> Ok
-        | END -> Ok dp
-        | EQU -> Ok dp
-        |_ -> Ok ( PCPlus4 dp)
+        | IADR ins' when CheckCond dp ins'.Cond-> ADR.exec ins' dp |> runErrorMap ins
+        |_ -> Ok (dp)
     
     let condMet = CheckCond dp 
     execute dp    
 
 let rec simulate addr (dp:DataPath<Instr>) = 
-    let memContent = dp.MM.[WA addr]
+    printf "%A" addr 
+    let memContent = dp.MM.TryFind(WA addr)
     match memContent with
-    |Code END -> Ok dp
-    |Code ins -> 
+    |Some (Code END) -> Ok dp
+    |Some (Code ins) -> 
         let newDP = executeAnyInstr ins dp
         Result.bind (fun k -> simulate (k.Regs.[R15]-8u) k) newDP
-    |DataLoc _ -> Error (ERRTOPLEVEL "Error: data memory accessed when fetching instruction")
+    |(Some (DataLoc _)) |_ when addr >= 0x100u -> Error (ERRTOPLEVEL "Error: data memory accessed when fetching instruction")
+    |None -> Ok {dp with Regs = dp.Regs.Add (R15,dp.Regs.[R15]-4u)}
+    |_ -> failwithf "unexpected error"

@@ -75,7 +75,10 @@ module MV2
 
     let MovsExecute (cpuData:DataPath<'INS>) (instr): DataPath<'INS> = 
         let setC = instr.Op2|>Op2SetCFlag cpuData
-        let rop2 = instr.Op2|> fun k -> flexOp2 k cpuData
+        let rop2 = 
+            match instr.Rdest with
+            |R15 -> instr.Op2|> fun k -> (flexOp2 k cpuData)+4u
+            |_ -> instr.Op2|> fun k -> (flexOp2 k cpuData)
         let updateFlRegs'= updateFlRegs cpuData instr.Rdest instr.Setflag setC
         
         match instr.Opcode with

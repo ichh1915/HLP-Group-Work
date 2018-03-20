@@ -103,7 +103,7 @@ let shiftMode =
     ] 
 
 ///Converts Expression string to uint32
-let convExp2Lit (str:string)  (symtab:SymbolTable) = 
+let convExp2LitNoCheck (str:string)  (symtab:SymbolTable) = 
     let charList = Seq.toList str
 
     let convStr2Lit symtab (str:string) = 
@@ -111,20 +111,20 @@ let convExp2Lit (str:string)  (symtab:SymbolTable) =
         |str when str.StartsWith "0X" -> 
             let numWithout0x = str.[2..] 
             match Regex.IsMatch (numWithout0x,"^[0-9A-F][0-9A-F]*$") with
-            |true->  System.Convert.ToUInt32 (numWithout0x,16) |> makeLiteral
+            |true->  System.Convert.ToInt32 (numWithout0x,16) |>uint32 |> Literal |> Some
             |false -> None
 
         |str when str.StartsWith "0B" -> 
             let numWithout0b = str.[2..] 
             
             match Regex.IsMatch (numWithout0b,"^[0-1][0-1]*$") with
-            |true->  System.Convert.ToUInt32 (numWithout0b,2) |> makeLiteral
+            |true->  System.Convert.ToUInt32 (numWithout0b,2)|>uint32 |> Literal |> Some
             |false -> None
         |str -> 
             match Regex.IsMatch (str,"^[0-9\-][0-9]*$") with
             |true->
-                System.UInt32.Parse str |> makeLiteral
-            |false -> Map.tryFind str symtab |> Option.bind makeLiteral
+                System.UInt32.Parse str |>uint32 |> Literal |>Some
+            |false -> Map.tryFind str symtab |> Option.map Literal
 
     let detectFirst list= 
         let firstOpIndex = List.tryFindIndex (fun k -> ((k = '+' )|| (k = '-') || (k = '*'))) list
@@ -155,13 +155,16 @@ let convExp2Lit (str:string)  (symtab:SymbolTable) =
                 let newFirstLit = arithOp firstLit lit' operator
                 parseExp newFirstLit op rest symtab
             |_ -> Error "unexpected. should not happen."
+    
+    parseExp (0u) '+' charList symtab
+    
+let convExp2Lit  (str:string)  (symtab:SymbolTable) = 
     let checkFinalResult inp = 
         match checkLitValidity inp with
         |true->Ok inp
         |false -> Error (sprintf "Invalid Literal %A" inp)
-    parseExp (0u) '+' charList symtab
+    convExp2LitNoCheck str symtab
     |>Result.bind checkFinalResult
-     
                    
 
 
@@ -222,7 +225,7 @@ let strList2Offset strList symtab=
 
 ///parse LineData into LSInstr
 let parse (ls: LineData) : Result<Parse<LSInstr>,string> option =
-    let parse' (instrC, (root,suffix,pCond)) =
+    let parse' (_, (root,suffix,pCond)) =
 
         /// address this instruction is loaded into memory
         let (WA la) = ls.LoadAddr 
@@ -316,7 +319,7 @@ let (|IMatch|_|) = parse
 //---------------------------------Load and Store Instruction Execution-------------------//
 
 ///define range for instruction memory. Can be changed. 
-let dataMemAddrStart = 0x1000u
+let dataMemAddrStart = 0x100u
 
 ///return function based on byte status
 let byteWordTwoFunc byteFunc wordFunc byte=

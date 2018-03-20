@@ -20,6 +20,9 @@
     
     <Compile Include="BIT_v2.fs" />
     <Compile Include="TST_v2.fs" />
+    <Compile Include="DCD.fs" />
+    <Compile Include="ADR.fs" />
+    
     <Compile Include="CommonTop.fs" />
     
     <Compile Include="Group.fs" />
