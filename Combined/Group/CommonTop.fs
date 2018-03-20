@@ -161,7 +161,7 @@ let executeSpecialIns startAddr ins dp =
 let parseAll lines symtab dp= 
     let rec parseOneLine strlist addr parselist dp' startAddr = 
         match strlist with
-        |[] -> Ok (parselist,dp')
+        |[] -> Ok (List.rev parselist,dp')
         |a::b -> 
             let newparse = parseLine symtab (WA addr) a
             match newparse with
@@ -191,16 +191,25 @@ let genSymTab parse1List =
         |[] -> symtab
     addSymbol parse1List initSymTab
 
-let parseOneTwo lines = 
-    let parseres = parseAll lines None initialDataPath
-    match parseres with
-    |Ok (parselist,dp) -> 
-        let symtab = parselist|> genSymTab
-        printf "symtab is %A" symtab
-        symtab
-        |>Some
-        |>(fun k -> parseAll lines k initialDataPath)
-    |Error k -> Error k
+let rec parseNTimes lines n symtab = 
+    let parseres = parseAll lines symtab initialDataPath
+    match n with 
+    |1 -> 
+        match parseres with
+        |Ok (parselist,dp) -> 
+            let symtab = parselist|> genSymTab 
+            symtab
+            |>Some
+            |>(fun k -> parseAll lines k initialDataPath)
+        |Error k -> Error k
+            
+    |_ ->
+        match parseres with
+        |Ok (parselist,dp) -> 
+            let symtab' = parselist|> genSymTab 
+            parseNTimes lines (n-1) (Some symtab')
+        |Error k -> Error k
+    
 
 
 
@@ -221,7 +230,7 @@ let rec storeIns addr  (datapath:DataPath<Instr>) (parses:Parse<Instr> list) =
 
 
 let genParsedDP lines= 
-    parseOneTwo lines
+    parseNTimes lines 10 None
     |>Result.map (fun (parselist,dp) -> storeIns  0u dp parselist)
 
 let runErrorMap ins res= 

@@ -38,6 +38,8 @@ module EQUFILL
               let oprands = ls.Operands|>splitStrIntoList|>ParseFILLEQUOps root ls
               match oprands with
               |Ok op -> 
+                  
+
                   Ok { 
                      PInstr={Opcode=opcodeMap.[root];
                              Value=op;
@@ -47,7 +49,8 @@ module EQUFILL
                         match root with 
                         |"FILL" -> ls.Label |> Option.map (fun lab -> lab, la) 
                         |"EQU" -> ls.Label |> Option.map (fun lab -> lab, op) 
-                        |"_" -> failwithf "will not happen";
+                        |_ -> failwithf "will not happen";
+                     
                      PSize =op/4u; 
                      PCond = pCond }
                |Error k -> Error k

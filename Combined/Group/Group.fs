@@ -10,10 +10,13 @@ let main argv =
 
     let input = 
             """
-            here FILL 12
-            this equ 1
+            
             mov r0,#here
             mov r1,#this
+            that equ this
+            this equ here
+            here FILL 12
+            mov r4,#that
             END
 
             """

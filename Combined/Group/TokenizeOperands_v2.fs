@@ -207,7 +207,6 @@ let ParseFILLEQUOps (root:string) (ls:LineData) (tok:string list): Result<FILLEQ
                 match ls.SymTab with
                 |None -> Ok (0u)
                 |Some symtab -> (convExp2LitNoCheck exp' symtab)
-            printf "num = %A" num
             match num with
             |Ok num' when num'%4u = 0u -> Ok num' 
             |Ok _  -> Error "Number of bytes to fill not a multiple of 4"              
@@ -215,9 +214,14 @@ let ParseFILLEQUOps (root:string) (ls:LineData) (tok:string list): Result<FILLEQ
 
         |[exp'],"EQU" -> 
                 match ls.SymTab with
-                |None -> Ok (0u)
-                |Some symtab -> (convExp2LitNoCheck exp' symtab)
-
+                |None -> 
+                    let res = convExp2LitNoCheck exp' Map.empty
+                    match res with
+                    |Ok k -> Ok k
+                    |Error _ -> Ok 0u
+                |Some symtab -> 
+                    convExp2LitNoCheck exp' symtab
+                    
         |_ ->Error "Expression error"
 
 
