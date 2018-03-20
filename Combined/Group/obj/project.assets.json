@@ -189,7 +189,7 @@
       "projectName": "Group",
       "projectPath": "c:\\Users\\user\\Documents\\GitHub\\HLP-Group-Work\\Combined\\Group\\Group.fsproj",
       "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\user\\Documents\\GitHub\\HLP-Group-Work\\Combined\\Group\\obj\\",
+      "outputPath": "C:\\Users\\user\\Documents\\GitHub\\HLP-Group-Work\\Combined\\Group\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

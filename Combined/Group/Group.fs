@@ -13,6 +13,7 @@ let main argv =
             
             mov r0,#0xFFFFFFF
             bl jumphere
+            add r5,r5,#5
             end
             mov r1,#3
             jumphere mov r4,#22
