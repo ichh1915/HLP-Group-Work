@@ -31,15 +31,12 @@ type ErrInstr = string
 //-----------------------------Identify Opcode----------------------------------//
 
 
-///Branch Instruction Specs
-let bSpec = {
-    InstrC = DCD
-    Roots = ["DCD";"DCB"]
-    Suffixes = [""]
-}
 
 /// map of all possible opcodes recognised
-let opCodes = opCodeExpand bSpec
+
+let opCodes = 
+    [("DCD",(DCD,("DCD","",Cal)));("DCB",(DCD,("DCB","",Cal)))]
+    |>Map.ofList
 
 let opt2Val inp = 
     match inp with

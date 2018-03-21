@@ -161,7 +161,7 @@ let executeSpecialIns startAddr ins dp =
 let parseAll lines symtab dp= 
     let rec parseOneLine strlist addr parselist dp' startAddr = 
         match strlist with
-        |[] -> Ok (List.rev parselist,dp')
+        |[] -> Ok (List.rev parselist,dp',symtab)
         |a::b -> 
             let newparse = parseLine symtab (WA addr) a
             match newparse with
@@ -196,7 +196,7 @@ let rec parseNTimes lines n symtab =
     match n with 
     |1 -> 
         match parseres with
-        |Ok (parselist,dp) -> 
+        |Ok (parselist,dp,_) -> 
             let symtab = parselist|> genSymTab 
             symtab
             |>Some
@@ -205,7 +205,7 @@ let rec parseNTimes lines n symtab =
             
     |_ ->
         match parseres with
-        |Ok (parselist,dp) -> 
+        |Ok (parselist,dp,_) -> 
             let symtab' = parselist|> genSymTab 
             parseNTimes lines (n-1) (Some symtab')
         |Error k -> Error k
@@ -229,9 +229,9 @@ let rec storeIns addr  (datapath:DataPath<Instr>) (parses:Parse<Instr> list) =
 
 
 
-let genParsedDP lines= 
+let genParsedDPSymtab lines= 
     parseNTimes lines 10 None
-    |>Result.map (fun (parselist,dp) -> storeIns  0u dp parselist)
+    |>Result.map (fun (parselist,dp,symtab) -> (storeIns  0u dp parselist),symtab)
 
 let runErrorMap ins res= 
     match res with
@@ -294,7 +294,7 @@ let executeAnyInstr (ins:Instr) (dp:DataPath<Instr>) : Result<DataPath<Instr>, E
         | ITST ins' when CheckCond dp ins'.Cond-> TT2.TestExecute dp ins' |> Ok
         | ISFT ins' when CheckCond dp ins'.Cond-> SF2.ShiftExecute dp ins' |> Ok
         | IADR ins' when CheckCond dp ins'.Cond-> ADR.exec ins' dp |> runErrorMap ins
-        |_ -> Ok (dp)
+        |_ -> Ok (PCPlus4 dp)
     
     let condMet = CheckCond dp 
     execute dp    

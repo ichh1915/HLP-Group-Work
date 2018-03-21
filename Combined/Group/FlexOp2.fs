@@ -67,7 +67,6 @@ let checkLitValidity (literal:uint32) =
         [0..2..30]
         |>List.map (fun x -> (inv>>>x)|||(inv<<<(32-x)))  //all 16 ROR results
         |>List.exists(fun x-> ((x>=0u) && (x<=255u)))
-    printf "checkOri is: %A" checkInv
     checkInv||checkOri
 
 let makeLiteral (literalData:uint32) = 

@@ -22,22 +22,20 @@ module EQUFILL
     /// parse error (dummy, but will do)
     type ErrInstr = string
 
-    let EQUSpec = {
-        InstrC = EQUC
-        Roots = ["EQU";"FILL"]
-        Suffixes = [""; ]
-    }
-
     /// map of all possible opcodes recognised
-    let opCodes = opCodeExpand EQUSpec
+
+    let opCodes = 
+        [("EQU",(EQUC,("EQU","",Cal)));("FILL",(EQUC,("FILL","",Cal)))]
+        |>Map.ofList
 
 
     let FILLEQUparse (ls: LineData) : Result<Parse<Instr>,string> option =
         let (WA la) = ls.LoadAddr
         let parse' (instrC, (root,suffix,pCond)) =
               let oprands = ls.Operands|>splitStrIntoList|>ParseFILLEQUOps root ls
-              match oprands with
-              |Ok op -> 
+              match oprands,ls.Label with
+              |_,None -> Error "No Label found"
+              |Ok op,_ -> 
                   
 
                   Ok { 
@@ -53,7 +51,7 @@ module EQUFILL
                      
                      PSize =op/4u; 
                      PCond = pCond }
-               |Error k -> Error k
+               |Error k,_ -> Error k
 
         Map.tryFind ls.OpCode opCodes
         |> Option.map parse'
