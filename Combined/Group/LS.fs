@@ -21,8 +21,14 @@ type LORS = |L|S
 ///DU, Pre or Post
 type IndexMode = |PRE|POST 
 
+
+
 /// instruction type for ldr and str
 type LSInstr =  {Ins: LORS; Byte: bool ; Reg1:RName; Reg2:RName ; Offset: Op2 Option ; PointerUpdate :IndexMode Option; Cond:Condition}
+
+type LDRPseudo = {Dest:RName; Value:uint32;Cond:Condition}
+
+type Instr = LS of LSInstr | LDRP of LDRPseudo
 
 /// parse error, string used
 type ErrInstr = string
@@ -37,13 +43,13 @@ type Bkt = {
 }
 //--------------------------------Identify OpCode-------------------------//
 let LSSpec = {
-    InstrC = LS
+    InstrC = LSC
     Roots = ["LDR";"STR"]
-    Suffixes = [""; "B"]
+    Suffixes = [""; "B"; ]
 }
 
 
-let opCodes = opCodeExpand LSSpec
+let opCodes = opCodeExpand LSSpec 
 
 //---------------------Useful functions for general parsing-------------------------//
 
@@ -72,6 +78,8 @@ let checkTwoEl strList =
     |a::[b] -> Ok (a,b)
     |[_] -> Error "Invalid syntax: Symbol not found.check symbols such as ',', '[', ']' etc"
     |_ -> Error "Invalid syntax:check symbols such as ',', '[', ']' etc"
+
+let splitStrIntoList str = splitIntoWords str [|','|]
 
  
 ///parse string into prebracket, inbracket and postbracket        
@@ -165,15 +173,28 @@ let convExp2Lit  (str:string)  (symtab:SymbolTable) =
         |false -> Error (sprintf "Invalid Literal %A" inp)
     convExp2LitNoCheck str symtab
     |>Result.bind checkFinalResult
-                   
 
+
+let checkOffsetValidity num = (num> -4096) && (num <4096) 
+
+let convExp2Offset  (str:string)  (symtab:SymbolTable) = 
+    let checkFinalResult inp = 
+        match checkOffsetValidity (int inp) with
+        |true->Ok inp
+        |false -> Error (sprintf "Invalid Literal %A" inp)
+    convExp2LitNoCheck str symtab
+    |>Result.bind checkFinalResult
+                   
+    
 
 ///convert string into literal or register
-let litOrReg (el: string) symtab =
+let litOrReg (el: string) symtab offsetBool=
     match el with
     |lit when lit.StartsWith "#" -> 
         let litStr = lit.Substring 1
-        Result.map Literal (convExp2Lit litStr symtab)
+        match offsetBool with
+        |true -> Result.map Literal (convExp2Offset litStr symtab)
+        |false -> Result.map Literal (convExp2Lit litStr symtab)
     |reg -> 
         match Map.tryFind reg regNames with
         | Some reg' -> Ok ((Reg reg'))
@@ -181,9 +202,9 @@ let litOrReg (el: string) symtab =
  
 
 ///parse string list, return op2 type, assumption: No empty string in list, all elements trimmed
-let str2Offset  (symtab:SymbolTable) (strList:string list)= 
+let str2Offset  (symtab:SymbolTable) (strList:string list) offsetBool= 
     match strList with
-    |[el1] -> litOrReg el1 symtab //one element must be either literal or register
+    |[el1] -> litOrReg el1 symtab offsetBool//one element must be either literal or register
     |el1::[el2] -> //two element must be rrx
         match (el1,el2) with
         |(reg,"RRX") -> 
@@ -196,7 +217,7 @@ let str2Offset  (symtab:SymbolTable) (strList:string list)=
         |Some reg' -> 
             match Map.tryFind el2 shiftMode with
             |Some shiftMode' -> 
-                let el3' = litOrReg el3 symtab
+                let el3' = litOrReg el3 symtab offsetBool
                 match el3' with
                 |Ok (Literal lit) -> optToRes (makeShift shiftMode' reg' None ( Some (int32 lit) )) "invalid lit shift operation" 
                 |Ok (Reg reg) -> optToRes (makeShift shiftMode' reg' (Some reg) None) "invalid reg shift operation" 
@@ -217,14 +238,20 @@ let str2Offset  (symtab:SymbolTable) (strList:string list)=
 let parseSqBktRes = parseBktResGen '[' ']'
 
 ///convert string list to op2. 
+let strList2Op2 strList symtab= 
+            strList 
+            |> List.collect ( fun a -> ((splitIntoWords a [|' '|])))
+            |> removeEmptyStr
+            |> fun k -> str2Offset symtab k false
+
 let strList2Offset strList symtab= 
             strList 
             |> List.collect ( fun a -> ((splitIntoWords a [|' '|])))
             |> removeEmptyStr
-            |> str2Offset symtab
+            |> fun k -> str2Offset symtab k true
 
 ///parse LineData into LSInstr
-let parse (ls: LineData) : Result<Parse<LSInstr>,string> option =
+let parse (ls: LineData) : Result<Parse<Instr>,string> option =
     let parse' (_, (root,suffix,pCond)) =
 
         /// address this instruction is loaded into memory
@@ -286,16 +313,36 @@ let parse (ls: LineData) : Result<Parse<LSInstr>,string> option =
                     |(_,_,Some (Error k),_,_) -> Error k
                     |(_,_,_,Some (Error k), _) -> Error k
                     //No Offset
-                    |(Some reg1',Some reg2',None, None, false) -> Ok {Ins = ins; Byte = byte; Reg1 = reg1'; Reg2 = reg2'; Offset = None; PointerUpdate = None; Cond = pCond }
+                    |(Some reg1',Some reg2',None, None, false) -> Ok (LS {Ins = ins; Byte = byte; Reg1 = reg1'; Reg2 = reg2'; Offset = None; PointerUpdate = None; Cond = pCond })
                     //Offset in bkt found, no pointer update
-                    |(Some reg1',Some reg2',Some (Ok offset) , None, false) -> Ok {Ins = ins; Byte = byte; Reg1 = reg1'; Reg2 = reg2'; Offset = Some offset; PointerUpdate = None;Cond = pCond }
+                    |(Some reg1',Some reg2',Some (Ok offset) , None, false) -> Ok (LS {Ins = ins; Byte = byte; Reg1 = reg1'; Reg2 = reg2'; Offset = Some offset; PointerUpdate = None;Cond = pCond })
                     //Offset in bkt found, pre-index
-                    |(Some reg1',Some reg2',Some (Ok offset), None, true) -> Ok {Ins = ins; Byte = byte; Reg1 = reg1'; Reg2 = reg2'; Offset = Some offset; PointerUpdate = Some PRE;Cond = pCond }
+                    |(Some reg1',Some reg2',Some (Ok offset), None, true) -> Ok (LS {Ins = ins; Byte = byte; Reg1 = reg1'; Reg2 = reg2'; Offset = Some offset; PointerUpdate = Some PRE;Cond = pCond })
                     //Offset out bkt found, post index
-                    |(Some reg1',Some reg2',None, Some (Ok offset) , false) -> Ok {Ins = ins; Byte = byte; Reg1 = reg1'; Reg2 = reg2'; Offset = Some offset; PointerUpdate = Some POST;Cond = pCond }
+                    |(Some reg1',Some reg2',None, Some (Ok offset) , false) -> Ok (LS {Ins = ins; Byte = byte; Reg1 = reg1'; Reg2 = reg2'; Offset = Some offset; PointerUpdate = Some POST;Cond = pCond })
                     //Error for unexpected type
                     |_ -> Error "Offset error"
-                |Error k -> Error k
+                |Error k -> 
+                    let strList = splitStrIntoList ls.Operands
+                    match root,strList with
+                    |"LDR",reg::[value] when value.StartsWith "=" -> 
+                        let dest = Map.tryFind reg regNames
+                        let value' = 
+                            match ls.SymTab with
+                            |None -> Ok 0u
+                            |Some symtab -> convExp2LitNoCheck value.[1..] symtab
+                        match dest,value' with
+                        |(Some reg, Ok k) -> Ok (LDRP { Dest =reg; Value = k; Cond = pCond})
+                        |None,_ -> Error "destination Reg invalid"
+                        |_,Error k -> Error k
+                    |_ -> Error k
+
+                        
+                        
+
+
+                        
+
 
         ///output Parse Type
         match instrLS with 
@@ -340,7 +387,7 @@ let breakWordIntoBytes (word:uint32) =
 ///Check address is above data memory start address as defined above
 let checkAddrValidity addr = 
     match addr with
-    |k when k <dataMemAddrStart -> Error "Address under 0x1000 not allowed."
+    |k when k <dataMemAddrStart -> Error "Address under 0x100 not allowed."
     |validAddr -> Ok validAddr
 
 ///Check address is aligned, for word function only
@@ -420,9 +467,9 @@ let storeDataReturnMM addr dataPath source byte=
 
 ///Main execution function
 let LSMain reg1 reg2 offset byte ins (ptrupdate:IndexMode Option) (dataPath: DataPath<'INS>) = 
-    match reg2 with
-    |R15 -> Error "R15 not allowed as destination (STR) or source (LDR)"
-    |reg when (reg = reg1 && ptrupdate.IsSome) -> Error "Destination must be different from source base addr"
+    match ins, byte, reg2 with
+    |S,_,R15 | L,true,R15 -> Error "R15 not allowed as destination (STR) or source (LDR)"
+    |_,_,reg when (reg = reg1 && ptrupdate.IsSome) -> Error "Destination must be different from source base addr"
     |_ -> 
         let addrInReg = dataPath.Regs.[reg2]
         let source = 
@@ -470,13 +517,20 @@ let LSMain reg1 reg2 offset byte ins (ptrupdate:IndexMode Option) (dataPath: Dat
                 |None -> Error "Offset value missing"
         |Error k -> Error k
 
+let LDRPseudoExec dest value (dp:DataPath<'INS>) = 
+    Ok (PCPlus4{dp with Regs = dp.Regs.Add (dest,value)})
+
 ///Top level Load Store Execution Function
-let execLS (instr:LSInstr) (dataPath: DataPath<'INS>) = 
+let execLS (ins:Instr) (dataPath: DataPath<'INS>) = 
+    match ins with
+    |LS instr -> 
+        let reg1 = instr.Reg1
+        let reg2 = instr.Reg2
+        let offset = Option.map (fun k -> flexOp2 k dataPath) instr.Offset
+        let byte = instr.Byte
+        let ins = instr.Ins
+        let ptrupdate = instr.PointerUpdate
     
-    let reg1 = instr.Reg1
-    let reg2 = instr.Reg2
-    let offset = Option.map (fun k -> flexOp2 k dataPath) instr.Offset
-    let byte = instr.Byte
-    let ins = instr.Ins
-    let ptrupdate = instr.PointerUpdate
-    LSMain reg1 reg2 offset byte ins ptrupdate dataPath
+        LSMain reg1 reg2 offset byte ins ptrupdate dataPath
+    |LDRP instr -> 
+        LDRPseudoExec instr.Dest instr.Value dataPath

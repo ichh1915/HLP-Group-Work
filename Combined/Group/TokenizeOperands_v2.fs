@@ -163,7 +163,6 @@ let Op2SetCFlag (cpuData:DataPath<'INS>) (op2:Op2):bool option =
 //                | Some tok -> tok :: tokenize' st'
 //     tokenize' {Txt=asmline;State=Normal;Numb=0}
 
-let splitStrIntoList str = splitIntoWords str [|','|]
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -184,7 +183,7 @@ let ParseSHIFTOps (root:string) (ls:LineData) (tok:string list): Result<SHIFTOps
             let op2' = 
                 match ls.SymTab with
                 |None -> (Literal 0u)|>Ok |>Some
-                |Some symtab -> Some (litOrReg op2 symtab)
+                |Some symtab -> Some (litOrReg op2 symtab false)
             (destReg,op1Reg,op2')
 
         |_ -> (None,None,None)
@@ -276,7 +275,7 @@ let ParseMOVOps  (ls:LineData)(tok:string list): Result<MOVOps,string> =
             let op2' = 
                 match ls.SymTab with
                 |None -> (Literal 0u)|>Ok |>Some
-                |Some symtab -> Some (strList2Offset op2 symtab)
+                |Some symtab -> Some (strList2Op2 op2 symtab)
             (destReg,op2')
         |_ -> (None,None)
        
@@ -323,7 +322,7 @@ let ParseBITOps (ls:LineData) (tok:string list) : Result<BITOps,string> =
             let op2' = 
                 match ls.SymTab with
                 |None -> (Literal 0u)|>Ok |>Some
-                |Some symtab -> Some (strList2Offset op2 symtab)
+                |Some symtab -> Some (strList2Op2 op2 symtab)
             (destReg,op1',op2')
         |_ -> (None,None,None)
        
@@ -373,7 +372,7 @@ let ParseTSTOps  (ls:LineData)(tok:string list): Result<TSTOps,string> =
             let op2' = 
                 match ls.SymTab with
                 |None -> (Literal 0u)|>Ok |>Some
-                |Some symtab -> Some (strList2Offset op2 symtab)
+                |Some symtab -> Some (strList2Op2 op2 symtab)
             (destReg,op2')
         |_ -> (None,None)
        

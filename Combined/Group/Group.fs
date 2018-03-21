@@ -11,13 +11,9 @@ let main argv =
     let input = 
             """
             
-            mov r0,#here
-            mov r1,#this
-            that equ this
-            this equ here
-            here FILL 12
-            mov r4,#that
-            END
+            mov		r0,#0x100
+            ldr r5,=98427
+		    str		r1,[r0,#4092]
 
             """
 

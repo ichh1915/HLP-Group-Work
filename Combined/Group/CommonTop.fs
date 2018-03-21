@@ -20,7 +20,7 @@ open EQUFILL
 /// allows different modules to return different instruction types
 type Instr =
     | ILSM of LSM.LSMInstr
-    | ILS of LS.LSInstr
+    | ILS of LS.Instr
     | IB of Branch.BInstr
     | IDP of DP.Instr
     | ITST of TT2.Instr
@@ -285,7 +285,8 @@ let executeAnyInstr (ins:Instr) (dp:DataPath<Instr>) : Result<DataPath<Instr>, E
     let execute dp= 
         match ins with
         | ILSM ins' when CheckCond dp ins'.Cond-> LSM.execLSM ins' dp |> runErrorMap ins
-        | ILS ins' when CheckCond dp ins'.Cond-> LS.execLS ins' dp |> runErrorMap ins
+        | ILS (LS ins') when CheckCond dp ins'.Cond-> LS.execLS (LS ins') dp |> runErrorMap ins
+        | ILS (LDRP ins') when CheckCond dp ins'.Cond-> LS.execLS (LDRP ins') dp |> runErrorMap ins
         | IB ins' when CheckCond dp ins'.Cond-> Branch.execB ins' dp |>runErrorMap ins
         | IDP ins' when CheckCond dp ins'.Cond-> DP.arith ins' dp |> runErrorMap ins
         | IBIT ins' when CheckCond dp ins'.Cond-> BT2.BitwiseExecute dp ins' |>Ok

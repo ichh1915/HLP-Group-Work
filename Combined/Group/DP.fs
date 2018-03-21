@@ -65,7 +65,7 @@ type ErrInstr = string
 
 // type LexData = {Txt: string; Num: int}
 
-type SumData = {Actual: uint32; CSum: uint64 ; VSum: int64}
+type SumData = {Actual: int64 ; CSum: int64 ; VSum: int64}
 
 // ---------------------------------- Map ------------------------------------------------ //
 
@@ -104,16 +104,17 @@ let opCodes = opCodeExpand dPSpec |> Map.remove "CMPS" |> Map.remove "CMNS"
 
 // --------------------------------- Arithmetic Functions ---------------------------------------- //
 
+let myUint32 (x: int64) = (~~~ ((int64 -1) >>> 32 |> fun x -> x <<< 32)) &&& x 
 
 //create a triplet of (sum, cSum, vSum)
-let actualSum (op1Val: uint32) (op2Val: uint32) (carry: uint32) = uint32(int(op1Val) + int(op2Val) + int(carry))
-let cSum (op1Val: uint64) (op2Val: uint64) (carry: uint64) = op1Val + op2Val + carry
+let actualSum (op1Val: uint32) (op2Val: uint32) (carry: uint32) = myUint32 (int64 op1Val + int64 op2Val + int64 carry)
+let cSum (op1Val: uint32) (op2Val: uint32) (carry: uint32) =  myUint32 (int64 op1Val) + myUint32 (int64 op2Val) + myUint32 (int64 carry)
 let vSum (op1Val:uint32) (op2Val:uint32) (carry: uint32) = int64(int32(op1Val)) + int64(int32(op2Val)) + int64(int32(carry))
 
-let doArith op1Val (op2Val: uint64) carry = 
-    let actual = actualSum op1Val (uint32 op2Val) carry
-    let cSum = cSum (uint64 op1Val) op2Val (uint64 carry)
-    let vSum = vSum op1Val (uint32 op2Val) carry
+let doArith (op1Val: uint32) (op2Val: uint32) (carry: uint32) = 
+    let actual = actualSum op1Val op2Val carry
+    let cSum = cSum op1Val op2Val carry
+    let vSum = vSum op1Val op2Val carry
     {Actual = actual; CSum = cSum; VSum = vSum}
 
 
@@ -128,48 +129,33 @@ let arith (instr: Instr) (data: DataPath<'INS>) : Result<DataPath<'INS>, string>
     let carry = if data.Fl.C then 1u else 0u
     let op1Val = data.Regs.[op1]
 
-    // Restriction on the literal
-    //let makeLiteral (literalData: uint32) = 
-        //let ROR m = (literalData >>> m) ||| (literalData <<<(32 - m))
-        //let resList = [0..15]
-        //              |> List.map (fun m' -> ROR (2*m')) 
-        //              |> List.collect (fun x -> if x >= 0u && x <= 255u then [x] else [])
-        //if resList.IsEmpty then None else Some (literalData)
-
-
     //sum is a record of Actual, CSum and VSum
     let setFlag (sum: SumData) = 
-
-        let cFlag = uint64(sum.Actual) <> sum.CSum // Can be just .. <> ..  //Think of the mathematical value, not operational
-        let zFlag = sum.Actual = 0u 
-        let nFlag = sum.Actual>>>31 = 1u 
+        let cFlag = int32 (sum.CSum >>> 32) <> 0
+            //int64(sum.Actual) <> int64(int32 sum.CSum) // Can be just .. <> ..  //Think of the mathematical value, not operational
+        let zFlag = uint32 sum.Actual = 0u 
+        let nFlag = uint32 (sum.Actual >>> 31) = 1u 
         let vFlag = int64(int32(sum.Actual)) <> sum.VSum 
 
         { N = nFlag; C = cFlag; Z = zFlag; V = vFlag}
     
-
     let createSum (op1Val: uint32) (op2Val: uint32) =
-
-        let negVal (opVal: uint32) = uint64(~~~opVal) + 1UL
-
         match operator with
-        |ADD -> doArith op1Val (uint64 op2Val) 0u
-        |CMN -> doArith op1Val (uint64 op2Val) 0u
-        |SUB -> doArith op1Val (negVal op2Val) 0u
-        |CMP -> doArith op1Val (negVal op2Val) 0u
-        |RSB -> doArith op2Val (negVal op1Val) 0u
-        |ADC -> doArith op1Val (uint64 op2Val) carry
-        |SBC -> doArith op1Val (negVal (op2Val+1u)) carry
-        |RSC -> doArith op2Val (negVal (op1Val+1u)) carry
-        
-
-    
+        |ADD -> doArith op1Val op2Val 0u
+        |CMN -> doArith op1Val op2Val 0u
+        |SUB -> doArith op1Val (uint32 (-int32 op2Val)) 0u
+        |CMP -> doArith op1Val (uint32 (-int32 op2Val)) 0u
+        |RSB -> doArith op2Val (uint32 (-int32 op1Val)) 0u
+        |ADC -> doArith op1Val op2Val carry
+        |SBC -> doArith op1Val (uint32 (-int32(op2Val+1u))) carry
+        |RSC -> doArith op2Val (uint32 (-int32(op1Val+1u))) carry
+           
     let createNewReg dest (sum: SumData) = 
         match dest with 
         | Some y -> 
             let curReg = data.Regs
-            [(y, (sum.Actual))]
-            |> fun lst -> List.fold (fun _ x -> curReg.Add x) curReg lst //TODO:- increment PC count
+            [(y, (uint32 sum.Actual))]
+            |> fun lst -> List.fold (fun _ x -> curReg.Add x) curReg lst 
         | None -> data.Regs
 
     let updateData (dest:RName option) op1Val op2Val = 
@@ -216,351 +202,7 @@ let arith (instr: Instr) (data: DataPath<'INS>) : Result<DataPath<'INS>, string>
         let op2Val = litNum
         updateData dest op1Val op2Val
 
-   
-
-
-
-
-
-// ----------------------------- Useful Functions ------------------------------------------------ //
-
-// TODO:- Use a LexData instead of lit
-// let evalExp (st: SymbolTable option) (lit: string) = 
-//     let exp = lit.[1..] //Remove the # sign
-    
-//     let opMap = 
-//             Map.ofList [ 
-//                 '+', (+)  
-//                 '-', (-) 
-//                 '*', (*)
-//                 ]
-    
-//     //create a list of symbols/literals                
-//     let symSeq = 
-//         exp.Split([|'+' ; '-' ; '*' |], System.StringSplitOptions.RemoveEmptyEntries)
-//         |> List.ofArray
-    
-//     //create a list of operators
-//     let opSeq = 
-//         exp 
-//         |> fun str -> if (str.[0] = '-' || str.[0] = '+') then str else "+" + str
-//         |> Seq.toList
-//         |> List.collect (fun x -> if opMap.ContainsKey x then [x] else []) 
-    
-//     //Use List.fold to evalute the expression
-//     let folder state litOrSym =
-//         match state, litOrSym with
-//         | (cummSum, hd::rst), y -> 
-//             let createSum sum num = opMap.[hd] sum num
-
-//             match y, st with 
-//             | y, Some symTab when symTab.ContainsKey y -> 
-//                 createSum cummSum (int(symTab.[y])) , rst
-//             | y, _ -> 
-//                 createSum cummSum (int(y)) , rst
-//         | _ ->
-//             (state)    
-
-//     List.fold folder (0, opSeq) symSeq
-//     |> fun (x, y) -> x
-
-
-
-// ------------------------------- Lex Functions -------------------------------------------------//
-
-
-// let (|LexMatchD|_|) debug regex (lexData: LexData) = 
-//     match String.regexMatch regex (lexData.Txt) with
-//     | None -> 
-//         if debug 
-//         then printfn "Match of '%s' with '%s' failed." lexData.Txt regex
-//         None
-//     | Some (mStr, rst) -> 
-//         let mChars = String.length mStr
-//         if mChars = 0 then
-//             failwithf "Unexpected 0 character match '%s' " regex
-//         if debug then
-//             printfn "Match of '%s' with '%s' OK: match is '%s'" lexData.Txt regex mStr
-//         let lexData' = {lexData with Txt = lexData.Txt.[mChars..]}
-//         Some (mStr, lexData')
-
-// let (|LexMatch|_|) = (|LexMatchD|_|) false
-
-// let nextToken ld = 
-//     let incr ld = {ld with Num = ld.Num + 1}
-//     match ld with
-//     | LexMatch @"^\," (_, ld') -> None, ld'
-//     | LexMatch @"^[ ]" (_, ld') -> None, ld'
-//     | LexMatch @"^#.*" (exp, ld') -> Some (Exp (exp)), ld'
-//     | LexMatch @"^[rR][0-9]+" (reg, ld') -> Some (R (reg, ld'.Num)), incr ld'
-//     | LexMatch @"^[lL][sS][lL]" (opr, ld') -> Some (Opr (opr)), ld'
-//     | LexMatch @"^[lL][sS][rR]" (opr, ld') -> Some(Opr(opr)), ld'
-//     | LexMatch @"^[aA][sS][rR]" (opr, ld') -> Some(Opr(opr)), ld'
-//     | LexMatch @"^[rR][rR][xX]" (opr, ld') -> Some(Opr(opr)), ld'
-//     | LexMatch @"^[rR][oO][rR]" (opr, ld') -> Some(Opr(opr)), ld'
-//     | _ -> failwithf "Matching failed in lexer" 
-
-// let tokenize (line: string): Token List = 
-//     let rec tokenize' ld = 
-//         match ld.Txt with
-//         | "" -> [END]
-//         | _ -> 
-//             let nt, st' = nextToken ld
-//             match nt with 
-//             | None -> tokenize' st'
-//             | Some tok -> tok :: tokenize' st'
-//     tokenize' {Txt = line; Num = 0}
-
-
-// ---------------------- Parse line data ------------------------------------- //
-
-// let parseTok (symTb: SymbolTable option) (tok: Token List) = 
-
-//     let genR r = if regNames.ContainsKey r then Some regNames.[r] else None
-//     let genOp2 r = 
-//         match genR r with
-//         | Some op2' -> Some (Ro op2')
-//         | None -> None
-
-//     match tok with
-//     | [R (dest, 0) ; R (op1, 1) ; Exp(exp); END] -> 
-
-//         let destR = genR dest
-//         let op1R = genR op1
-//         let op2 = 
-//             //TODO: - let numberCheck = System.Text.RegularExpressions.Regex("^[0-9]+$")   
-//             match symTb with
-//             |Some symtab -> 
-//                 let expRes = convExp2Lit exp.[1..] symtab
-//                 match expRes with
-//                 |Ok res -> 
-//                     Some (Literal res)
-//                 |Error _ -> None    
-//             |None ->     
-//                 Some (Literal 0u)
-
-//         destR, op1R, op2
-//     // TODO:- Expression case
-//     //| [R (dest, 0) ; R (op1, 1) ; R(op2, 2); Opr(opr) ; Exp(exp) ; END] -> 
-//         //let destR = genR dest
-//         //let op1R = genR op1 
-//         //let op2R = 
-//              //Shifted of Reg * Shift * SVal
-       
-//     | [R (dest, 0) ; R (op1, 1) ; R(op2, 2); END] -> 
-//         let destR = genR dest
-//         let op1R = genR op1
-//         let op2R = genOp2 op2
-//         destR, op1R, op2R
-
-//     | [R (op1, 0) ; R (op2, 1); END] -> //CMP Case
-//         let op1R = genR op1
-//         let op2R = genOp2 op2
-
-//         None, op1R, op2R
-
-//     | [R (op1, 0) ; Exp(exp) ; END] -> //CMP Case
-//         let op1R = genR op1
-//         let op2 = 
-//             match symTb with
-//             |Some symtab -> 
-//                 let expRes = convExp2Lit exp.[1..]  symtab
-//                 match expRes with
-//                 |Ok res -> 
-//                     Some (Literal res)
-//                 |Error _ -> None    
-//             |None ->     
-//                 Some (Literal 0u)
-        
-//         None, op1R, op2
-
-//     | _ -> 
-//         None, None, None
-
-// let arithParse (ls: LineData): Result<Parse<Instr>, string> option = 
-//     let parse' (instrC, ((root: string), suffix: string, pCond)) = 
-//         let suf = 
-//             match suffix with
-//             |"" -> NoFSet  
-//             |"s" -> FSet
-//             |_ -> failwithf "Impossible, it will be filtered by Option.map"
-
-//         let tokenList = tokenize ls.Operands
-//         let dest, op1, op2 = parseTok ls.SymTab tokenList
-//         let arithType = 
-//             if arithTypeMap.ContainsKey (root.ToUpper()) 
-//                 then Some (arithTypeMap.[root.ToUpper()])
-//                 else None
-//         let instr = {Dest = dest; Op1 = op1; Op2 = op2; Suffix = suf; arithType = arithType;Cond = pCond}       
-
-//         match instr with
-//         | {Dest = None; Op1 = None; Op2 = None} -> Error (sprintf "Syntax error")
-//         | {Dest = None} -> 
-//             match root with
-//             | x when (x = "cmp") || (x = "cmn") -> Ok { PInstr = instr ; PLabel = None ; PSize = 4u ; PCond = pCond }
-//             | _ -> Error (sprintf "Error Dest")
-//         | {Op1 = None} -> Error (sprintf "Error Op1")
-//         | {Op2 = None} -> Error (sprintf "Error Op2")
-//         | _ -> Ok { PInstr = instr ; PLabel = None ; PSize = 4u; PCond = pCond }
-       
-//     Map.tryFind (ls.OpCode.ToLower()) opCodes
-//     |> Option.map parse'
-
-//let parse (ls: LineData) : Result<Parse<Instr>,string> option = //Only parse the right instruction
-    //let parse' (instrC, ((root: string), suffix: string, pCond)) =
-    //    // this does the real work of parsing
-    //    let suf = 
-    //        match suffix with
-    //        |"" -> false  
-    //        |"s" -> true
-    //        |_ -> failwithf "Impossible, it will be filtered by Option.map"
-
-    //    //split into array of strings
-    //    let splitIntoWords (line: string) =
-    //        line.Split( ([||] : char array), System.StringSplitOptions.RemoveEmptyEntries)
-        
-    //    //split into list of strings
-    //    let splitIntoList (x: string) = 
-    //        x.Split(',')
-    //        |> List.ofArray 
-    //        |> List.map splitIntoWords
-    //        |> List.map List.ofArray
-
-    //    let listOfWords = splitIntoList (ls.Operands.ToUpper())
-
-    //    //Used to evaluate e.g #5+5*3 case
-    //    let evalLit (lit: string) (rstOfLit: string list)= 
-    //        let stringVal = lit.[1..String.length lit - 1] //Remove the # sign
-    //        let rstOfVal = String.concat "" rstOfLit
-    //        let litOp2 = stringVal + rstOfVal
-            
-    //        let opMap = 
-    //                Map.ofList [ 
-    //                    '+', (+)  
-    //                    '-', (-) 
-    //                    '*', (*)
-    //                    ]
-
-    //        //create a list of symbols/literals                
-    //        let symSeq = 
-    //            litOp2.Split([|'+' ; '-' ; '*' |], System.StringSplitOptions.RemoveEmptyEntries)
-    //            |> List.ofArray
-            
-    //        //create a list of operators
-    //        let opSeq = 
-    //            litOp2 
-    //            |> fun str -> if (str.[0] = '-' || str.[0] = '+') then str else "+" + str
-    //            |> Seq.toList
-    //            |> List.collect (fun x -> if opMap.ContainsKey x then [x] else []) 
-            
-    //        //Use List.fold to evalute the expression
-    //        let folder state litOrSym =
-    //            match state, litOrSym with
-    //            | (cummSum, hd::rst), y -> 
-    //                let intVal = 
-    //                    match y, ls.SymTab with //if SymTab has the reference
-    //                    | y, Some symTab when symTab.ContainsKey y -> 
-    //                        int (symTab.[y])
-    //                    | y, _ -> 
-    //                        int(y)
-    //                let newSum = opMap.[hd] cummSum intVal
-    //                (newSum, rst)
-    //            | _ ->
-    //                (state)    
-
-    //        List.fold folder (0, opSeq) symSeq
-    //        |> fun (x, y) -> x
-
-
-    //     //Case of ArithInstr
-    //    let buildInstr (dest:string) (op1Op2: string list) = 
-    //        let dest = 
-    //            match dest with
-    //            | x when regNames.ContainsKey x -> Some regNames.[dest]
-    //            | _ -> None //Not valid register
-
-    //        let op1 = 
-    //            match op1Op2.[0] with
-    //            | x when regNames.ContainsKey x -> Some regNames.[op1Op2.[0]]
-    //            | _ -> None //Not valid register
-
-    //        let op2OrExp = 
-    //            let op2' = op1Op2.[1..List.length op1Op2 - 1] 
-    //            match op2' with 
-    //            | str::rst -> 
-    //                match str, rst with                     
-    //                //Few possible cases:
-    //                //i) R1
-    //                //ii) R1, LSL #5
-    //                //iii) R1, LSL R0
-    //                //iv) #5
-    //                //v) #5+5*3
-    //                | x, _ when regNames.ContainsKey x -> 
-    //                    match rst with 
-    //                    | [] -> //Case i)
-    //                        Some (Ro (regNames.[x]))
-    //                    | rst'::rst'' -> //Case ii), iii)
-    //                        match rst', rst'' with 
-    //                        | r, [] when (r.ToLower()) = "rrx" -> //Applicable to RRX only
-    //                            Some (RRX (regNames.[x]))
-    //                        | r, r'::r'' -> 
-    //                            match r', r'' with 
-    //                            |r', [] when regNames.ContainsKey r' -> 
-    //                                Some (Shifted (regNames.[x], shiftOpMap.[r], Rg regNames.[r']))
-    //                            |r', r'' when r'.StartsWith "#" -> //might want to include cases where it is valid to do #5+3+3
-    //                                let intNum = evalLit r' r''
-    //                                Some (Shifted (regNames.[x], shiftOpMap.[r], Nms ({K = uint32(intNum); R = intNum})))
-    //                            |_ -> None
-    //                        | _ -> None
-
-    //                | x, y when x.StartsWith "#" -> //rst must be empty, op2 is a lit
-    //                    let intNum = evalLit x y 
-    //                    Some (Nm {K = uint32(intNum) ; R = intNum})
-    //                | _ -> //any other instructions are invalid
-    //                    None
-    //            | [] -> None //Error case
-            
-    //        let instr = {Dest = dest; Op1 = op1; Op2 = op2OrExp; Suffix = suf; arithType = root.ToLower()}       
-
-    //        match instr with
-    //        | {Dest = None; Op1 = None; Op2 = None} -> Error (sprintf "Syntax error")
-    //        | {Dest = None} -> 
-    //            match root with
-    //            | x when (x = "cmp") || (x = "cmn") -> Ok { PInstr = instr ; PLabel = None ; PSize = 4u ; PCond = pCond }
-    //            | _ -> Error (sprintf "Error Dest")
-    //        | {Op1 = None} -> Error (sprintf "Error Op1")
-    //        | {Op2 = None} -> Error (sprintf "Error Op2")
-    //        | _ -> Ok { PInstr = instr ; PLabel = None ; PSize = 4u; PCond = pCond }
-
-    //    match root with
-    //    | x when (x = "cmp" || x = "cmn") -> 
-    //        match listOfWords.[listOfWords.Length - 1] with
-    //        | [] -> Error (sprintf "Syntax error")
-    //        | _ -> 
-    //            let op1Op2 = 
-    //                listOfWords
-    //                |> fun lst -> List.fold (fun x lst' -> x @ lst') [] lst
-    //            buildInstr "" op1Op2 //CMP/CMN has no destination
-
-    //    | _ -> 
-    //        //Check whether the syntax is correct, i.e extra , at the end
-    //        match listOfWords.[listOfWords.Length - 1] with
-    //        | [] -> Error (sprintf "Syntax error")
-    //        | _ -> 
-    //            let lst = 
-    //                listOfWords
-    //                |> fun lst -> List.fold (fun x lst' -> x @ lst') [] lst
-    //            let dest = lst.[0]
-    //            let op1Op2 = 
-    //                match lst with 
-    //                | hd::rst -> rst
-    //                | _ -> lst
-    //            buildInstr dest op1Op2
-        
-    //Map.tryFind (ls.OpCode.ToLower()) opCodes
-    //|> Option.map parse'
-
-
+  
 /// Parse Active Pattern used by top-level code
 
 
@@ -575,14 +217,14 @@ let arithParse2 (ls: LineData): Result<Parse<AriInstr>, string> option =
         let arithType = (arithTypeMap.[root.ToUpper()])
             
         let opStrList = splitIntoWords ls.Operands [|','|]
-        let destReg,op1Reg,op2 = 
-            match opStrList,arithType with
+        let destReg, op1Reg, op2 = 
+            match opStrList, arithType with
             |op1::op2, CMP |op1::op2, CMN -> 
                 let op1Reg = Map.tryFind op1 regNames
                 let op2' = 
                     match ls.SymTab with
                     |None -> Some (Ok (Literal 0u))
-                    |Some symtab -> Some (strList2Offset op2 symtab)
+                    |Some symtab -> Some (strList2Op2 op2 symtab)
                 (None,op1Reg,op2')
             |dest::op1::op2,_ |dest::op1::op2,_  -> 
                 
@@ -591,7 +233,7 @@ let arithParse2 (ls: LineData): Result<Parse<AriInstr>, string> option =
                 let op2' = 
                     match ls.SymTab with
                     |None -> Some (Ok (Literal 0u))
-                    |Some symtab -> Some (strList2Offset op2 symtab)
+                    |Some symtab -> Some (strList2Op2 op2 symtab)
                 (destReg,op1Reg,op2')
             
             |_ -> (None,None,None)
@@ -611,8 +253,8 @@ let arithParse2 (ls: LineData): Result<Parse<AriInstr>, string> option =
         match instr with 
         |Ok (instrLS' ) -> 
             Ok {
-                PInstr=instrLS'; 
-                PLabel = ls.Label |> Option.map (fun lab -> lab, la) ;
+                PInstr = instrLS';      
+                PLabel =  ls.Label |> Option.map (fun lab -> lab, la) ;
                 PSize = 4u; 
                 PCond = pCond 
                 }
