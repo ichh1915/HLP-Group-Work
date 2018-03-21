@@ -17,13 +17,15 @@ let fontSize: HTMLSelectElement =
     Browser.document.getElementById("font-size") :?> HTMLSelectElement
 let register (id: int): HTMLElement =
     Browser.document.getElementById(sprintf "R%i" id)
-let explore: HTMLButtonElement =
-    Browser.document.getElementById("explore") :?> HTMLButtonElement
-let save: HTMLButtonElement =
-    Browser.document.getElementById("save") :?> HTMLButtonElement
+//let explore: HTMLButtonElement =
+//    Browser.document.getElementById("explore") :?> HTMLButtonElement
+//let save: HTMLButtonElement =
+//    Browser.document.getElementById("save") :?> HTMLButtonElement
 let run: HTMLButtonElement =
     Browser.document.getElementById("run") :?> HTMLButtonElement
 let flag (id: string): HTMLElement =
     Browser.document.getElementById(sprintf "flag_%s" id)
 let code: unit -> string = fun _ ->
     window?code?getValue() :?> string
+let mem: HTMLElement = 
+    Browser.document.getElementById("mem-table")

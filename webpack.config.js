@@ -70,4 +70,4 @@ var rendererConfig = Object.assign({
   }
 }, basicConfig);
 
-module.exports = [mainConfig, rendererConfig]
+module.exports = [mainConfig, rendererConfig];

@@ -6,6 +6,7 @@
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/photon.css">
+    <link rel="stylesheet" href="css/my-style.css">
     <!--<link rel="stylesheet" href="css/material-icons.css">-->
 </head>
 
@@ -16,16 +17,16 @@
             <h1 class="title">ARM7TDMI</h1>
 
             <div class="toolbar-actions">
-                <div class="btn-group">
+<!--                <div class="btn-group">
                     <button id="explore" class="btn btn-default">
                         <span class="icon icon-folder"></span>
                     </button>
-                    <!-- open btn -->
+                    &lt;!&ndash; open btn &ndash;&gt;
                     <button id="save" class="btn btn-default">
                         <span class="icon icon-floppy"></span>
                     </button>
-                    <!-- save btn -->
-                </div>
+                    &lt;!&ndash; save btn &ndash;&gt;
+                </div>-->
                 <!-- btn-group -->
 
                 <button id="run" class="btn btn-default">
@@ -33,7 +34,41 @@
                     Run
                 </button>
                 <!-- run btn -->
-
+                
+                <!-- Memory Map Button -->
+                <button id="memory" class="btn btn-default">
+                    <span class="icon icon-popup"></span>
+                    View Memory Contents
+                </button>
+                
+                <!-- Memory Map Modal -->
+                <div id="memModal" class="modal">
+                    <!-- Modal Content -->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span class="close">&times;</span>
+                            <h2>Memory Content</h2>
+                        </div>
+                        
+                        <div class="modal-body">
+<!--                            <button id="testBtn">Click me to append!</button>-->
+                            <table style="width=100%" id="mem-table">
+                                <tr>
+                                    <th>Word Address</th>
+                                    <th>Byte 3</th>
+                                    <th>Byte 2</th>
+                                    <th>Byte 1</th>
+                                    <th>Byte 0</th>
+                                    <th>Word Value</th>
+                                </tr>
+                            </table>
+                            <p class="memory-content"></p>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                
                 <div class="btn-group pull-right">
                     <select id="font-size" class="form-control">
                         <option>Font Size: 8</option>
@@ -57,7 +92,7 @@
                 <!-- editor -->
                 <div id="dashboard" class="pane-sm">
                     <table class="table text-center">
-                        <tbody>
+                        <tbody id="reg">
                             <tr>
                                 <td>
                                     <br>
@@ -65,36 +100,12 @@
                             </tr>
                             <tr>
                                 <td>
-                                    Click on `R0` for random numbers!
+                                    Registers
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     <br>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="btn-group full-width">
-                                        <button class="btn btn-reg">R0</button>
-                                        <button id="R0" class="btn btn-reg-con">0x0</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="btn-group full-width">
-                                        <button class="btn btn-reg">R1</button>
-                                        <button id="R1" class="btn btn-reg-con">0x0</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="btn-group full-width">
-                                        <button class="btn btn-reg">R2</button>
-                                        <button id="R2" class="btn btn-reg-con">0x0</button>
-                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -106,20 +117,23 @@
         </div>
         <!-- window-content -->
         <footer class="toolbar toolbar-footer">
-            <div class="pull-left footer-margin">Group Name</div>
+            <div class="pull-left footer-margin">Group 6</div>
             <div id="flags" class="btn-group pull-right footer-margin">
                 <button class="btn btn-mini btn-flag">N</button>
                 <button id="flag_N" class="btn btn-mini btn-flag-con">0</button>
                 <button class="btn btn-mini btn-flag">Z</button>
-                <button id="frag_Z" class="btn btn-mini btn-flag-con">0</button>
+                <button id="flag_Z" class="btn btn-mini btn-flag-con">0</button>
                 <button class="btn btn-mini btn-mini btn-flag">C</button>
-                <button id="frag_C" class="btn btn-mini btn-flag-con">0</button>
+                <button id="flag_C" class="btn btn-mini btn-flag-con">0</button>
                 <button class="btn btn-mini btn-flag">V</button>
-                <button id="frag_V" class="btn btn-mini btn-flag-con">0</button>
+                <button id="flag_V" class="btn btn-mini btn-flag-con">0</button>
             </div>
         </footer>
         <!-- Header -->
     </div>
+    <!-- my javascript -->
+    <script>window.$ = window.jQuery = require('../node_modules/jquery/dist/jquery.min');</script>
+    <script type="text/javascript" src="js/my-script.js"></script>
     <!-- window -->
     <script>
         // Monaco uses a custom amd loader that over-rides node's require.
@@ -127,8 +141,10 @@
         var nodeRequire = global.require;
     </script>
     <script src="../node_modules/monaco-editor/min/vs/loader.js"></script>
+    
     <script src="js/editor.js"></script>
     <script src="js/renderer.js"></script>
+    
 
 </body>
 

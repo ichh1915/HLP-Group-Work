@@ -14,7 +14,6 @@ open Fable.Import
 open Electron
 open Node.Exports
 open Fable.PowerPack
-
 open Fable.Import.Browser
 
 // open DevTools to see the message
@@ -26,11 +25,19 @@ open Update
 open Emulator
 
 /// Access to `Emulator` project
-let dummyVariable = Emulator.Common.A
-
 
 /// Initialization after `index.html` is loaded
 let init () =
+
+(*    let canvas = document.querySelector(".pane") :?> HTMLCanvasElement
+    let z = Regex ("a(.)a")
+    let matches = z.Match "bbaxa"
+    let success = matches.Success
+    
+    let matchStr = sprintf "output is %A _ success is %A" matches success
+    let ctx = canvas.getContext_2d()
+    ctx.fillText(matchStr, 100., 100.)*)
+    
     Ref.fontSize.addEventListener_change(fun _ ->
         let size: int =
             // TODO: error-prone, hardcoded index
@@ -40,22 +47,54 @@ let init () =
         Browser.console.log "Font size updated" |> ignore
         Update.fontSize size
     )
+    
     // TODO: Implement actions for the buttons
-    Ref.explore.addEventListener_click(fun _ ->
+    
+(*    Ref.explore.addEventListener_click(fun _ ->
         Browser.console.log "Code updated"
         Update.code("mov r7, #5")
-    )
-    Ref.save.addEventListener_click(fun _ ->
-        Browser.window.alert (sprintf "%A" (Ref.code ()))
-    )
+    )*)
+    
+(*    Ref.save.addEventListener_click(fun _ ->
+        Browser.window.alert (sprintf "%s" (Ref.code ()))
+        //Pass it to Emulator
+    )*)
+    
     Ref.run.addEventListener_click(fun _ ->
-        Browser.window.alert "NotImplemented :|"
+        // Get instructions
+        let inputString = Ref.code ()   
+        // Get the result
+        let regs, fls, mms = Emulator.Group.output (inputString.ToString())
+        
+        Browser.console.log (sprintf "input %s" (inputString.ToString())) 
+        |> ignore
+        
+        Browser.console.log (sprintf "flags %A" fls) 
+        |> ignore
+        
+        Browser.console.log (sprintf "Regs %A" regs)
+        |> ignore
+        
+        Browser.console.log (sprintf "MM %A" mms)
+        |> ignore
+        
+        Update.memory mms
+        |> ignore 
+        
+        regs
+        |> List.map (fun (x, y) -> Update.register x (uint32 y))
+        |> ignore
+        
+        fls
+        |> List.map (fun (x, y) -> Update.flag x y)
     )
+   
     // just for fun!
     (Ref.register 0).addEventListener_click(fun _ ->
         Browser.console.log "register R0 changed!" |> ignore
-        Update.register 0 (System.Random().Next 1000)
+        //Update.register 0 (System.Random().Next 1000u)
     )
+    
     (Ref.flag "N").addEventListener_click(fun _ ->
         Browser.console.log "flag N changed!" |> ignore
         Update.flag "N" true

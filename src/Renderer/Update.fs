@@ -17,10 +17,12 @@ open Ref
 let fontSize (size: int) =
     let options = createObj ["fontSize" ==> size]
     window?code?updateOptions options
-let register (id: int) (value: int) =
+let register (id: int) (value: uint32) =
     let el = Ref.register id
+  
     el.setAttribute("style", "background: #fbbc05")
     el.innerHTML <- sprintf "0x%X" value
+    
 let flag (id: string) (value: bool) =
     let el = Ref.flag id
     match value with
@@ -30,5 +32,25 @@ let flag (id: string) (value: bool) =
         | true ->
             el.setAttribute("style", "background: #4285f4")
             el.innerHTML <- sprintf "%i" 1
+            
 let code (text: string) =
     window?code?setValue(text)
+    
+let memory (wl: (uint32 * uint32) list) = 
+    let mem = Ref.mem
+   
+    let appendChild wa wv = 
+        let newNode = document.createElement("tr")
+        let b0 = wv &&& 255u
+        let b1 = (wv &&& 65280u) >>> 8
+        let b2 = (wv &&& 16711680u) >>> 16
+        let b3 = (wv &&& uint32 -16777216) >>> 24
+        newNode.innerHTML <- sprintf "<tr> <td> 0x%X </td> <td> 0x%X </td> <td> 0x%X </td> <td> 0x%X </td> <td> 0x%X </td> <td> 0x%X </td> <tr>" wa b3 b2 b1 b0 wv 
+        mem.appendChild(newNode) 
+    
+    mem.innerHTML <- sprintf "<tr><th>Word Address</th><th>Byte 3</th><th>Byte 2</th><th>Byte 1</th><th>Byte 0</th><th>Word Value</th></tr>" 
+    
+    wl |> List.map (fun (wa, wv) -> appendChild wa wv) 
+
+
+       
