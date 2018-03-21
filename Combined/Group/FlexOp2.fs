@@ -57,15 +57,17 @@ let makeShift (shiftType:ShiftRotateOption) (rOp2:RName) (rShift: RName option) 
 //     |> List.map (fun n -> rOR lit (2u*n)) 
 //     |> List.exists (fun x -> ((x>=0u) && (x <256u)))
 let checkLitValidity (literal:uint32) = 
+    
     let checkOri = 
         [0..2..30]
-        |>List.map (fun x -> literal>>>x|||literal<<<(32-x))  //all 16 ROR results
-        |>List.exists(fun x-> uint32 0<=x && x<=uint32 255)
+        |>List.map (fun x -> (literal>>>x)|||(literal<<<(32-x)))  //all 16 ROR results
+        |>List.exists(fun x-> ((x>=0u) && (x<=255u)))
     let checkInv = 
         let inv = ~~~literal
         [0..2..30]
-        |>List.map (fun x -> inv>>>x|||inv<<<(32-x))  //all 16 ROR results
-        |>List.exists(fun x-> uint32 0<=x && x<=uint32 255)
+        |>List.map (fun x -> (inv>>>x)|||(inv<<<(32-x)))  //all 16 ROR results
+        |>List.exists(fun x-> ((x>=0u) && (x<=255u)))
+    printf "checkOri is: %A" checkInv
     checkInv||checkOri
 
 let makeLiteral (literalData:uint32) = 

@@ -11,9 +11,7 @@ let main argv =
     let input = 
             """
             
-            mov		r0,#0x100
-            ldr r5,=98427
-		    str		r1,[r0,#4092]
+            mov		r0,#0xFFFF
 
             """
 
