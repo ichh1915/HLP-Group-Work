@@ -176,14 +176,14 @@ Test Status: Tested with property test during individual stage. Working.
 Summary:Shift operations 
 
 Syntax:
-1.op{S}{cond} Rd,Rn,Rs  
-2.op{S}{cond} Rd,Rm,expression 
-3.RRX{S}{cond} Rd,Rm
+1. op{S}{cond} Rd,Rn,Rs  
+2. op{S}{cond} Rd,Rm,expression 
+3. RRX{S}{cond} Rd,Rm
        
 Comment:
-1.Only the least significant byte is used and can be in the range of 0-255
-2.C flag is updated to the last bit shifted out. N and Z are updated according to the result
-3.Test Status: Tested with property test during individual stage. Working. 
+1. Only the least significant byte is used and can be in the range of 0-255
+2. C flag is updated to the last bit shifted out. N and Z are updated according to the result
+3. Test Status: Tested with property test during individual stage. Working. 
 
 
 ### TST, TEQ
