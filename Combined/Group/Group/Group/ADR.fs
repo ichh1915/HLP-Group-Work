@@ -82,7 +82,6 @@ let exec (instr:Instr) (dataPath:DataPath<'INS>)=
     let pcVal = dataPath.Regs.[R15]-4u
     let addr = instr.Value
     let diff = addr-pcVal
-    printf "difference is %A" diff
     let validity = diff |> checkLitValidity
     match validity with
     |true -> Ok (PCPlus4{dataPath with Regs = dataPath.Regs.Add (destReg,addr)})
