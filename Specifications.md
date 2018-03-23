@@ -69,6 +69,8 @@ Summary:Bitwise instructions
 
 Syntax:op{S}{cond} Rd, FlexOperand2
 
+Comments:Can be updated the C flag when calculating FlexOperand2.
+
 Test Status: Tested with property test during individual stage. Working. 
 
 ### Branch: B, BL
@@ -178,8 +180,10 @@ Syntax:
 2.op{S}{cond} Rd,Rm,expression 
 3.RRX{S}{cond} Rd,Rm
        
-       
-Test Status: Tested with property test during individual stage. Working. 
+Comment:
+1.Only the least significant byte is used and can be in the range of 0-255
+2.C flag is updated to the last bit shifted out. N and Z are updated according to the result
+3.Test Status: Tested with property test during individual stage. Working. 
 
 
 ### TST, TEQ
