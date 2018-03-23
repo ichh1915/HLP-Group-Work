@@ -58,7 +58,7 @@ let FILLTest =
 let DCDTest = 
     testProperty "DCD Test" <| fun (el1:int32) (el2:int32) (el3:int32) ->
         
-        let inputStr = sprintf "here DCD %A,%A,%A" el1 el2 el3
+        let inputStr = sprintf ";This is a comment \r\n here DCD %A,%A,%A " el1 el2 el3
         let parseres = 
             inputStr
             |>inputToLines

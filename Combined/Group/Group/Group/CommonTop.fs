@@ -103,7 +103,6 @@ let parseLine (symtab: SymbolTable option) (loadAddr: WAddr) (asmLine:string) =
         let pNoLabel =
             match words with 
             | ["END"] -> {PInstr = END; PLabel =None; PSize = 4u; PCond = Cal}|>Ok |>Some
-
             | opc :: operands -> 
                 makeLineData opc operands 
                 |> IMatch
@@ -134,7 +133,8 @@ let inputToLines (inp:string) =
     Regex.Split(inp, "[\r\n]+")
     |>Array.toList
     |> List.map (fun k -> k.Trim ())
-    |> List.filter (fun k -> k <>"")
+    |> List.filter (fun k -> k <>"" )
+    |> List.filter (fun k -> (not ( k.StartsWith ";")))
 
 
 let addSym (symtab:SymbolTable) parse= 
