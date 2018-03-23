@@ -173,9 +173,8 @@ Test Status: Tested with property test during individual stage. Working.
 ### LSL, LSR, ASR, ROR, RRX
 Summary:Shift operations 
 
-Syntax:op{S}{cond} Rd,Rn,Rs or 
-       op{S}{cond} Rd,Rm,expression
-       RRX{S}{cond} Rd,Rm
+Syntax:op{S}{cond} Rd,Rn,Rs  or op{S}{cond} Rd,Rm,expression or RRX{S}{cond} Rd,Rm
+       
        
 Test Status: Tested with property test during individual stage. Working. 
 
