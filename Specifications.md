@@ -64,7 +64,12 @@ Syntax: ADR{cond} dest, expression
 
 Comments: working. Difference between PC and the input value must be creatable by rotating an 8-bit number within a 32-bit word. Doesn't agree with VisUAL. For example, ADR R0,271 works on VisUAL, but returns error in our simulator. 
 
-### Bitwise instructions: AND, EOR, BIC, ORR
+### AND, EOR, BIC, ORR
+Summary:Bitwise instructions
+
+Syntax:op{S}{cond} Rd, FlexOperand2
+
+Test Status: Tested with property test during individual stage. Working. 
 
 ### Branch: B, BL
 Summary: Branch {with link}
@@ -157,13 +162,31 @@ Comments:
 
 Test Status: Tested with property test during individual stage. Working. 
 
-### MOV
+### MOV MVN
+Summary:Move FlexOperand2 in Rd
 
-### MVN
+Syntax:op{S}{cond} Rd,FlexOperand2
+       
+Test Status: Tested with property test during individual stage. Working. 
 
-### Shift operations: LSL, LSR, ASR, ROR, RRX
 
-### Test: TST, TEQ
+### LSL, LSR, ASR, ROR, RRX
+Summary:Shift operations 
+
+Syntax:op{S}{cond} Rd,Rn,Rs or 
+       op{S}{cond} Rd,Rm,expression
+       RRX{S}{cond} Rd,Rm
+       
+Test Status: Tested with property test during individual stage. Working. 
+
+
+### TST, TEQ
+Summary:Test instruction
+
+Syntax:op{cond} Rn,FlexOperand2
+       
+Test Status: Tested with property test during individual stage. Working. 
+
 
 
 
