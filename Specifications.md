@@ -81,8 +81,25 @@ Syntax: B{L}{cond} target
 Comments: working. Tested with property test during individual phase. 
 
 ### Arithmetic instructions: ADD, ADC, SUB, SBC, RSB, RSC
+Summary: Arithmetic instruction
+
+Syntax: op{cond}{S} Rd, Rn, Operand2
+
+Comments: Accept expression and literal for Operand 2. 
+
+Issue: Able to set Rd as R13, R14 and R15 unconditionally. 
+
+Test Status: Tested manually at top level.
 
 ### Compare: CMP, CMN
+Summary: Compare and Compare Negative Instruction
+
+Syntax: CMP{cond} Rn, Operand2
+        CMN{cond} Rn, Operand2
+
+Comments: Accept expression and literal.
+
+Test Status: Tested manually at top level.
 
 ### LDR= 
 Summary: LDR Psuedo-Instruction 
