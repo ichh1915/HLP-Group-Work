@@ -85,6 +85,13 @@ Summary: Arithmetic instruction
 
 Syntax: op{cond}{S} Rd, Rn, Operand2
 
+Example: 
+1. ADDS, R0, R1, #15
+2. ADDS, R0, R1, R2
+3. ADDS, R0, R1, R2, LSL #5
+4. ADDS, R0, R1, R2, LSL R0
+5. ADDS, R0, R1, R2, LSL, #5+5+symbol
+
 Comments: Accept expression and literal for Operand 2. 
 
 Issue: Able to set Rd as R13, R14 and R15 unconditionally. 
